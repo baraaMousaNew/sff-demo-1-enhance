@@ -1,0 +1,85 @@
+# Allure configuration for SOAP API testing
+
+# Custom categories for test results
+categories:
+  - name: "Regression Failures"
+    messageRegex: ".*Regression detected.*"
+    traceRegex: ".*regression_status.*FAILED.*"
+    matchedStatuses:
+      - failed
+    flaky: false
+
+  - name: "Configuration Errors"
+    messageRegex: ".*System.*_Endpoint_URL.*not configured.*"
+    traceRegex: ".*CONFIG_ERROR.*"
+    matchedStatuses:
+      - failed
+      - broken
+    flaky: false
+
+  - name: "System Execution Errors"
+    messageRegex: ".*(execution failed|Connection error|Request timeout).*"
+    traceRegex: ".*(EXECUTION_ERROR|ConnectionError|Timeout).*"
+    matchedStatuses:
+      - failed
+      - broken
+    flaky: true
+
+  - name: "Error Validation Issues"
+    messageRegex: ".*validation.*failed.*"
+    traceRegex: ".*validation_status.*ERROR.*"
+    matchedStatuses:
+      - failed
+    flaky: false
+
+  - name: "Minor Regression Warnings"
+    messageRegex: ".*Status code mismatch.*"
+    traceRegex: ".*regression_status.*WARNING.*"
+    matchedStatuses:
+      - passed
+    flaky: false
+
+# Environment information
+environment:
+  Framework: "Custom SOAP API Tester"
+  Test.Type: "Dual System Regression"
+  Domain: "Healthcare APIs"
+
+# Report customization
+report:
+  name: "SOAP API Regression Test Report"
+  title: "Dual-System Healthcare API Testing"
+
+# Plugin configuration
+plugins:
+  - junit-xml
+  - json-report
+
+# Severity mapping
+severity:
+  blocker:
+    - "Regression detected"
+    - "System.*execution failed"
+  critical:
+    - "Configuration error"
+    - "Missing.*endpoint"
+  normal:
+    - "Error validation"
+    - "Variable processing"
+  minor:
+    - "Status code mismatch"
+    - "Response time"
+
+# Custom labels for better organization
+labels:
+  layer:
+    - integration
+    - api
+    - regression
+  owner:
+    - qa_team
+    - devops_team
+  feature:
+    - dual_system_testing
+    - error_validation
+    - healthcare_apis

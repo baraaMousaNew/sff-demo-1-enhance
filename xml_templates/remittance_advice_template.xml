@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Remittance.Advice xmlns:tns="http://www.haad.ae/DataDictionary/CommonTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/CommonTypes/RemittanceAdvice.xsd">
+  <Header>
+    <SenderID>T001_Malaffi</SenderID>
+    <ReceiverID>TF001_Malaffi</ReceiverID>
+    <TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+    <RecordCount>1</RecordCount>
+    <DispositionFlag>PRODUCTION</DispositionFlag>
+  </Header>
+  <Claim>
+    <ID>{{VAR.claim_id}}</ID>
+    <IDPayer>T001_Malaffi-{{CUSTOM.generate_numbers_id()}}</IDPayer>
+	<ProviderID>TF001_Malaffi</ProviderID>
+    <DenialCode></DenialCode>
+    <PaymentReference>1111155555</PaymentReference>
+	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
+    <Encounter>
+        <FacilityID>MF3505</FacilityID>
+    </Encounter>
+    <Activity>
+	  <ID>{{VAR.activity_id}}</ID>
+      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
+      <Type>3</Type>
+      <Code>44950</Code>
+      <Quantity>1</Quantity>
+      <Net>0</Net>
+      <List>0</List>
+	  <OrderingClinician>GD6476</OrderingClinician>
+      <Clinician>GD6476</Clinician>
+      <PriorAuthorizationID></PriorAuthorizationID>
+      <Gross>100</Gross>
+      <PatientShare>0</PatientShare>
+      <PaymentAmount>0</PaymentAmount>
+      <DenialCode></DenialCode>
+    </Activity>
+  </Claim>
+</Remittance.Advice>

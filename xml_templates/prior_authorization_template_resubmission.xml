@@ -1,0 +1,28 @@
+<Prior.Authorization
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.haad.ae/DataDictionary/CommonTypes/PriorAuthorization.xsd">
+	<Header>
+		<SenderID>T001_Malaffi</SenderID>
+		<ReceiverID>TF001_Malaffi</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+	<Authorization>
+		<Result>Yes</Result>
+		<ID>MF3505-{{VAR.prior_request_id}}</ID>
+		<IDPayer>T001_Malaffi</IDPayer>
+		<DenialCode/>
+		<Start>{{DATE(DD/MM/YYYY)}} 16:45</Start>
+		<End>{{DATE(DD/MM/YYYY)}} 16:45</End>
+		<Comments>Claim will be subject to Medical review</Comments>
+		<Activity>
+			<ID>1</ID>
+			<Type>3</Type>
+			<Code>44950</Code>
+			<Quantity>1</Quantity>
+			<Net>1500</Net>
+			<PaymentAmount>1500</PaymentAmount>
+            <DenialCode>ELIG-005</DenialCode>
+		</Activity>
+	</Authorization>
+</Prior.Authorization>

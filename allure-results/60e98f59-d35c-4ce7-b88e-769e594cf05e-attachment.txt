@@ -1,0 +1,57 @@
+Pre-loading Excel files...
+Loaded and cached: resources/Insurers-Only.xlsx:None:['Auth.No']
+Loaded and cached: resources/Broker-Or-TPA.xlsx:None:['Auth.No']
+Loaded and cached: resources/Facilities.xls:None:None
+Loaded and cached: resources/CM-Codes-1.xlsx:Full_List:['ICD_10_CM_Code']
+Loaded and cached: resources/CPT-Codes.xlsx:None:['CPT Codes']
+Loaded and cached: resources/Loinc.xlsx:None:['LOINC_NUM']
+Loaded and cached: resources/Location.xlsx:None:['City']
+Loaded and cached: resources/Nationalities.xlsx:None:['Code']
+Loaded and cached: resources/Emirates.xlsx:None:['Code']
+Loaded and cached: resources/Clinicians.xlsx:None:['Clinician License']
+Loaded and cached: resources/DRG-Codes.xlsx:None:['Code']
+Loaded and cached: resources/HCPCS-Codes.xlsx:None:['Code']
+Loaded and cached: resources/Service-Codes.xlsx:None:['Code']
+Loaded and cached: resources/USCLS-Codes.xlsx:None:['Code']
+Pre-loading complete
+Loaded custom functions from functions\custom_functions.py
+Worker main: Executing test TC_RemAdv_001_01
+Pre-loading Excel files...
+Loaded and cached: resources/Insurers-Only.xlsx:None:['Auth.No']
+Loaded and cached: resources/Broker-Or-TPA.xlsx:None:['Auth.No']
+Loaded and cached: resources/Facilities.xls:None:None
+Loaded and cached: resources/CM-Codes-1.xlsx:Full_List:['ICD_10_CM_Code']
+Loaded and cached: resources/CPT-Codes.xlsx:None:['CPT Codes']
+Loaded and cached: resources/Loinc.xlsx:None:['LOINC_NUM']
+Loaded and cached: resources/Location.xlsx:None:['City']
+Loaded and cached: resources/Nationalities.xlsx:None:['Code']
+Loaded and cached: resources/Emirates.xlsx:None:['Code']
+Loaded and cached: resources/Clinicians.xlsx:None:['Clinician License']
+Loaded and cached: resources/DRG-Codes.xlsx:None:['Code']
+Loaded and cached: resources/HCPCS-Codes.xlsx:None:['Code']
+Loaded and cached: resources/Service-Codes.xlsx:None:['Code']
+Loaded and cached: resources/USCLS-Codes.xlsx:None:['Code']
+Pre-loading complete
+Loaded custom functions from functions\custom_functions.py
+Current time: 2025-12-03
+Current time: 2025-12-03
+Current time: 2025-12-03
+Pre-loading Excel files...
+Loaded and cached: resources/Insurers-Only.xlsx:None:['Auth.No']
+Loaded and cached: resources/Broker-Or-TPA.xlsx:None:['Auth.No']
+Loaded and cached: resources/Facilities.xls:None:None
+Loaded and cached: resources/CM-Codes-1.xlsx:Full_List:['ICD_10_CM_Code']
+Loaded and cached: resources/CPT-Codes.xlsx:None:['CPT Codes']
+Loaded and cached: resources/Loinc.xlsx:None:['LOINC_NUM']
+Loaded and cached: resources/Location.xlsx:None:['City']
+Loaded and cached: resources/Nationalities.xlsx:None:['Code']
+Loaded and cached: resources/Emirates.xlsx:None:['Code']
+Loaded and cached: resources/Clinicians.xlsx:None:['Clinician License']
+Loaded and cached: resources/DRG-Codes.xlsx:None:['Code']
+Loaded and cached: resources/HCPCS-Codes.xlsx:None:['Code']
+Loaded and cached: resources/Service-Codes.xlsx:None:['Code']
+Loaded and cached: resources/USCLS-Codes.xlsx:None:['Code']
+Pre-loading complete
+Loaded custom functions from functions\custom_functions.py
+Worker main: Error in system1 baseline for TC_RemAdv_001_01: Request timeout after 30 seconds
+Worker main: Test TC_RemAdv_001_01 FAILED: Request timeout after 30 seconds

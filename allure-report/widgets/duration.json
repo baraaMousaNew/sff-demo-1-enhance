@@ -1,0 +1,1 @@
+[{"uid":"c76a3139a3ec22d5","name":"Test Case: Rule-1 | Element: SenderID | Object: Header -> [Verify Header.SenderID - valid payer ID (accepted)]","time":{"start":1764754695397,"stop":1764754717108,"duration":21711},"status":"broken","severity":"normal"}]

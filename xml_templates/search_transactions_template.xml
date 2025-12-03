@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="https://www.shafafiya.org/v2/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <v2:SearchTransactions>
+         <v2:login>MalaffiProvidertest</v2:login>
+         <v2:pwd>Haad@2016</v2:pwd>
+         <v2:direction>1</v2:direction>
+         <v2:callerLicense>TF001_Malaffi</v2:callerLicense>
+         <v2:ePartner>T001_Malaffi</v2:ePartner>
+         <v2:transactionID>4</v2:transactionID>
+         <v2:transactionStatus>1</v2:transactionStatus>
+         <v2:transactionFileName>xxxxxxx.xml</v2:transactionFileName>
+         <v2:transactionFromDate>{{DATE(DD/MM/YYYY)}} 01:00</v2:transactionFromDate>
+         <v2:transactionToDate>{{DATE(DD/MM/YYYY)}} 01:00</v2:transactionToDate>
+         <v2:minRecordCount>-1</v2:minRecordCount>
+         <v2:maxRecordCount>-1</v2:maxRecordCount>
+      </v2:SearchTransactions>
+   </soapenv:Body>
+</soapenv:Envelope>

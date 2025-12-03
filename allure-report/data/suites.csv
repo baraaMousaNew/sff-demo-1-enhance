@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Rule-1 | Element: SenderID | Object: Header -> [Verify Header.SenderID - valid payer ID (accepted)]","21711","Test Case: Rule-1 | Element: SenderID | Object: Header -> [Verify Header.SenderID - valid payer ID (accepted)]","utils","Wed Dec 03 13:38:15 GST 2025","broken","Wed Dec 03 13:38:37 GST 2025","","allure_wrapper","",""

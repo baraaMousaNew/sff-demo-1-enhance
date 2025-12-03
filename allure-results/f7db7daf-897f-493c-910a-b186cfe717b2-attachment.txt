@@ -1,0 +1,3 @@
+Test ID: TC_RemAdv_001_01
+Description: Rule-1 | Element: SenderID | Object: Header -> [Verify Header.SenderID - valid payer ID (accepted)]
+Timestamp: 2025-12-03 13:38:15.554091

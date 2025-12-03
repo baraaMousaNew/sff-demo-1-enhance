@@ -1,0 +1,18 @@
+<Prior.Request
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.haad.ae/DataDictionary/CommonTypes/PriorRequest.xsd">
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>T001_Malaffi</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+	<Authorization>
+		<Type>Cancellation</Type>
+		<ID>MF3505-{{VAR(prior_request_id).CUSTOM.generate_numbers_id()}}</ID>
+		<MemberID>{{VAR.member_id}}</MemberID>
+		<PayerID>T001_Malaffi</PayerID>
+		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+        <DateOrdered>{{DATE(DD/MM/YYYY)}}</DateOrdered>
+	</Authorization>
+</Prior.Request>

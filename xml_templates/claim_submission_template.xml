@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Claim.Submission xmlns:tns="http://www.haad.ae/DataDictionary/CommonTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/CommonTypes/ClaimSubmission.xsd">
+
+	<!-- Header: Submission identification information -->
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>T001_Malaffi</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+
+	<!-- Example of a Claim with Cancer observations -->
+	<Claim>
+		<!-- Claim identification information -->
+		<ID>{{VAR(claim_id).CUSTOM.generate_numbers_id()}}</ID>
+		<MemberID>{{VAR.member_id}}</MemberID>
+		<PayerID>T001_Malaffi</PayerID>
+		<ProviderID>TF001_Malaffi</ProviderID>
+		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+		<Gross>0</Gross>
+		<PatientShare>0</PatientShare>
+		<Net>0</Net>
+
+		<!-- Encounter information -->
+		<Encounter>
+			<FacilityID>MF3505</FacilityID>
+			<Type>3</Type>
+			<PatientID>1245</PatientID>
+			<Start>{{DATE(DD/MM/YYYY)}} 12:00</Start>
+			<End>{{DATE(DD/MM/YYYY)}} 15:00</End>
+			<StartType>1</StartType>
+			<EndType>1</EndType>
+		</Encounter>
+
+		<!-- Diagnosis information: principal diagnosis - 195.2 - MALIGNANT NEOPLASM OF ABDOMEN -->
+		<Diagnosis>
+			<Type>Principal</Type>
+			<Code>A00.0</Code>
+			<DxInfo>
+				<Type>POA</Type>
+				<Code>Y</Code>
+			</DxInfo>
+		</Diagnosis>
+
+		<!-- Activity information: activity - Service Code 10 - Consultation Specialist -->
+		<Activity>
+			<ID>{{VAR(activity_id).CUSTOM.generate_numbers_id()}}</ID>
+			<Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
+			<Type>3</Type>
+			<Code>44950</Code>
+			<Quantity>1</Quantity>
+			<Net>0</Net>
+			<OrderingClinician>GD6476</OrderingClinician>
+			<Clinician>GD6476</Clinician>
+            <VAT>10</VAT>
+            <VATPercent>1</VATPercent>
+			<!-- Observation information: observation - Date of Initial Encounter -->
+			<Observation>
+				<Type>LOINC</Type>
+				<Code>10579-1</Code>
+				<Value>8</Value>
+				<ValueType>Qn</ValueType>
+			</Observation>
+		</Activity>
+	</Claim>
+</Claim.Submission>

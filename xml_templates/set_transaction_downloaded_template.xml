@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <SetTransactionDownloaded xmlns="https://www.shafafiya.org/v2/">
+      <login>MalaffiProvidertest</login>
+      <pwd>Haad@2016</pwd>
+      <fileId>00000000-0000-0000-0000-000000000000</fileId>
+    </SetTransactionDownloaded>
+  </soap:Body>
+</soap:Envelope>

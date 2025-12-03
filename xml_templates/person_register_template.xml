@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Person.Register>
+	<Header>
+		<SenderID>T001_Malaffi</SenderID>
+		<ReceiverID>HAAD</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PTE_SUBMIT</DispositionFlag>
+	</Header>
+	<Person>
+		<UnifiedNumber>{{VAR(unified_number).CUSTOM.generate_person_data(emirates_unified_number)}}</UnifiedNumber>
+		<FirstName>{{CUSTOM.generate_person_data(first_name)}}</FirstName>
+		<FirstNameEn>{{CUSTOM.generate_person_data(first_name)}}</FirstNameEn>
+        <MiddleNameEn></MiddleNameEn>
+        <LastNameEn></LastNameEn>
+        <FirstNameAr></FirstNameAr>
+        <MiddleNameAr></MiddleNameAr>
+        <LastNameAr></LastNameAr>
+		<ContactNumber>{{CUSTOM.generate_person_data(phone)}}</ContactNumber>
+		<BirthDate>{{CUSTOM.generate_dob()}}</BirthDate>
+		<Gender>1</Gender>
+		<Nationality>Indian</Nationality>
+		<NationalityCode>100</NationalityCode>
+		<City>Abu Dhabi</City>
+		<CityCode>88</CityCode>
+		<CountryOfResidence>United Arab Emirates</CountryOfResidence>
+		<EmirateOfResidence>1</EmirateOfResidence>
+		<PassportNumber>{{CUSTOM.generate_person_data(passport)}}</PassportNumber>
+		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+        <SponsorNumber></SponsorNumber>
+        <SponsorNameEn></SponsorNameEn>
+        <SponsorNameAr></SponsorNameAr>
+        <SpecialNationality></SpecialNationality>
+        <Privileges></Privileges>
+		<COCReferenceNumber>123456</COCReferenceNumber>
+        <BirthCertificateNumber></BirthCertificateNumber>
+		<Member>
+			<ID>{{VAR(member_id).CUSTOM.generate_person_data(member_id)}}</ID>
+			<Relation>Principal</Relation>
+			<RelationTo>{{VAR.member_id}}</RelationTo>
+            <RelationToEmiratesIDNumber>111-1111-1111111-1</RelationToEmiratesIDNumber>
+            <RelationToUnifiedNumber>{{VAR.unified_number}}</RelationToUnifiedNumber>
+			<Contract>
+				<PayerID>T001_Malaffi</PayerID>
+                <TPAID>T002_Malaffi</TPAID>
+				<PackageName>Malaffi-1234</PackageName>
+				<StartDate>{{CUSTOM.add_days_to_current_date(150)}}</StartDate>
+				<RenewalDate>{{CUSTOM.add_days_to_current_date(150)}}</RenewalDate>
+				<ExpiryDate>{{CUSTOM.add_days_to_current_date(350)}}</ExpiryDate>
+				<GrossPremium>951</GrossPremium>
+				<PolicyHolder>4</PolicyHolder>
+				<CompanyID>XYZ Insurance</CompanyID>
+				<CollectedPremium>0</CollectedPremium>
+				<VAT>0</VAT>
+				<VATPercent>5</VATPercent>
+				<Status>Corrected Date</Status>
+			</Contract>
+		</Member>
+	</Person>
+</Person.Register>

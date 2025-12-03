@@ -1,0 +1,59 @@
+<Person.Register>
+	<Header>
+		<SenderID>T001_Malaffi</SenderID>
+		<ReceiverID>HAAD</ReceiverID>
+		<TransactionDate>03/12/2025 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PTE_SUBMIT</DispositionFlag>
+	</Header>
+	<Person>
+		<UnifiedNumber>257507505</UnifiedNumber>
+		<FirstName>Oliver</FirstName>
+		<FirstNameEn>William</FirstNameEn>
+        <MiddleNameEn />
+        <LastNameEn />
+        <FirstNameAr />
+        <MiddleNameAr />
+        <LastNameAr />
+		<ContactNumber>+971-59-4288496</ContactNumber>
+		<BirthDate>06/12/1934</BirthDate>
+		<Gender>1</Gender>
+		<Nationality>Indian</Nationality>
+		<NationalityCode>100</NationalityCode>
+		<City>Abu Dhabi</City>
+		<CityCode>88</CityCode>
+		<CountryOfResidence>United Arab Emirates</CountryOfResidence>
+		<EmirateOfResidence>1</EmirateOfResidence>
+		<PassportNumber>C731UG82</PassportNumber>
+		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+        <SponsorNumber />
+        <SponsorNameEn />
+        <SponsorNameAr />
+        <SpecialNationality />
+        <Privileges />
+		<COCReferenceNumber>123456</COCReferenceNumber>
+        <BirthCertificateNumber />
+		<Member>
+			<ID>161773</ID>
+			<Relation>Principal</Relation>
+			<RelationTo>161773</RelationTo>
+            <RelationToEmiratesIDNumber>111-1111-1111111-1</RelationToEmiratesIDNumber>
+            <RelationToUnifiedNumber>257507505</RelationToUnifiedNumber>
+			<Contract>
+				<PayerID>T001_Malaffi</PayerID>
+                <TPAID>T002_Malaffi</TPAID>
+				<PackageName>Malaffi-1234</PackageName>
+				<StartDate>02/05/2026</StartDate>
+				<RenewalDate>02/05/2026</RenewalDate>
+				<ExpiryDate>18/11/2026</ExpiryDate>
+				<GrossPremium>951</GrossPremium>
+				<PolicyHolder>4</PolicyHolder>
+				<CompanyID>XYZ Insurance</CompanyID>
+				<CollectedPremium>0</CollectedPremium>
+				<VAT>0</VAT>
+				<VATPercent>5</VATPercent>
+				<Status>Corrected Date</Status>
+			</Contract>
+		</Member>
+	</Person>
+</Person.Register>

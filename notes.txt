@@ -1,0 +1,8 @@
+# Install from the local packages directory (no internet needed)
+pip install --find-links ./packages -r requirements.txt --no-index
+
+# open report for others
+1. Save the report from GUI
+2. Navigate to the folder
+3. In cmd, type: python -m http.server 8000
+4. Open the following in browser: http://localhost:8000

@@ -1,0 +1,33 @@
+from enum import Enum
+
+
+class RequestsName(Enum):
+
+    person_register = 'person register'
+    prior_request = 'prior request'
+    prior_request_prescription = 'prior request prescription'
+    prior_request_resubmission = 'prior request resubmission'
+    prior_request_cancellation = 'prior request cancellation'
+    prior_request_extension = 'prior request extension'
+    prior_request_eligibility = 'prior request eligibility'
+    prior_authorization = 'prior authorization'
+    claim_submission = 'claim submission'
+    remittance_advice = 'remittance advice'
+    search_transactions = 'search transactions'
+    get_new_transactions = 'get new transactions'
+    download_transaction = 'download transaction file'
+    set_transaction_downloaded = 'set transaction downloaded'
+    person_register_upload_transaction = 'person register upload transaction'
+    prior_request_upload_transaction = 'prior request upload transaction'
+    claim_submission_upload_transaction = 'claim submission upload transaction'
+    remittance_advice_upload_transaction = 'remittance advice upload transaction'
+    prior_authorization_upload_transaction = 'prior authorization upload transaction'
+    prior_request_zipped = 'prior request zipped'
+    person_register_resubmission = 'person register resubmission'
+    person_register_new = 'person register new'
+    prior_authorization_resubmission = 'prior authorization resubmission'
+    prior_authorization_prescription = 'prior authorization prescription'
+    prior_authorization_cancellation = 'prior authorization cancellation'
+    prior_authorization_extension = 'prior authorization extension'
+    prior_authorization_eligibility = 'prior authorization eligibility'
+    prior_authorization_large = 'prior authorization large'
