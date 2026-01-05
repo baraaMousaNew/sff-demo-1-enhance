@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Claim.Submission xmlns:tns="http://www.haad.ae/DataDictionary/CommonTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/CommonTypes/ClaimSubmission.xsd">
+
+	<!-- Header: Submission identification information -->
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>T001_Malaffi</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+
+	<Claim>
+        <ID>MF3505-{{CUSTOM.generate_numbers_id('',6)}}-{{CUSTOM.generate_random_digit_string(6)}}-{{CUSTOM.generate_random_number(1)}}</ID>
+        <MemberID>{{VAR.member_id}}</MemberID>
+        <PayerID>T001_Malaffi</PayerID>
+        <ProviderID>TF001_Malaffi</ProviderID>
+        <EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+        <Gross>197590.00</Gross>
+        <PatientShare>0.00</PatientShare>
+        <Net>197590.00</Net>
+        <VAT>0.00</VAT>
+        <Encounter>
+          <FacilityID>MF3505</FacilityID>
+          <Type>1</Type>
+          <PatientID>{{CUSTOM.generate_numbers_id()}}</PatientID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <StartType>1</StartType>
+        </Encounter>
+        <Diagnosis>
+          <Type>Principal</Type>
+          <Code>C71.9</Code>
+        </Diagnosis>
+        <Activity>
+          <ID>1</ID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <Type>5</Type>
+          <Code>QD4-C900-16948-01</Code>
+          <Quantity>1.0000</Quantity>
+          <Net>197590.00</Net>
+          <OrderingClinician>GD25888</OrderingClinician>
+          <Clinician>GD25888</Clinician>
+          <PriorAuthorizationID>MF3505-{{VAR.prior_request_id}}</PriorAuthorizationID>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Date of Prescription</Code>
+            <Value>26/02/2025</Value>
+            <ValueType>Date</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Prescription No</Code>
+            <Value>OS-000819180</Value>
+            <ValueType>Text</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Refill Number</Code>
+            <Value>0</Value>
+            <ValueType>Number</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Total Prescribed Refills</Code>
+            <Value>2</Value>
+            <ValueType>Number</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Dose</Code>
+            <Value>40</Value>
+            <ValueType>unit</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Frequency</Code>
+            <Value>1</Value>
+            <ValueType>D</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Duration</Code>
+            <Value>30</Value>
+            <ValueType>Days</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>RxInstructions</Code>
+            <Value>DAILY</Value>
+            <ValueType>Instructions</ValueType>
+          </Observation>
+          <Observation>
+            <Type>Text</Type>
+            <Code>Drug patient share</Code>
+            <Value>0.00</Value>
+            <ValueType>AED</ValueType>
+          </Observation>
+        </Activity>
+        <Contract>
+          <PackageName>Malaffi-1234</PackageName>
+        </Contract>
+    </Claim>
+</Claim.Submission>

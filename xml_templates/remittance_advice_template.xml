@@ -9,7 +9,7 @@
   </Header>
   <Claim>
     <ID>{{VAR.claim_id}}</ID>
-    <IDPayer>T001_Malaffi-{{CUSTOM.generate_numbers_id()}}</IDPayer>
+    <IDPayer>{{VAR(remittance_id_payer).CUSTOM.generate_numbers_id(T001_Malaffi)}}</IDPayer>
 	<ProviderID>TF001_Malaffi</ProviderID>
     <DenialCode></DenialCode>
     <PaymentReference>1111155555</PaymentReference>
@@ -19,7 +19,7 @@
     </Encounter>
     <Activity>
 	  <ID>{{VAR.activity_id}}</ID>
-      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
+      <Start>{{CUSTOM.get_current_date_time()}}</Start>
       <Type>3</Type>
       <Code>44950</Code>
       <Quantity>1</Quantity>

@@ -130,7 +130,7 @@ def _execute_system2_regression(test_case):
     try:
         response, template, prerequisite_response = do_requests(test_case[tc_request_name], test_case[tc_precondition]).do_request(system=Systems.NEW_SYSTEM,
                                                                                                             live_data=test_case[tc_test_data])
-        CustomAsserterContext(test_case[tc_request_name]).get_request_strategy().determine(response, prerequisite_response, test_case[tc_objective])
+        CustomAsserterContext(test_case[tc_request_name]).get_request_strategy().determine(template,response, prerequisite_response, test_case[tc_objective])
     except Exception as e:
         worker_id = get_worker_id()
         print(f"Worker {worker_id}: Error in system1 baseline for {test_case[tc_id]}: {str(e)}")

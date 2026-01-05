@@ -66,12 +66,12 @@ class SendPersonRegister(SendRequest):
             allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -103,12 +103,12 @@ class SendPriorRequest(SendRequest):
             allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -140,12 +140,12 @@ class SendPriorRequestZipped(SendRequest):
             allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -178,12 +178,12 @@ class SendPriorAuthorization(SendRequest):
             allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -216,12 +216,49 @@ class SendClaimSubmission(SendRequest):
             allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
+                attachment_type=allure.attachment_type.XML,
+            )
+            return response
+
+    def send_request_new_system(self):
+        return self.send_request_old_system()
+
+class SendClaimReSubmission(SendRequest):
+
+    def send_request_old_system(self):
+        encoded_template = encode_xml(self.template)
+        self.variables = f"Body.UploadTransaction.fileContent={encoded_template};" + self.variables
+        with allure.step("Get upload transaction request for claim resubmission"):
+            template, variables, live_data = GetRequestTemplate().get_template_request(
+                request_name=RequestsName.claim_submission_upload_transaction.value, live_data=self.variables)
+            if live_data is not None and live_data != '':
+                pytest.fail(f"live data is not all consumed; the following are still unused: {live_data}")
+        namespace_value = re.search(r'xmlns:ns1="([^"]+)"', ET.tostring(template).decode("utf-8")).group(1)
+        with allure.step(f"Send Claim Resubmission - Old System"):
+            response = APIClient().send_request(
+                url=self.defaults.get('old_system').get('url'),
+                xml_body=ET.tostring(template).decode("utf-8"),
+                soap_action=f'{namespace_value}UploadTransaction'
+            )
+            allure.attach(
+                f"URL: {self.defaults.get('old_system').get('url')}\nAction: {namespace_value}UploadTransaction",
+                name="Request URL and action",
                 attachment_type=allure.attachment_type.TEXT,
+            )
+            allure.attach(
+                ET.tostring(template).decode("utf-8"),
+                name="Request",
+                attachment_type=allure.attachment_type.XML,
+            )
+            allure.attach(
+                response['content'],
+                name="Response",
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -253,12 +290,50 @@ class SendRemittanceAdvice(SendRequest):
             allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
+                attachment_type=allure.attachment_type.XML,
+            )
+            return response
+
+    def send_request_new_system(self):
+        return self.send_request_old_system()
+
+
+class SendCostSubmission(SendRequest):
+
+    def send_request_old_system(self):
+        encoded_template = encode_xml(self.template)
+        self.variables = f"Body.UploadTransaction.fileContent={encoded_template};" + self.variables
+        with allure.step("Get upload transaction request for cost submission"):
+            template, variables, live_data = GetRequestTemplate().get_template_request(
+                request_name=RequestsName.cost_submission_upload_transaction.value, live_data=self.variables)
+            if live_data is not None and live_data != '':
+                pytest.fail(f"live data is not all consumed; the following are still unused: {live_data}")
+        namespace_value = re.search(r'xmlns:ns1="([^"]+)"', ET.tostring(template).decode("utf-8")).group(1)
+        with allure.step(f"Send Cost Submission - Old System"):
+            response = APIClient().send_request(
+                url=self.defaults.get('old_system').get('url'),
+                xml_body=ET.tostring(template).decode("utf-8"),
+                soap_action=f'{namespace_value}UploadTransaction'
+            )
+            allure.attach(
+                f"URL: {self.defaults.get('old_system').get('url')}\nAction: {namespace_value}UploadTransaction",
+                name="Request URL and action",
                 attachment_type=allure.attachment_type.TEXT,
+            )
+            allure.attach(
+                ET.tostring(template).decode("utf-8"),
+                name="Request",
+                attachment_type=allure.attachment_type.XML,
+            )
+            allure.attach(
+                response['content'],
+                name="Response",
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -289,12 +364,44 @@ class SendSearchTransactions(SendRequest):
             allure.attach(
                 ET.tostring(self.template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
+                attachment_type=allure.attachment_type.XML,
+            )
+            return response
+
+class SendGetNewPriorAuthorizationTransactions(SendRequest):
+
+    def send_request_new_system(self):
+        return self.send_request_old_system()
+
+    def send_request_old_system(self):
+        namespace_value = re.search(r'xmlns:ns1="([^"]+)"', ET.tostring(self.template).decode("utf-8")).group(1)
+        with allure.step(f"Send Get New Prior Authorization Transactions - Old System"):
+            if self.variables is not None and self.variables != '':
+                pytest.fail(f"live data is not all consumed; the following are still unused: {self.variables}")
+            response = APIClient().send_request(
+                url=self.defaults.get('old_system').get('url'),
+                xml_body=ET.tostring(self.template).decode("utf-8"),
+                soap_action=f'{namespace_value}GetNewPriorAuthorizationTransactions'
+            )
+            allure.attach(
+                f"URL: {self.defaults.get('old_system').get('url')}\nAction: {namespace_value}GetNewPriorAuthorizationTransactions",
+                name="Request URL and action",
                 attachment_type=allure.attachment_type.TEXT,
+            )
+            allure.attach(
+                ET.tostring(self.template).decode("utf-8"),
+                name="Request",
+                attachment_type=allure.attachment_type.XML,
+            )
+            allure.attach(
+                response['content'],
+                name="Response",
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -318,12 +425,12 @@ class SendGetNewTransaction(SendRequest):
             allure.attach(
                 ET.tostring(self.template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -350,12 +457,12 @@ class SendDownloadTransaction(SendRequest):
             allure.attach(
                 ET.tostring(self.template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 
@@ -382,12 +489,12 @@ class SendSetTransactionDownloaded(SendRequest):
             allure.attach(
                 ET.tostring(self.template).decode("utf-8"),
                 name="Request",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             allure.attach(
                 response['content'],
                 name="Response",
-                attachment_type=allure.attachment_type.TEXT,
+                attachment_type=allure.attachment_type.XML,
             )
             return response
 

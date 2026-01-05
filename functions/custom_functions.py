@@ -26,6 +26,9 @@ _data_cache = {}
 _cache_lock = threading.Lock()
 
 
+users = {'T001_Malaffi':{'login':'MalaffiPayertest','password':'Haad@2016'},'T002_Malaffi':{'login':'MalaffiPayertest','password':'Haad@2016'},'TF001_Malaffi':{'login':'MalaffiProvidertest','password':'Haad@2016'},'PF001_Malaffi':{'login':'MalaffiProvidertest','password':'Haad@2016'}}
+
+
 def _get_cached_excel_data(file_path, sheet_name=None, usecols=None):
     """Load and cache Excel data - FIXED VERSION"""
     cache_key = f"{file_path}:{sheet_name}:{str(usecols)}"
@@ -53,10 +56,15 @@ def _get_cached_excel_data(file_path, sheet_name=None, usecols=None):
         return _data_cache[cache_key]
 
 
-def generate_numbers_id(length='10'):
+def generate_numbers_id(preceding='', length='10'):
     number_length = int(length)
     """Generate patient ID in healthcare format"""
-    return ''.join(random.choices('0123456789', k=number_length))
+    numeric_value = ''.join(random.choices('0123456789', k=number_length))
+
+    if preceding == '' or len(preceding) == 0:
+        return numeric_value
+    else:
+        return preceding + '-' + numeric_value
 
 def get_random_provider_login():
     providers = ['MalaffiProvidertest']
@@ -74,11 +82,27 @@ def get_random_payer_login():
     payers = ['MalaffiPayertest']
     return random.choice(payers)
 
+def get_login_from_id(key):
+    try:
+        return users[key].get('login')
+    except KeyError:
+        raise KeyError(f'{key} is not valid for login credentials')
 
-def generate_random_number(n=5):
+def get_password_from_id(key):
+    return users[key].get('password')
+
+def generate_random_number(n='5'):
+    n = int(n)
     lower = 10 ** (n - 1)
     upper = (10 ** n) - 1
     return random.randint(lower, upper)
+
+def generate_random_digit_string(length='10'):
+    length = int(length)
+    # Combine letters (both cases) and digits
+    characters = string.ascii_letters + string.digits
+    # Generate random string
+    return ''.join(random.choice(characters) for _ in range(length))
 
 def generate_person_data(data_type):
     """Generate realistic test data"""
@@ -486,7 +510,7 @@ def remove_last_chars_from_string(value, characters_remove):
     return value[:remove]
 
 def get_random_loinc():
-    """Get random LOINC code from cached data - FIXED"""
+    
     try:
         # Use the corrected caching function
         df = _get_cached_excel_data('resources/Loinc.xlsx', usecols=['LOINC_NUM'])
@@ -504,6 +528,89 @@ def get_random_loinc():
                     return random.choice(auth_values)
                 else:
                     return "No LOINC_NUM values found in data"
+            else:
+                # Debug what we actually got
+                return f"Unexpected data structure. Columns: {getattr(df, 'columns', 'No columns attr')}"
+        else:
+            return "Failed to load Excel file"
+
+    except Exception as e:
+        return f"Error reading file: {e}"
+
+def get_random_dha_license():
+    
+    try:
+        # Use the corrected caching function
+        df = _get_cached_excel_data('resources/DHA-Licenses.xlsx', usecols=['Facility License'])
+
+        if df is not None:
+            # Make sure it's a DataFrame, not a dict
+            if isinstance(df, dict):
+                # If somehow we got multiple sheets, take the first one
+                df = list(df.values())[0]
+
+            if hasattr(df, 'columns') and 'Facility License' in df.columns:
+                auth_values = df['Facility License'].dropna().tolist()
+                if auth_values:
+                    # Return a random value like A001, A002, etc.
+                    return random.choice(auth_values)
+                else:
+                    return "No Facility License values found in data"
+            else:
+                # Debug what we actually got
+                return f"Unexpected data structure. Columns: {getattr(df, 'columns', 'No columns attr')}"
+        else:
+            return "Failed to load Excel file"
+
+    except Exception as e:
+        return f"Error reading file: {e}"
+
+def get_random_moh_license():
+    
+    try:
+        # Use the corrected caching function
+        df = _get_cached_excel_data('resources/MOH-Licenses.xlsx', usecols=['Facility License'])
+
+        if df is not None:
+            # Make sure it's a DataFrame, not a dict
+            if isinstance(df, dict):
+                # If somehow we got multiple sheets, take the first one
+                df = list(df.values())[0]
+
+            if hasattr(df, 'columns') and 'Facility License' in df.columns:
+                auth_values = df['Facility License'].dropna().tolist()
+                if auth_values:
+                    # Return a random value like A001, A002, etc.
+                    return random.choice(auth_values)
+                else:
+                    return "No Facility License values found in data"
+            else:
+                # Debug what we actually got
+                return f"Unexpected data structure. Columns: {getattr(df, 'columns', 'No columns attr')}"
+        else:
+            return "Failed to load Excel file"
+
+    except Exception as e:
+        return f"Error reading file: {e}"
+
+def get_random_tooth_numbering():
+    try:
+        # Use the corrected caching function
+        df = _get_cached_excel_data('resources/Universal-Tooth-Numbering.xlsx', usecols=['Code'])
+
+        if df is not None:
+            # Make sure it's a DataFrame, not a dict
+            if isinstance(df, dict):
+                # If somehow we got multiple sheets, take the first one
+                df = list(df.values())[0]
+
+            if hasattr(df, 'columns') and 'Code' in df.columns:
+                auth_values = df['Code'].dropna().tolist()
+                if auth_values:
+                    # Return a random value like A001, A002, etc.
+                    return random.choice(auth_values)
+                else:
+                    return "No Code values found in data"
             else:
                 # Debug what we actually got
                 return f"Unexpected data structure. Columns: {getattr(df, 'columns', 'No columns attr')}"
@@ -548,6 +655,9 @@ def preload_excel_files():
         ('resources/HCPCS-Codes.xlsx', None, ['Code']),
         ('resources/Service-Codes.xlsx', None, ['Code']),
         ('resources/USCLS-Codes.xlsx', None, ['Code']),
+        ('resources/MOH-Licenses.xlsx', None, ['Facility License']),
+        ('resources/DHA-Licenses.xlsx', None, ['Facility License']),
+        ('resources/Universal-Tooth-Numbering.xlsx', None, ['Code'])
     ]
 
     for file_path, sheet_name, usecols in files_to_preload:

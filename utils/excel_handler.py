@@ -17,7 +17,8 @@ from utils.common_variables import tc_precondition
 
 def validate_excel(sheets_to_test: dict):
     expected_columns = [common_variables.tc_id, common_variables.tc_description, common_variables.tc_test_data,
-                        common_variables.tc_rule_id, common_variables.tc_name, common_variables.tc_request_name, tc_precondition]
+                        common_variables.tc_rule_id, common_variables.tc_name, common_variables.tc_request_name, common_variables.tc_precondition,
+                        common_variables.tc_objective]
     # messages = []
     for sheet in sheets_to_test:
         actual_columns = list(sheets_to_test[sheet][0].keys())

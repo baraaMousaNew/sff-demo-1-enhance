@@ -114,7 +114,7 @@ class LiveParentElement(AbstractLiveDataStrategy):
 class LiveLeafElement(AbstractLiveDataStrategy):
 
     def get_full_element(self, request_name, template:Element, tag, value, variables):
-        template, is_updated = LeafElementsContext(template).decide_template_type().update_leaf_element(template=template, leaf_element=tag, value=value)
+        template, is_updated = LeafElementsContext(template).decide_template_type().update_leaf_element(template=template, leaf_element=tag, value=value, variables=variables)
         return template, is_updated
 
 

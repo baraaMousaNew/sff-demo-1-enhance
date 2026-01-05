@@ -1,1 +1,1 @@
-[{"uid":"c76a3139a3ec22d5","name":"Test Case: Rule-1 | Element: SenderID | Object: Header -> [Verify Header.SenderID - valid payer ID (accepted)]","time":{"start":1764754695397,"stop":1764754717108,"duration":21711},"status":"broken","severity":"normal"}]
+[{"uid":"d6bb1981a99e040","name":"Test Case: Rule-9 | Element:RecordCount | Object:Header -> Missing PayerID","time":{"start":1767616896607,"stop":1767616901088,"duration":4481},"status":"failed","severity":"normal"}]

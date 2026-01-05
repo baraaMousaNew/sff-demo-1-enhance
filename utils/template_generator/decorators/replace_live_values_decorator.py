@@ -46,7 +46,7 @@ class ReplaceLiveValueDecorator(BaseDecorator):
         allure.attach(
                 ET.tostring(template).decode("utf-8"),
                 name="Replace live variables",
-                attachment_type=allure.attachment_type.TEXT)
+                attachment_type=allure.attachment_type.XML)
 
         template, results, live_data =super().create_template(request_name=request_name, template=template, parent=parent, results=results, live_data=final_live_data, results_index=results_index, prerequisites=prerequisites, health_checker=health_checker)
         return template, results, live_data

@@ -14,6 +14,7 @@
 	<Claim>
 		<!-- Claim identification information -->
 		<ID>{{VAR(claim_id).CUSTOM.generate_numbers_id()}}</ID>
+        <IDPayer></IDPayer>
 		<MemberID>{{VAR.member_id}}</MemberID>
 		<PayerID>T001_Malaffi</PayerID>
 		<ProviderID>TF001_Malaffi</ProviderID>
@@ -21,16 +22,19 @@
 		<Gross>0</Gross>
 		<PatientShare>0</PatientShare>
 		<Net>0</Net>
-
+        <VAT>1</VAT>
 		<!-- Encounter information -->
 		<Encounter>
 			<FacilityID>MF3505</FacilityID>
 			<Type>3</Type>
 			<PatientID>1245</PatientID>
+            <EligibilityIDPayer></EligibilityIDPayer>
 			<Start>{{DATE(DD/MM/YYYY)}} 12:00</Start>
 			<End>{{DATE(DD/MM/YYYY)}} 15:00</End>
 			<StartType>1</StartType>
 			<EndType>1</EndType>
+            <TransferSource></TransferSource>
+            <TransferDestination></TransferDestination>
 		</Encounter>
 
 		<!-- Diagnosis information: principal diagnosis - 195.2 - MALIGNANT NEOPLASM OF ABDOMEN -->
@@ -53,8 +57,10 @@
 			<Net>0</Net>
 			<OrderingClinician>GD6476</OrderingClinician>
 			<Clinician>GD6476</Clinician>
+            <PriorAuthorizationID></PriorAuthorizationID>
             <VAT>10</VAT>
             <VATPercent>1</VATPercent>
+            <DateOrdered>{{DATE(DD/MM/YYYY)}} 12:00</DateOrdered>
 			<!-- Observation information: observation - Date of Initial Encounter -->
 			<Observation>
 				<Type>LOINC</Type>
@@ -63,5 +69,8 @@
 				<ValueType>Qn</ValueType>
 			</Observation>
 		</Activity>
+        <Contract>
+            <PackageName>Malaffi-1234</PackageName>
+        </Contract>
 	</Claim>
 </Claim.Submission>

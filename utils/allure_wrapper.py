@@ -8,7 +8,7 @@ import os
 import threading
 from utils.asserter.asserter import XMLAsserter
 from utils.common_variables import tc_id, tc_description, tc_name, tc_request_name, tc_test_data, tc_rule_id, \
-    tc_objective, tc_precondition
+    tc_objective, tc_precondition, tc_error_text
 from utils.request_mapper.request_mapper_context import do_requests
 from utils.request_sender.system_enums import Systems
 from utils.excel_handler import ExcelHandler
@@ -110,7 +110,13 @@ def _execute_system1_baseline(test_case):
         if 'Pass'.lower() in test_case.get(tc_objective).lower():
             XMLAsserter(response).assert_error_doesnt_exist(test_case)
         else:
-            XMLAsserter(response).assert_error_exists(test_case)
+            try:
+                error_text = test_case[tc_error_text] if test_case[tc_error_text] is not None and len(test_case[tc_error_text].strip()) > 0 else None
+                if error_text is None:
+                    raise KeyError
+                XMLAsserter(response).assert_error_and_error_text_exists(test_case, error_text)
+            except KeyError:
+                XMLAsserter(response).assert_error_exists(test_case)
     except Exception as e:
         worker_id = get_worker_id()
         print(f"Worker {worker_id}: Error in system1 baseline for {test_case[tc_id]}: {str(e)}")
@@ -123,7 +129,13 @@ def _execute_dual_system_regression(test_case):
         if 'Pass'.lower() in test_case.get(tc_objective).lower():
             XMLAsserter(old_system_response).assert_error_doesnt_exist(test_case)
         else:
-            XMLAsserter(old_system_response).assert_error_exists(test_case)
+            try:
+                error_text = test_case[tc_error_text] if test_case[tc_error_text] is not None and len(test_case[tc_error_text].strip()) > 0 else None
+                if error_text is None:
+                    raise KeyError
+                XMLAsserter(old_system_response).assert_error_and_error_text_exists(test_case, error_text)
+            except KeyError:
+                XMLAsserter(old_system_response).assert_error_exists(test_case)
         new_system_response, template, prerequisite_response = request.do_request(system= Systems.NEW_SYSTEM ,live_data=test_case[tc_test_data])
         XMLAsserter(old_system_response).assert_responses_errors(new_system_response)
     except Exception as e:

@@ -9,6 +9,7 @@ tc_objective = 'Objective (Expected Result)'
 tc_precondition = 'Precondition'
 tc_object = 'Object'
 tc_element = 'Element'
+tc_error_text = 'Error Text'
 
 
 ## xml tags

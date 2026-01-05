@@ -3,12 +3,15 @@ from abc import abstractmethod, ABC
 import allure
 import pytest
 
+from functions.custom_functions import get_login_from_id, get_password_from_id
 from utils.asserter.asserter import XMLAsserter
 from utils.request_sender.send_request import SendPersonRegister, SendPriorRequest, SendPriorAuthorization, \
     SendClaimSubmission, SendRemittanceAdvice, SendSearchTransactions, SendGetNewTransaction, \
-    SendDownloadTransaction, SendSetTransactionDownloaded, SendPriorRequestZipped
+    SendDownloadTransaction, SendSetTransactionDownloaded, SendPriorRequestZipped, \
+    SendGetNewPriorAuthorizationTransactions, SendCostSubmission
 from utils.request_sender.send_request_context import SendRequestContext
 from utils.request_sender.system_enums import Systems
+from utils.template_generator.request_transaction_mapper import get_transaction_from_request
 from utils.template_generator.requests_name_enums import RequestsName
 from utils.template_generator.template_generator import GetRequestTemplate
 import xml.etree.ElementTree as ET
@@ -21,11 +24,17 @@ class AbstractRequestMapper(ABC):
         self.prior_authorization_template = None
         self.prior_authorization_resubmission_template = None
         self.claim_submission_template = None
+        self.claim_submission_resubmission_template = None
+        self.claim_submission_second_resubmission_template = None
         self.remittance_advice_template = None
+        self.second_remittance_advice_template = None
         self.search_transaction_template = None
+        self.get_new_prior_authorization_template = None
         self.get_new_transaction_template = None
         self.prior_request_resubmission_template = None
         self.prerequisites = prerequisites
+        self.cost_Submission_template = None
+        self.cost_resubmission_template = None
 
     @abstractmethod
     def do_request(self, live_data, system: Systems):
@@ -104,6 +113,46 @@ class PriorRequest(AbstractRequestMapper):
             person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
             XMLAsserter(person_register_response).assert_no_errors()
         return SendRequestContext().send_request(system,SendPriorRequest(self.prior_request_template, live_data)), self.prior_request_template, None
+
+class PriorRequestGreaterThan6MB(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if (self.person_register_template is None and self.prior_request_template is None and self.prior_authorization_template is None and
+            self.prior_request_resubmission_template is None):
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template,
+                                                                                        None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get prior authorization"):
+                self.prior_authorization_template, variables, empty_live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.prior_authorization.value, variables=variables)
+            prior_authorization_response = SendRequestContext().send_request(system,
+                                                                       SendPriorAuthorization(self.prior_authorization_template,
+                                                                                        None))
+            XMLAsserter(prior_authorization_response).assert_no_errors()
+            with allure.step("Get prior request resubmission"):
+                self.prior_request_resubmission_template, variables, live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.prior_request_greater_than_6MB.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template,
+                                                                                        None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            prior_authorization_response = SendRequestContext().send_request(system,SendPriorAuthorization(self.prior_authorization_template, None))
+            XMLAsserter(prior_authorization_response).assert_no_errors()
+        return SendRequestContext().send_request(system,SendPriorRequest(self.prior_request_resubmission_template, live_data)), self.prior_request_template, None
 
 class PriorRequestResubmission(AbstractRequestMapper):
 
@@ -327,6 +376,120 @@ class ClaimSubmission(AbstractRequestMapper):
             XMLAsserter(prior_request_response).assert_no_errors()
         return SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, live_data)), self.claim_submission_template, None
 
+class ClaimSubmissionMultipleClaims(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None:
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get prior authorization"):
+                self.prior_authorization_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_authorization.value, variables=variables)
+            prior_auth_response = SendRequestContext().send_request(system, SendPriorAuthorization(self.prior_authorization_template, None))
+            XMLAsserter(prior_auth_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission_multiple_claims.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, live_data)), self.claim_submission_template, None
+
+class ClaimResubmission(AbstractRequestMapper):
+    def do_request(self, system: Systems, live_data=None):
+        if self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None:
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system,
+                                                                       SendClaimSubmission(self.claim_submission_template,
+                                                                                        None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get remittance advice request"):
+                self.remittance_advice_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.remittance_advice.value, variables=variables)
+            remittance_response = SendRequestContext().send_request(system,
+                                                                       SendRemittanceAdvice(self.remittance_advice_template,
+                                                                                        None))
+            XMLAsserter(remittance_response).assert_no_errors()
+            with allure.step("Get claim resubmission request"):
+                self.claim_submission_resubmission_template, variables, live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.claim_submission_resubmission.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system,
+                                                                       SendClaimSubmission(self.claim_submission_template,
+                                                                                        None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_resubmission_template, live_data)), self.claim_submission_resubmission_template, None
+
+
+class ClaimSecondResubmission(AbstractRequestMapper):
+    def do_request(self, system: Systems, live_data=None):
+        if self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None:
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system,
+                                                                       SendClaimSubmission(self.claim_submission_template,
+                                                                                        None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get first claim resubmission request"):
+                self.claim_submission_resubmission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.claim_submission_resubmission.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system,
+                                                                          SendClaimSubmission(
+                                                                              self.claim_submission_resubmission_template,
+                                                                              None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get second claim resubmission request"):
+                self.claim_submission_second_resubmission_template, variables, live_data = GetRequestTemplate().get_template_request(
+                    request_name=RequestsName.claim_submission_second_resubmission.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system,
+                                                                       SendClaimSubmission(self.claim_submission_template,
+                                                                                        None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system,
+                                                                          SendClaimSubmission(
+                                                                              self.claim_submission_resubmission_template,
+                                                                              None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_second_resubmission_template, live_data)), self.claim_submission_second_resubmission_template, None
+
+
 class RemittanceAdvice(AbstractRequestMapper):
 
     def do_request(self, system: Systems, live_data=None):
@@ -359,6 +522,177 @@ class RemittanceAdvice(AbstractRequestMapper):
         return SendRequestContext().send_request(system, SendRemittanceAdvice(self.remittance_advice_template, live_data)), self.remittance_advice_template, None
 
 
+class CostSubmission(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if (self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None
+            and self.remittance_advice_template is None):
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get cost submission request"):
+                self.cost_Submission_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.cost_submission.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(
+                self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendCostSubmission(self.cost_Submission_template, live_data)), self.cost_Submission_template, None
+
+class CostResubmission(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if (self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None
+            and self.remittance_advice_template is None):
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get cost submission request"):
+                self.cost_Submission_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.cost_submission.value, live_data=live_data, variables=variables)
+            cost_submission_response = SendRequestContext().send_request(system, SendCostSubmission(
+                self.cost_Submission_template, None))
+            XMLAsserter(cost_submission_response).assert_no_errors()
+            with allure.step("Get cost resubmission request"):
+                self.cost_resubmission_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.cost_resubmission.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(
+                self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            cost_submission_response = SendRequestContext().send_request(system, SendCostSubmission(
+                self.cost_Submission_template, None))
+            XMLAsserter(cost_submission_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendCostSubmission(self.cost_resubmission_template, live_data)), self.cost_resubmission_template, None
+
+class RemittanceAdviceMultipleClaims(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if (self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None
+            and self.remittance_advice_template is None):
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission_multiple_claims.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get remittance advice request"):
+                self.remittance_advice_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.remittance_advice_multiple_claims.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(
+                self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendRemittanceAdvice(self.remittance_advice_template, live_data)), self.remittance_advice_template, None
+
+class SecondRemittanceAdvice(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if (self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None
+            and self.remittance_advice_template is None):
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get remittance advice request"):
+                self.remittance_advice_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.remittance_advice.value, variables=variables)
+            remittance_advice_response = SendRequestContext().send_request(system, SendRemittanceAdvice(
+                self.remittance_advice_template, None))
+            XMLAsserter(remittance_advice_response).assert_no_errors()
+            with allure.step("Get remittance advice request"):
+                self.second_remittance_advice_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.second_remittance_advice.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(
+                self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            remittance_advice_response = SendRequestContext().send_request(system, SendRemittanceAdvice(
+                self.remittance_advice_template, None))
+            XMLAsserter(remittance_advice_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendRemittanceAdvice(self.second_remittance_advice_template, live_data)), self.remittance_advice_template, None
+
+class RemittanceAdviceHAADClaim(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        if (self.person_register_template is None and self.prior_request_template is None and self.claim_submission_template is None
+            and self.remittance_advice_template is None):
+            with allure.step("Get person register request"):
+                self.person_register_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.person_register.value)
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            with allure.step("Get prior request"):
+                self.prior_request_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.prior_request.value, variables=variables)
+            prior_request_response = SendRequestContext().send_request(system, SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            with allure.step("Get claim submission request"):
+                self.claim_submission_template, variables, empty_live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.claim_submission_haad.value, variables=variables)
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+            with allure.step("Get remittance advice request"):
+                self.remittance_advice_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.remittance_advice.value, live_data=live_data, variables=variables)
+        else:
+            person_register_response = SendRequestContext().send_request(system, SendPersonRegister(
+                self.person_register_template, None))
+            XMLAsserter(person_register_response).assert_no_errors()
+            prior_request_response = SendRequestContext().send_request(system,
+                                                                       SendPriorRequest(self.prior_request_template, None))
+            XMLAsserter(prior_request_response).assert_no_errors()
+            claim_submission_response = SendRequestContext().send_request(system, SendClaimSubmission(
+                self.claim_submission_template, None))
+            XMLAsserter(claim_submission_response).assert_no_errors()
+        return SendRequestContext().send_request(system, SendRemittanceAdvice(self.remittance_advice_template, live_data)), self.remittance_advice_template, None
+
 class SearchTransactions(AbstractRequestMapper):
 
     def do_request(self, system: Systems, live_data=None):
@@ -374,17 +708,47 @@ class SearchTransactions(AbstractRequestMapper):
             from utils.request_mapper.request_mapper_context import do_requests
             prerequisite_transaction_response, prerequisite_transaction_template, prerequisite_prerequisite_response = do_requests(under_test_request=prerequisite, prerequisites=self.prerequisites[:-1]).do_request(system)
             XMLAsserter(prerequisite_transaction_response).assert_no_errors()
+            upload_transaction_id = get_transaction_from_request(prerequisite_transaction_template.tag)
             with allure.step("Get search transactions request"):
-                self.search_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.search_transactions.value, live_data=live_data, prerequisites=[{"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "fileName", "to":"transactionFileName"},
-                                                                                                                                                                        {"source": prerequisite_transaction_template, "from":"SenderID", "to":"callerLicense"},
-                                                                                                                                                                        {"source": prerequisite_transaction_template, "from":"ReceiverID", "to":"ePartner"},
-                                                                                                                                                                        {"source": prerequisite_transaction_response['request_xml'], "from": "login", "to":"login"},
-                                                                                                                                                                        {"source": prerequisite_transaction_response['request_xml'], "from": "pwd", "to":"pwd"}])
+                self.search_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.search_transactions.value, live_data=live_data, prerequisites=[{"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "fileName", "to":"transactionFileName", "process":None},
+                                                                                                                                                                        {"source": prerequisite_transaction_template, "from":"SenderID", "to":"callerLicense", "process":None},
+                                                                                                                                                                        {"source": prerequisite_transaction_template, "from":"ReceiverID", "to":"ePartner", "process":None},
+                                                                                                                                                                        {"source": prerequisite_transaction_response['request_xml'], "from": "login", "to":"login", "process":None},
+                                                                                                                                                                        {"source": prerequisite_transaction_response['request_xml'], "from": "pwd", "to":"pwd", "process":None},
+                                                                                                                                                                        {"source": None, "from": upload_transaction_id, "to":"transactionID", "process":None}])
         else:
             with allure.step("Get search transactions request"):
                 self.search_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.search_transactions.value, live_data=live_data)
         # the condition is important so that any API search, get new, download, set downloaded can reach the upload transaction data
         return SendRequestContext().send_request(system, SendSearchTransactions(self.search_transaction_template, live_data)), prerequisite_transaction_template, prerequisite_transaction_response if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response
+
+
+class GetNewPriorAuthorizationTransactions(AbstractRequestMapper):
+
+    def do_request(self, system: Systems, live_data=None):
+        prerequisite_transaction_response = None
+        prerequisite_transaction_template = None
+        prerequisite_prerequisite_response = None
+        if self.prerequisites:
+            try:
+                self.prerequisites = self.prerequisites.split('\n')
+            except AttributeError:
+                pass
+            prerequisite = self.prerequisites[-1].replace('\t','').replace('•','').strip()
+            from utils.request_mapper.request_mapper_context import do_requests
+            prerequisite_transaction_response, prerequisite_transaction_template, prerequisite_prerequisite_response = do_requests(under_test_request=prerequisite, prerequisites=self.prerequisites[:-1]).do_request(system)
+            XMLAsserter(prerequisite_transaction_response).assert_no_errors()
+
+            with allure.step("Get new prior authorization transactions request"):
+                self.get_new_prior_authorization_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.get_new_prior_authorization.value, live_data=live_data, prerequisites=[{"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "fileName", "to":"transactionFileName", "process":None},
+                                                                                                                                                                        {"source": prerequisite_transaction_template, "from":"SenderID", "to":"SenderID", "process":None},
+                                                                                                                                                                        {"source": prerequisite_transaction_template, "from": "ReceiverID", "to":"login", "process":get_login_from_id},
+                                                                                                                                                                        {"source": prerequisite_transaction_template, "from": "ReceiverID", "to":"pwd", "process":get_password_from_id}])
+        else:
+            with allure.step("Get new prior authorization transactions request"):
+                self.get_new_prior_authorization_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.get_new_prior_authorization.value, live_data=live_data)
+        # the condition is important so that any API search, get new, download, set downloaded can reach the upload transaction data
+        return SendRequestContext().send_request(system, SendGetNewPriorAuthorizationTransactions(self.get_new_prior_authorization_template, live_data)), prerequisite_transaction_template, prerequisite_transaction_response if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response
 
 
 class GetNewTransactions(AbstractRequestMapper):
@@ -403,12 +767,14 @@ class GetNewTransactions(AbstractRequestMapper):
             prerequisite_transaction_response, prerequisite_transaction_template, prerequisite_prerequisite_response = do_requests(
                 under_test_request=prerequisite, prerequisites=self.prerequisites[:-1]).do_request(system)
             XMLAsserter(prerequisite_transaction_response).assert_no_errors()
-            with allure.step("Get 'get new transactions' request"):
+            with allure.step("Get (get new transactions) request"):
                 self.get_new_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(
                     request_name=RequestsName.get_new_transactions.value, live_data=live_data, prerequisites=[
-                        {"source": prerequisite_transaction_template, "from": "SenderID", "to": "SenderID"},
-                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "login", "to": "login"},
-                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "pwd", "to": "pwd"}])
+                        {"source": prerequisite_transaction_template, "from": "SenderID", "to": "SenderID", 'process':None},
+                        # {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "login", "to": "login", "process":None},
+                        # {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "pwd", "to": "pwd", "process":None}
+                        {"source": prerequisite_transaction_template, "from": "ReceiverID", "to": "login","process": get_login_from_id},
+                        {"source": prerequisite_transaction_template, "from": "ReceiverID", "to": "pwd","process": get_password_from_id}])
         else:
             with allure.step("Get 'get new transactions' request"):
                 self.get_new_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(request_name=RequestsName.get_new_transactions.value, live_data=live_data)
@@ -434,9 +800,9 @@ class DownloadTransaction(AbstractRequestMapper):
             with allure.step("Get download transaction request"):
                 self.get_new_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(
                     request_name=RequestsName.download_transaction.value, live_data=live_data, prerequisites=[
-                        {"source": prerequisite_transaction_response['content'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['content'], "from": "TransactionID", "to": "fileId"},
-                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "login", "to": "login"},
-                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "pwd", "to": "pwd"}])
+                        {"source": prerequisite_transaction_response['content'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['content'], "from": "TransactionID", "to": "fileId", 'process':None},
+                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "login", "to": "login", 'process':None},
+                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "pwd", "to": "pwd", 'process':None}])
         else:
             with allure.step("Get download transaction request"):
                 self.get_new_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(
@@ -464,9 +830,9 @@ class SetTransactionDownloaded(AbstractRequestMapper):
                 self.get_new_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(
                     request_name=RequestsName.set_transaction_downloaded.value, live_data=live_data, prerequisites=[
                         {"source": prerequisite_transaction_response['content'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['content'], "from": "TransactionID",
-                         "to": "fileId"},
-                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "login", "to": "login"},
-                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "pwd", "to": "pwd"}])
+                         "to": "fileId", 'process':None},
+                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "login", "to": "login", 'process':None},
+                        {"source": prerequisite_transaction_response['request_xml'] if prerequisite_prerequisite_response is None else prerequisite_prerequisite_response['request_xml'], "from": "pwd", "to": "pwd", 'process':None}])
         else:
             with allure.step("Get set transaction downloaded request"):
                 self.get_new_transaction_template, variables, live_data = GetRequestTemplate().get_template_request(
@@ -484,4 +850,4 @@ class DefaultAbstractRequest(AbstractRequestMapper):
         self.request_name = request_name
 
     def do_request(self, system: Systems, live_data=None):
-        return pytest.fail(f"<Error: Unexpected type of request {self.request_name}> ")
+        raise Exception(f"Unexpected type of request {self.request_name}")

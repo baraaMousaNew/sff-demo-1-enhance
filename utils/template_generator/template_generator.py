@@ -66,6 +66,18 @@ class GetRequestTemplate:
                 return self.template.create_template(request_name=request_name,
                                                      template="xml_templates/prior_request_template.xml",
                                                      live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.prior_request_greater_than_6MB.value:
+            # with allure.step('Get prior request'):
+                allure.attach(
+                    "Starting the process of getting prior request",
+                    name='-- Prior Request --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template = GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(
+                    ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name,
+                                                     template="xml_templates/prior_request_resubmission_greater_6MB_template.xml",
+                                                     live_data=live_data, results=variables, health_checker=health_checker)
         elif request_name.lower() == RequestsName.prior_request_prescription.value:
             # with allure.step('Get prior request'):
                 allure.attach(
@@ -152,6 +164,42 @@ class GetRequestTemplate:
                 )
                 self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
                 return self.template.create_template(request_name=request_name, template="xml_templates/claim_submission_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.claim_submission_multiple_claims.value:
+            # with allure.step('Get claim submission'):
+                allure.attach(
+                    "Starting the process of getting claim submission",
+                    name='-- Claim Submission --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/claim_submission_multiple_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.claim_submission_resubmission.value:
+            # with allure.step('Get claim submission'):
+                allure.attach(
+                    "Starting the process of getting claim submission",
+                    name='-- Claim Re-Submission --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/claim_resubmission_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.claim_submission_second_resubmission.value:
+            # with allure.step('Get claim submission'):
+                allure.attach(
+                    "Starting the process of getting claim submission",
+                    name='-- Claim Re-Submission --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/claim_second_resubmission_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.claim_submission_haad.value:
+            # with allure.step('Get claim submission'):
+                allure.attach(
+                    "Starting the process of getting claim submission",
+                    name='-- Claim Submission --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/claim_submission_HAAD_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
         elif request_name.lower() == RequestsName.remittance_advice.value:
             # with allure.step('Get remittance advice'):
                 allure.attach(
@@ -161,6 +209,42 @@ class GetRequestTemplate:
                 )
                 self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
                 return self.template.create_template(request_name=request_name, template="xml_templates/remittance_advice_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.cost_submission.value:
+            # with allure.step('Get remittance advice'):
+                allure.attach(
+                    "Starting the process of getting cost submission",
+                    name='-- Cost Submission --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/cost_submission_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.cost_resubmission.value:
+            # with allure.step('Get remittance advice'):
+                allure.attach(
+                    "Starting the process of getting cost submission",
+                    name='-- Cost Submission --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/cost_resubmission_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.remittance_advice_multiple_claims.value:
+            # with allure.step('Get remittance advice'):
+                allure.attach(
+                    "Starting the process of getting remittance advice",
+                    name='-- Remittance Advice --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/remittance_advice_multiple_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.second_remittance_advice.value:
+            # with allure.step('Get remittance advice'):
+                allure.attach(
+                    "Starting the process of getting remittance advice",
+                    name='-- Remittance Advice --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template =  GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ReplaceLiveValueDecorator(RequestTemplate())))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/remittance_advice_second_template.xml", live_data=live_data, results=variables, health_checker=health_checker)
         elif request_name.lower() == RequestsName.search_transactions.value:
             # with allure.step('Get search transactions'):
                 allure.attach(
@@ -170,6 +254,15 @@ class GetRequestTemplate:
                 )
                 self.template = GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ExtractFromPrerequisitesDecorator(ReplaceLiveValueDecorator(RequestTemplate()))))))
                 return self.template.create_template(request_name=request_name, template="xml_templates/search_transactions_template.xml", live_data=live_data, results=variables, prerequisites=prerequisites, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.get_new_prior_authorization.value:
+            # with allure.step('Get search transactions'):
+                allure.attach(
+                    "Starting the process of getting search transactions",
+                    name='-- Search Transactions --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template = GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(ReplaceTemplateVariablesValuesDecorator(ExtractFromPrerequisitesDecorator(ReplaceLiveValueDecorator(RequestTemplate()))))))
+                return self.template.create_template(request_name=request_name, template="xml_templates/get_new_prior_authorization_transactions.xml", live_data=live_data, results=variables, prerequisites=prerequisites, health_checker=health_checker)
         elif request_name.lower() == RequestsName.get_new_transactions.value:
             # with allure.step('Get new transactions'):
                 allure.attach(
@@ -275,6 +368,20 @@ class GetRequestTemplate:
                         ExtractFromPrerequisitesDecorator(ReplaceLiveValueDecorator(RequestTemplate()))))))
                 return self.template.create_template(request_name=request_name,
                                                      template="xml_templates/upload_transaction_remittance_advice_template.xml",
+                                                     live_data=live_data, results=variables,
+                                                     prerequisites=prerequisites, health_checker=health_checker)
+        elif request_name.lower() == RequestsName.cost_submission_upload_transaction.value:
+            # with allure.step('Get upload transaction for remittance advice'):
+                allure.attach(
+                    "Starting the process of getting upload transaction",
+                    name='-- Upload transaction --',
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                self.template = GetTemplateDecorator(GetVariablesDecorator(GenerateVariablesValuesDecorator(
+                    ReplaceTemplateVariablesValuesDecorator(
+                        ExtractFromPrerequisitesDecorator(ReplaceLiveValueDecorator(RequestTemplate()))))))
+                return self.template.create_template(request_name=request_name,
+                                                     template="xml_templates/upload_transaction_cost_submission_template.xml",
                                                      live_data=live_data, results=variables,
                                                      prerequisites=prerequisites, health_checker=health_checker)
         else:

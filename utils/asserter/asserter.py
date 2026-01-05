@@ -5,6 +5,7 @@ import allure
 import pytest
 
 from utils.asserter.schema_rules_validator import SchemaRulesValidator
+from utils.asserter.text_similarity import calculate_similarity
 from utils.assertion_validator import AssertionValidator
 from utils.common_variables import tc_rule_id
 from utils.error_validator import ErrorValidator
@@ -24,7 +25,13 @@ class Asserter(ABC):
     def assert_error_exists(self, rule_id):
         pass
 
+    def assert_error_and_error_text_exists(self, rule_id, error_text):
+        pass
+
     def assert_responses_errors(self, second_response):
+        pass
+
+    def assert_error_text(self, expected_error_text):
         pass
 
 
@@ -68,7 +75,7 @@ class XMLAsserter(Asserter):
                 pytest.fail("Error report is empty")
             else:
                 file = error_validator.decode_and_parse_error_report(base64_report)
-                found = SchemaRulesValidator(rule_id, test_case).validate_strategy(file)
+                found, actual_error_text = SchemaRulesValidator(rule_id, test_case).validate_strategy(file)
                 if not found:
                     allure.attach(
                         f"Error file doesn't contain the rule id\n\n" + f"{json.dumps(file, indent=2)}",
@@ -82,6 +89,51 @@ class XMLAsserter(Asserter):
                         name=f"Assert rule id {rule_id} does exist",
                         attachment_type=allure.attachment_type.TEXT
                     )
+            if response_code != '-2':
+                pytest.fail(f"Response code is '{response_code}' while expecting response code of -2")
+
+    def assert_error_and_error_text_exists(self, test_case, error_text):
+        rule_id = test_case.get(tc_rule_id)
+        error_validator = ErrorValidator()
+        base64_report = error_validator.extract_error_report(self.response['content'])
+        response_code = error_validator.extract_response_code(self.response['content'])
+        with allure.step(f"Assert error {rule_id} exists in the report"):
+            if not base64_report:
+                allure.attach(
+                    "No error file exists",
+                    name=f"Assert rule id {rule_id} does exist",
+                    attachment_type=allure.attachment_type.TEXT)
+                pytest.fail("Error report is empty")
+            else:
+                file = error_validator.decode_and_parse_error_report(base64_report)
+                found, actual_error_text = SchemaRulesValidator(rule_id, test_case).validate_strategy(file)
+                if not found:
+                    allure.attach(
+                        f"Error file doesn't contain the rule id\n\n" + f"{json.dumps(file, indent=2)}",
+                        name=f"Assert rule id {rule_id} does exist",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
+                    pytest.fail("Error report doesn't contain the ruleID")
+                else:
+                    allure.attach(
+                        "Error file contains the rule id\n\n" + f"{json.dumps(file, indent=2)}",
+                        name=f"Assert rule id {rule_id} does exist",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
+                    similarity = calculate_similarity(error_text, actual_error_text)
+                    if similarity < 0.9:
+                        allure.attach(
+                            f"Similarity is less that 90%\nActual error: {actual_error_text}\nExpected error: {error_text}",
+                            name=f"Assert error texts are similar",
+                            attachment_type=allure.attachment_type.TEXT
+                        )
+                        pytest.fail("Error similarity in error text is less than 90%")
+                    else:
+                        allure.attach(
+                            f"Similarity is above or equal to 90%\nActual error: {actual_error_text}\nExpected error: {error_text}",
+                            name=f"Assert error texts are similar",
+                            attachment_type=allure.attachment_type.TEXT
+                        )
             if response_code != '-2':
                 pytest.fail(f"Response code is '{response_code}' while expecting response code of -2")
 
@@ -99,7 +151,7 @@ class XMLAsserter(Asserter):
                     attachment_type=allure.attachment_type.TEXT)
             else:
                 file = error_validator.decode_and_parse_error_report(base64_report)
-                found = SchemaRulesValidator(rule_id, test_case).validate_strategy(file)
+                found, actual_error_text = SchemaRulesValidator(rule_id, test_case).validate_strategy(file)
                 if not found:
                     allure.attach(
                         f"Error file doesn't contain the rule id\n\n" + f"{json.dumps(file, indent=2)}",
@@ -129,7 +181,8 @@ class XMLAsserter(Asserter):
                         found = False
                         for second_element in file_second:
                             if (element.get("Type") == second_element.get("Type") and
-                                element.get("RuleID") == second_element.get("RuleID")):
+                                element.get("RuleID") == second_element.get("RuleID") and
+                                element.get("Error Text") == second_element.get("Error Text")):
                                 found = True
                                 break
                         if not found:

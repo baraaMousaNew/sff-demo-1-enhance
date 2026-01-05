@@ -403,7 +403,7 @@ class VariableProcessor:
                         variable_expression['tag_values'].append(value)
 
     ## this function is for processing variables of manual tab
-    def evaluate_variable_manual(self, variable_expr):
+    def evaluate_variable_manual(self, variable_expr, variable_expressions=None):
         """
         Evaluate a single variable expression
 
@@ -412,14 +412,19 @@ class VariableProcessor:
 
         Returns:
             str: Evaluated result
+            :param variable_expr:
+            :param variable_expressions:
         """
         # Handle declared variables first
         if variable_expr.startswith('VAR.'):
+            # var_name = variable_expr[4:]  # Remove 'VAR.'
+            # if var_name in self.declared_variables:
+            #     return self.declared_variables[var_name]
+            # else:
+            #     return f"{{ERROR: Undefined variable '{var_name}'}}"
             var_name = variable_expr[4:]  # Remove 'VAR.'
-            if var_name in self.declared_variables:
-                return self.declared_variables[var_name]
-            else:
-                return f"{{ERROR: Undefined variable '{var_name}'}}"
+            variable_value = self.get_from_variables(variable_expressions, var_name)
+            return variable_value
 
         # Handle extracted variables (from responses)
         if variable_expr.startswith('EXTRACT.'):

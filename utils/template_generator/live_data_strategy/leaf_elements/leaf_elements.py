@@ -7,12 +7,12 @@ from utils.variable_processor import VariableProcessor
 
 class LeafElements(ABC):
 
-    def update_leaf_element(self, template, leaf_element, value):
+    def update_leaf_element(self, template, leaf_element, value, variables):
         pass
 
 class XmlnsLeafElement(LeafElements):
 
-    def update_leaf_element(self, template, leaf_element, value):
+    def update_leaf_element(self, template, leaf_element, value, variables):
         tags_list = [item.strip() for item in leaf_element.split('.')]
         value = value.strip()
         def search_element(main, tags):
@@ -26,7 +26,8 @@ class XmlnsLeafElement(LeafElements):
                         if len(tags) > 0:
                             return search_element(child, tags)
                         else:
-                            child.text = LeafValueContext().get_leaf_value(child.text, value)
+                            child_text = child.text if child.text else ''
+                            child.text = LeafValueContext().get_leaf_value(child_text, value, variables)
                             return template, True
                 else:
                     if bool(re.search(rf'\{{[^}}]*\}}{element.group(1)}$', child.tag)):
@@ -36,7 +37,8 @@ class XmlnsLeafElement(LeafElements):
                             if len(tags) > 0:
                                 return search_element(child, tags)
                             else:
-                                child.text = LeafValueContext().get_leaf_value(child.text, value)
+                                child_text = child.text if child.text else ''
+                                child.text = LeafValueContext().get_leaf_value(child_text, value, variables)
                                 return template, True
             return template, False
         template, is_updated = search_element(template, tags_list)
@@ -44,7 +46,7 @@ class XmlnsLeafElement(LeafElements):
 
 class NoXmlnsLeafElement(LeafElements):
 
-    def update_leaf_element(self, template, leaf_element, value):
+    def update_leaf_element(self, template, leaf_element, value, variables):
         tags_list = [item.strip() for item in leaf_element.split('.')]
         value = value.strip()
         def search_element(main, tags):
@@ -57,7 +59,9 @@ class NoXmlnsLeafElement(LeafElements):
                         if len(tags) > 0:
                             return search_element(child, tags)
                         else:
-                            child.text = LeafValueContext().get_leaf_value(child.text, value)
+                            ## this line is used to handle the elements with empty value
+                            child_text = child.text if child.text else ''
+                            child.text = LeafValueContext().get_leaf_value(child_text, value, variables)
                             return template, True
                 else:
                     if child.tag == element.group(1):
@@ -67,7 +71,8 @@ class NoXmlnsLeafElement(LeafElements):
                             if len(tags) > 0:
                                 return search_element(child, tags)
                             else:
-                                child.text = LeafValueContext().get_leaf_value(child.text, value)
+                                child_text = child.text if child.text else ''
+                                child.text = LeafValueContext().get_leaf_value(child_text, value, variables)
                                 return template, True
             return template, False
         template = search_element(template, tags_list)
@@ -75,7 +80,7 @@ class NoXmlnsLeafElement(LeafElements):
 
 class LeafValueContext:
 
-    def get_leaf_value(self, current_value, value):
+    def get_leaf_value(self, current_value, value, variables):
         # variable_pattern = r'{([^}]*)}|<([^>]*)>|\(([^)]*)\)|\[([^\]]*)\]'
         if bool(re.match(enclosed_variable_pattern, value)):
             try:
@@ -103,7 +108,7 @@ class LeafValueContext:
         elif bool(re.search(r'\{\{(.*?)\}\}', value)):
             try:
                 match = re.search(r'\{\{(.*?)\}\}', value)
-                generated_value = VariableLeafValue().get_value(match.group(1), current_value)
+                generated_value = VariableLeafValue().get_value(match.group(1), current_value, variables)
                 result = re.sub(r'\{\{(.*?)\}\}', str(generated_value), value)
             except Exception as e:
                 raise Exception(f"Error while parsing function value {value}: {e}")
@@ -113,20 +118,20 @@ class LeafValueContext:
 
 class LeafValues(ABC):
 
-    def get_value(self, variable, current_value):
+    def get_value(self, variable, current_value, variables):
         pass
 
 class ValidLeafValue(LeafValues):
 
-    def get_value(self, variable, current_value=None):
+    def get_value(self, variable, current_value=None, declared_variables=None):
         return f"ERROR: <InvalidLeafSyntax> ValidLeafValue Currently not handled {variable}"
 
 class InvalidLeafValue(LeafValues):
 
-    def get_value(self, variable, current_value=None):
+    def get_value(self, variable, current_value=None, declared_variables=None):
         return f"ERROR: <InvalidLeafSyntax> InvalidLeafValue Currently not handled {variable}"
 
 class VariableLeafValue(LeafValues):
-    def get_value(self, variable, current_value=None):
+    def get_value(self, variable, current_value=None, declared_variables=None):
         variable = re.sub(r'\bvalue\b(?=[^()]*\))', current_value, variable)
-        return VariableProcessor().evaluate_variable_manual(variable)
+        return VariableProcessor().evaluate_variable_manual(variable, declared_variables)
