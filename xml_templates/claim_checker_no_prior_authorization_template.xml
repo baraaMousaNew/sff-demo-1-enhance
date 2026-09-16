@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Claim.Submission xmlns:tns="http://www.haad.ae/DataDictionary/CommonTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/CommonTypes/ClaimSubmission.xsd">
+
+	<!-- Header: Submission identification information -->
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>T001_Malaffi</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+
+	<Claim>
+		<!-- Claim identification information -->
+		<ID>{{VAR(claim_id).CUSTOM.generate_numbers_id()}}</ID>
+		<IDPayer></IDPayer>
+		<MemberID>{{VAR.member_id}}</MemberID>
+		<PayerID>T001_Malaffi</PayerID>
+		<ProviderID>TF001_Malaffi</ProviderID>
+		<EmiratesIDNumber>{{VAR.emirates_id}}</EmiratesIDNumber>
+		<Gross>1500.002</Gross>
+		<PatientShare>0</PatientShare>
+		<Net>1500.002</Net>
+		<VAT>1</VAT>
+
+		<!-- Encounter information -->
+		<Encounter>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
+			<Type>3</Type>
+			<PatientID>1245</PatientID>
+			<EligibilityIDPayer></EligibilityIDPayer>
+			<Start>{{DATE(DD/MM/YYYY)}} 12:00</Start>
+			<End>{{DATE(DD/MM/YYYY)}} 15:00</End>
+			<StartType>1</StartType>
+			<EndType>1</EndType>
+			<TransferSource></TransferSource>
+			<TransferDestination></TransferDestination>
+		</Encounter>
+
+		<!-- Diagnosis information -->
+		<Diagnosis>
+			<Type>Principal</Type>
+			<Code>A00.0</Code>
+			<DxInfo>
+				<Type>POA</Type>
+				<Code>Y</Code>
+			</DxInfo>
+		</Diagnosis>
+
+		<!-- Activity information -->
+		<Activity>
+			<ID>{{VAR.activity_id}}</ID>
+			<Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
+			<Type>3</Type>
+			<Code>{{VAR.activity_code}}</Code>
+			<Quantity>1.006</Quantity>
+			<Net>1500.002</Net>
+			<OrderingClinician>{{VAR.clinician_license}}</OrderingClinician>
+			<Clinician>{{VAR.clinician_license}}</Clinician>
+			<PriorAuthorizationID></PriorAuthorizationID>
+			<VAT>10</VAT>
+			<VATPercent>1</VATPercent>
+			<DateOrdered>{{DATE(DD/MM/YYYY)}} 12:00</DateOrdered>
+			<!-- Observation information -->
+			<Observation>
+				<Type>LOINC</Type>
+				<Code>{{VAR.observation_code}}</Code>
+				<Value>8</Value>
+				<ValueType>Qn</ValueType>
+			</Observation>
+		</Activity>
+
+		<!-- Contract information -->
+		<Contract>
+			<PackageName>Malaffi-1234</PackageName>
+		</Contract>
+	</Claim>
+</Claim.Submission>

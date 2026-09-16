@@ -1,0 +1,33 @@
+# CI/CD dependencies — GUI packages excluded
+# Use this instead of requirements.txt when running in headless/pipeline mode:
+#   pip install -r requirements-ci.txt
+
+allure-pytest==2.15.0
+allure-python-commons==2.15.0
+attrs==25.3.0
+certifi==2025.8.3
+charset-normalizer==3.4.3
+colorama==0.4.6
+elementpath==5.0.4
+et_xmlfile==2.0.0
+execnet==2.1.1
+idna==3.10
+iniconfig==2.1.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+numpy==2.3.2
+openpyxl==3.1.5
+packaging==25.0
+pandas==2.3.2
+pluggy==1.6.0
+pytest==8.4.1
+pytest-timeout==2.4.0
+pytest-xdist==3.8.0
+python-dateutil==2.9.0.post0
+pytz==2025.2
+requests==2.32.5
+six==1.17.0
+tzdata==2025.2
+urllib3==2.5.0
+xlrd==2.0.2
+xmlschema==4.1.0

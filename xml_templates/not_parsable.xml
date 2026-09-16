@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <[invalid field]Response xmlns="https://www.shafafiya.org/v2/"><[invalid field]Result>[invalid field]
+    </[invalid field]Result>
+    <errorMessage>[invalid field]</errorMessage>
+</[invalid field]Response>
+</soapenv:Body>
+</soapenv:Envelope>

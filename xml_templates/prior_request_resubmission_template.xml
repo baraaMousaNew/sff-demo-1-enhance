@@ -9,30 +9,34 @@
 	</Header>
 	<Authorization>
 		<Type>Authorization</Type>
-		<ID>MF3505-{{VAR.prior_request_id}}</ID>
-        <IDPayer>MF3505-{{CUSTOM.generate_numbers_id()}}</IDPayer>
+		<ID>{{VAR.facility_id}}-{{VAR.prior_request_id}}</ID>
+        <IDPayer>{{VAR.facility_id}}-{{VAR.id_payer}}</IDPayer>
 		<MemberID>{{VAR.member_id}}</MemberID>
 		<PayerID>T001_Malaffi</PayerID>
 		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
 		<Encounter>
-			<FacilityID>MF3505</FacilityID>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
 			<Type>3</Type>
 			<Start>{{DATE(DD/MM/YYYY)}} 16:43</Start>
 		</Encounter>
 		<Diagnosis>
 			<Type>Principal</Type>
 			<Code>A00.0</Code>
+            <DxInfo>
+                <Type>ICD10-CM</Type>
+                <Code>A00.1</Code>
+            </DxInfo>
 		</Diagnosis>
 		<Activity>
-			<ID>1</ID>
+			<ID>{{VAR.activity_id}}</ID>
 			<Start>{{DATE(DD/MM/YYYY)}} 16:43</Start>
 			<Type>3</Type>
-			<Code>44950</Code>
+			<Code>{{VAR.activity_code}}</Code>
 			<Quantity>1</Quantity>
 			<Net>1500</Net>
 			<Observation>
 				<Type>LOINC</Type>
-				<Code>10579-1</Code>
+				<Code>{{VAR.observation_code}}</Code>
 				<Value>8</Value>
 				<ValueType>Qn</ValueType>
 			</Observation>

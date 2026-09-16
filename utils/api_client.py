@@ -4,6 +4,9 @@ API Client - Handles HTTP requests to SOAP APIs
 
 import requests
 from datetime import datetime
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class APIClient:
     def __init__(self):
@@ -13,7 +16,7 @@ class APIClient:
             'User-Agent': 'Python-SOAP-Client/1.0'
         }
 
-    def send_request(self, url, xml_body, soap_action=None, timeout=30, debug=False):
+    def send_request(self, url, xml_body, soap_action=None, content_type=None, timeout=30, debug=False):
         """
         Send SOAP request and return response details
 
@@ -21,6 +24,7 @@ class APIClient:
             url (str): API endpoint URL
             xml_body (str): XML/SOAP body content
             soap_action (str): SOAPAction header value for this specific request
+            content_type (str): Override Content-Type header (e.g. application/soap+xml for SOAP 1.2)
             timeout (int): Request timeout in seconds
             debug (bool): Print request details for debugging
 
@@ -31,6 +35,8 @@ class APIClient:
 
         # Use provided SOAPAction or default
         headers = self.default_headers.copy()
+        if content_type:
+            headers['Content-Type'] = content_type
         if soap_action:
             # Auto-add quotes if not present, but don't double-quote
             if not (soap_action.startswith('"') and soap_action.endswith('"')):
@@ -54,7 +60,8 @@ class APIClient:
                 url=url,
                 data=xml_body,
                 headers=headers,
-                timeout=timeout
+                timeout=timeout,
+                verify=False
             )
 
             end_time = datetime.now()
@@ -71,10 +78,10 @@ class APIClient:
                 'request_xml': xml_body  # Add the final XML that was sent
             }
 
-        except requests.exceptions.Timeout:
-            raise Exception(f"Request timeout after {timeout} seconds")
-        except requests.exceptions.ConnectionError:
-            raise Exception("Connection error - check URL and network")
+        except requests.exceptions.Timeout as e:
+            raise Exception(f"Request timeout after {timeout} seconds {e}")
+        except requests.exceptions.ConnectionError as e:
+            raise Exception(f"Connection error - check URL and network {e}")
         except requests.exceptions.RequestException as e:
             raise Exception(f"Request failed: {str(e)}")
         except Exception as e:

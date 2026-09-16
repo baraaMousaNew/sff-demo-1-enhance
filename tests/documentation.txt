@@ -1,0 +1,7 @@
+-v alone now gives you the readable log you want without any extra flags:
+
+  python -m pytest tests/test_update_qa_bugs.py -v
+  → e.g. test_failure_tag_outcome[system 1: bug=soft only, tc=hard tag -> skip (soft check never ran)] PASSED
+
+For full detail (exact tags + actual vs. expected for every case, including passing ones), add -s:
+  python -m pytest tests/test_update_qa_bugs.py -v -s

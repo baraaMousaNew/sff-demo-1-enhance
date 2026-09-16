@@ -40,7 +40,7 @@ class ExtractFromPrerequisitesDecorator(BaseDecorator):
                                                                                                       prereq['from'])
         allure.attach(
             ET.tostring(template).decode('utf-8'),
-            name="Extracting data from prerequisites",
+            name="53d1c0 - Extracting data from prerequisites",
             attachment_type=allure.attachment_type.XML
         )
         template, results, live_data = super().create_template(request_name=request_name, template=template, parent=parent, results=results, results_index=results_index, live_data=live_data, prerequisites=prerequisites, health_checker=health_checker)

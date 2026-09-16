@@ -18,14 +18,14 @@
 		<MemberID>{{VAR.member_id}}</MemberID>
 		<PayerID>T001_Malaffi</PayerID>
 		<ProviderID>TF001_Malaffi</ProviderID>
-		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
-		<Gross>0</Gross>
+		<EmiratesIDNumber>{{VAR.emirates_id}}</EmiratesIDNumber>
+		<Gross>1500.002</Gross>
 		<PatientShare>0</PatientShare>
-		<Net>0</Net>
+		<Net>1500.002</Net>
         <VAT>1</VAT>
 		<!-- Encounter information -->
 		<Encounter>
-			<FacilityID>MF3505</FacilityID>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
 			<Type>3</Type>
 			<PatientID>1245</PatientID>
             <EligibilityIDPayer></EligibilityIDPayer>
@@ -49,14 +49,14 @@
 
 		<!-- Activity information: activity - Service Code 10 - Consultation Specialist -->
 		<Activity>
-			<ID>{{VAR(activity_id).CUSTOM.generate_numbers_id()}}</ID>
+			<ID>{{VAR.activity_id}}</ID>
 			<Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
 			<Type>3</Type>
-			<Code>44950</Code>
-			<Quantity>1</Quantity>
-			<Net>0</Net>
-			<OrderingClinician>GD6476</OrderingClinician>
-			<Clinician>GD6476</Clinician>
+			<Code>{{VAR.activity_code}}</Code>
+			<Quantity>1.006</Quantity>
+			<Net>1500.002</Net>
+			<OrderingClinician>{{VAR.clinician_license}}</OrderingClinician>
+			<Clinician>{{VAR.clinician_license}}</Clinician>
             <PriorAuthorizationID></PriorAuthorizationID>
             <VAT>10</VAT>
             <VATPercent>1</VATPercent>
@@ -64,7 +64,7 @@
 			<!-- Observation information: observation - Date of Initial Encounter -->
 			<Observation>
 				<Type>LOINC</Type>
-				<Code>10579-1</Code>
+				<Code>{{VAR.observation_code}}</Code>
 				<Value>8</Value>
 				<ValueType>Qn</ValueType>
 			</Observation>

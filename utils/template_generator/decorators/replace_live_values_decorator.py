@@ -31,7 +31,8 @@ class ReplaceLiveValueDecorator(BaseDecorator):
                     except Exception as e:
                         pytest.fail(f'Exception while parsing live data: {value};\nError: {e}')
                 else:
-                    pytest.fail(f'Value {value} is not a valid value')
+                    # pytest.fail(f'Value {value} is not a valid value')
+                    raise Exception(f'Value {value} is not a valid value')
             parent_elements = dict(sorted(parent_elements.items(), key=lambda item: len(item[0])))
             live_data_dict.update(parent_elements)
             live_data_dict.update(leaf_elements)
@@ -43,10 +44,10 @@ class ReplaceLiveValueDecorator(BaseDecorator):
                 if is_done:
                     final_data_dict.pop(key)
             final_live_data = ';'.join(f"{key}={value}" for key, value in final_data_dict.items())
-        allure.attach(
-                ET.tostring(template).decode("utf-8"),
-                name="Replace live variables",
-                attachment_type=allure.attachment_type.XML)
+            allure.attach(
+                    ET.tostring(template, encoding="unicode"),
+                    name="e86ab1 - Replace live variables",
+                    attachment_type=allure.attachment_type.XML)
 
         template, results, live_data =super().create_template(request_name=request_name, template=template, parent=parent, results=results, live_data=final_live_data, results_index=results_index, prerequisites=prerequisites, health_checker=health_checker)
         return template, results, live_data

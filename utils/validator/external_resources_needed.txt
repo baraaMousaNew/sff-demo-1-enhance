@@ -1,0 +1,248 @@
+EXTERNAL RESOURCES NEEDED FOR RULES VALIDATOR
+==============================================
+Each section describes a resource, what it is, and which rules depend on it.
+Please collect and share back so we can wire them into the validator.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+1. PROVIDER / PAYER CLASSIFICATION LISTS
+   These are fixed groupings of license IDs by who issued them.
+   Rules use them to check if a SenderID or ReceiverID belongs to a category.
+═══════════════════════════════════════════════════════════════════════════════
+
+  1.1  HAADProvider
+       Description : License IDs of providers licensed by HAAD
+       Used in     : Rules 11, 12, 13, 17, 31, 33, 34, 36, 42, 43, 54, 55, 57, 65, 66, 67, 68, 69
+       Format needed: List of license ID strings
+
+  1.2  DHAProvider
+       Description : License IDs of providers licensed by DHA
+       Used in     : Rules 11, 12, 17, 31, 34, 42, 43, 54, 57, 65, 66, 67, 68, 69
+       Format needed: List of license ID strings
+
+  1.3  MOHProvider
+       Description : License IDs of providers licensed by MOH
+       Used in     : Rules 11, 12, 17, 31, 34, 42, 43, 54, 57, 65, 66, 67, 68, 69
+       Format needed: List of license ID strings
+
+  1.4  HAADPayer
+       Description : License IDs of insurers/payers licensed by HAAD
+       Used in     : Rules 11, 13, 54, 55, 57, 59
+       Format needed: List of license ID strings
+
+  1.5  HAADTPA
+       Description : License IDs of TPAs licensed by HAAD
+       Used in     : Rules 15, 54, 55, 56, 57, 59
+       Format needed: List of license ID strings
+
+
+═══════════════════════════════════════════════════════════════════════════════
+2. LIVE REGISTRY LOOKUPS
+   These are dynamic — they change as licenses are issued/revoked.
+   Rules check if an ID exists with "active" status in the registry.
+═══════════════════════════════════════════════════════════════════════════════
+
+  2.1  Provider Registry (HAAD + DHA + MOH combined, active only)
+       Description : All active facility/provider license IDs across all three authorities
+       DB tables   : HAAD_SH_FACILITY_LICENSE.FACILITY_LICENSE_ID
+                     HAAD_SH_DHA_LICENSE.FACILITY_LICENSE
+                     HAAD_SH_MOH_LICENSE.FACILITY_LICENSE
+       Filter      : Active status only
+       Used in     : Rules 18, 31, 34, 42, 43, 205
+       Format needed: Queryable set of license IDs with active flag
+
+  2.2  Insurer Registry (classification = "Insurance" or "Other")
+       Description : Active insurance license IDs (excludes Brokers and TPAs)
+       DB table    : HAAD_SH_INSURANCE.AUTH_NUMBER where CLASSIFICATION not in ("Broker", "TPA")
+       Filter      : Active status only
+       Used in     : Rules 15, 54, 57, 208
+       Format needed: Queryable set of license IDs
+
+  2.3  TPA Registry (classification = "TPA")
+       Description : Active TPA license IDs
+       DB table    : HAAD_SH_INSURANCE.AUTH_NUMBER where CLASSIFICATION = "TPA"
+       Filter      : Active status only
+       Used in     : Rules 54, 57, 59, 209
+       Format needed: Queryable set of license IDs
+
+  2.4  dhaMohProvider Registry
+       Description : Combined DHA + MOH provider registry (referenced separately in Rules 18)
+       Used in     : Rule 18 (Claim.Submission, Remittance.Advice)
+       Format needed: Queryable set of license IDs with active flag
+       Note        : May overlap with 2.1 — confirm if same source or separate
+
+  2.5  Clinicians Registry
+       Description : Active clinician license IDs
+       Used in     : Rule 205 (ordering clinician validation)
+       Format needed: Queryable set of clinician license IDs with active flag
+
+
+═══════════════════════════════════════════════════════════════════════════════
+3. MANDATORY TARIFF / MEDICAL CODE LISTS
+   Each ActivityType maps to a specific code list.
+   Rules check if Activity.Code exists in the list and whether the
+   Activity.Start falls within the code's effective/expiry date range.
+═══════════════════════════════════════════════════════════════════════════════
+
+  3.1  CPT Tariff List  (ActivityType = 3)
+       Used in     : Rules 65 (Claim.Submission, Prior.Authorization, Prior.Request, Remittance.Advice)
+       Fields needed per code: code, effective_date, expiry_date, is_active
+
+  3.2  HCPCS Tariff List  (ActivityType = 4)
+       Used in     : Rules 66 (Claim.Submission, Prior.Authorization, Prior.Request, Remittance.Advice)
+       Fields needed per code: code, effective_date, expiry_date, is_active
+
+  3.3  Trade Drug Registry  (ActivityType = 5)
+       Used in     : Rules 67 (Claim.Submission, Prior.Authorization, Prior.Request, Remittance.Advice)
+       Fields needed per code: code, delete_effective_date, is_active
+       Note        : Rule checks if Activity.Start >= delete_effective_date (code was deleted)
+
+  3.4  Dental / USCLS Tariff List  (ActivityType = 6)
+       Used in     : Rules 68 (Claim.Submission, Prior.Authorization, Prior.Request, Remittance.Advice)
+       Fields needed per code: code, effective_date, expiry_date, is_active
+
+  3.5  Service Code List  (ActivityType = 8)
+       Used in     : Rules 69 (Claim.Submission, Prior.Authorization, Prior.Request, Remittance.Advice)
+       Fields needed per code: code, effective_date, expiry_date, is_active
+
+  3.6  Generic Drug List  (ActivityType = 10)
+       Used in     : Rules for ActivityType=10 (similar pattern to 3.3)
+       Fields needed per code: code, delete_effective_date, is_active
+       Note        : Confirm if same registry as 3.3 or separate
+
+  3.7  IR-DRG Tariff List  (ActivityType = 9)
+       Used in     : Rules for ActivityType=9 (similar pattern)
+       Fields needed per code: code, effective_date, expiry_date, is_active
+       Note        : Confirm if validated similarly to CPT/HCPCS
+
+
+═══════════════════════════════════════════════════════════════════════════════
+4. DIAGNOSIS CODE LISTS
+═══════════════════════════════════════════════════════════════════════════════
+
+  4.1  ICD-9 Code List
+       Used in     : Rules 52, 64 (Claim.Submission, Prior.Request, Prior.Authorization, Remittance.Advice)
+       Fields needed per code: code, is_active (some rules check active status)
+
+  4.2  ICD-10 Code List
+       Used in     : Rule 52 (when applicable based on date)
+       Fields needed per code: code, is_active
+
+  4.3  TwinICD9Codes / TwinICD10Codes
+       Description : List of ICD codes that are expected to appear as twins (pairs)
+                     Used for duplicate claim detection
+       Used in     : Rule 233 (Claim.Submission)
+       Format needed: List of ICD code strings
+
+
+═══════════════════════════════════════════════════════════════════════════════
+5. LOINC CODE LIST
+═══════════════════════════════════════════════════════════════════════════════
+
+  5.1  LOINC Master Data
+       Description : Valid LOINC observation codes with active status
+       Used in     : Rule 45 (Claim.Submission, Prior.Request)
+       Fields needed per code: code, is_active
+
+
+═══════════════════════════════════════════════════════════════════════════════
+6. BENEFIT PACKAGE REGISTRY
+═══════════════════════════════════════════════════════════════════════════════
+
+  6.1  Benefit Package Names
+       Description : Valid insurance package names
+       Used in     : Rule 153 (Person.Register)
+       Format needed: List of valid package name strings
+
+
+═══════════════════════════════════════════════════════════════════════════════
+7. DENIAL CODE REGISTRY
+═══════════════════════════════════════════════════════════════════════════════
+
+  7.1  Denial Code List
+       Description : Valid denial codes for claims and authorizations
+       Used in     : Rules 21 (Remittance.Advice), 163 (Prior.Authorization)
+       Format needed: List of valid denial code strings
+
+
+═══════════════════════════════════════════════════════════════════════════════
+8. NATIONALITY LIST
+═══════════════════════════════════════════════════════════════════════════════
+
+  8.1  Nationality Master Data
+       Description : Valid nationality codes/names
+       Used in     : Rule 53 (Person.Register)
+       Format needed: List of valid nationality strings
+
+
+═══════════════════════════════════════════════════════════════════════════════
+9. EXCLUSION LISTS
+   These are lists of SenderIDs that are exempt from certain rules.
+   They bypass specific checks — rules explicitly say "if senderID is NOT in exclusionListVarX".
+═══════════════════════════════════════════════════════════════════════════════
+
+  9.1  exclusionListVar1
+       Description : Senders exempt from tariff code validation (CPT, HCPCS, Dental, Service, Drug)
+       Used in     : Rules 31, 65, 66, 67, 68, 69 (Claim.Submission)
+       Format needed: List of SenderID strings
+
+  9.2  exclusionListVar2
+       Description : Senders exempt from TransferSource / TransferDestination registry checks
+       Used in     : Rules 42, 43 (Claim.Submission)
+       Format needed: List of SenderID strings
+
+  9.3  exclusionListVar4
+       Description : Senders/codes exempt from tariff checks in Prior.Authorization and Prior.Request
+       Used in     : Rules 65, 66, 67, 68, 69 (Prior.Authorization, Prior.Request)
+       Format needed: List of SenderID or code strings — confirm if sender IDs or activity codes
+
+  9.4  exclusionListVar6
+       Description : Additional exclusions for Prior.Request activity checks
+       Used in     : Rule 69 (Prior.Request)
+       Format needed: List of strings — confirm scope
+
+  9.5  applicableDateVar1
+       Description : A variable date threshold used in Rule 31 (Claim.Submission)
+       Used in     : Rule 31
+       Format needed: A single date value (dd/mm/yyyy)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+10. CROSS-TRANSACTION LOOKUP
+    These require fetching data from a previously submitted transaction.
+═══════════════════════════════════════════════════════════════════════════════
+
+  10.1  Historical ClaimSubmission records
+        Description : For RemittanceAdvice validation, fetch the latest matching
+                      ClaimSubmission by Claim.ID + SenderID/ReceiverID pairing
+        Used in     : Rule 133 (Remittance.Advice)
+        Fields needed: ClaimSubmission.Claim.ID, ClaimSubmission.Claim.Net,
+                       ClaimSubmission.Header.SenderID, ClaimSubmission.CreatedOn
+
+  10.2  PriorRequest / PriorAuthorization pairing
+        Description : For PriorAuthorization validation, check if a matching
+                      PriorRequest exists and has a response
+        Used in     : Rule 178 (Prior.Authorization)
+        Fields needed: PriorRequest.Authorization.ID,
+                       PriorRequest.Authorization.Activity.Start
+
+  10.3  IPC Provider List
+        Description : Providers classified as IPC — used in Rule 233 to exempt
+                      a specific activity code (45999) from duplicate detection
+        Used in     : Rule 233 (Claim.Submission)
+        Format needed: List of ProviderID strings
+
+
+═══════════════════════════════════════════════════════════════════════════════
+NOTE: HARDCODED CONSTANTS (no resource needed — already known)
+These values are fixed in the rules and will be inlined in the validator code.
+═══════════════════════════════════════════════════════════════════════════════
+
+  - Special PayerID values   : SelfPay, ProFormaPayer, MedicalTourismSelfPay,
+                               MedicalTourismOther, CSR
+  - Dummy Emirates ID values : 000-0000-0000000-0, 111-1111-1111111-1,
+                               222-2222-2222222-2, 999-9999-9999999-9
+  - Specific sender IDs      : A001, D001, D002 (used in Rule 133)
+  - Thiqa package names      : "Thiqa 1", "Thiqa 2", "Thiqa 3", "Thiqa 4",
+                               "101" through "110", "107A", "107B"
+  - HAAD fixed receiver ID   : "HAAD" (appears in many rules as a literal value)

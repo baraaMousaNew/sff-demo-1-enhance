@@ -15,7 +15,7 @@
 		<PayerID>T001_Malaffi</PayerID>
 		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
 		<Encounter>
-			<FacilityID>MF3505</FacilityID>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
 			<Type>3</Type>
 			<Start>{{DATE(DD/MM/YYYY)}} 16:43</Start>
 		</Encounter>

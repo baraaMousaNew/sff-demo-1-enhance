@@ -1,8 +1,24 @@
 {
   "old_system": {
-    "url": "https://shafafiyapte.doh.gov.ae/v3/webservices.asmx"
+    "pte_url": "https://shafafiyapte.doh.gov.ae/v3/webservices.asmx",
+    "production_url": "https://shafafiya.doh.gov.ae/v3/webservices.asmx"
   },
   "new_system": {
-    "url": "https://shafafiyapte.doh.gov.ae/v3/webservices.asmx"
+    "url": "https://afthibisvr001.internal.npsff.ae/v3/webservices.asmx",
+    "dev_url": "https://afdhibisvr001.internal.npsff.ae:443/v3/webservices.asmx",
+    "uat_url": "https://sffapi-uat.doh.gov.ae/v3/webservices.asmx",
+    "stage_url": "https://sffapi-stg.doh.gov.ae/v3/webservices.asmx"
+  },
+  "claim_checker": {
+    "old_system": {
+      "pte_url": "https://shafafiyapte.doh.gov.ae/ClaimCheckerService",
+      "production_url": "https://shafafiya.doh.gov.ae/ClaimCheckerService"
+    },
+    "new_system": {
+      "url": "https://afthibisvr001.internal.npsff.ae/ClaimCheckerService",
+      "dev_url": "https://afdhibisvr001.internal.npsff.ae:443/ClaimCheckerService",
+      "uat_url": "https://sffapi-uat.doh.gov.ae/ClaimCheckerService",
+      "stage_url": "https://sffapi-stg.doh.gov.ae/ClaimCheckerService"
+    }
   }
 }

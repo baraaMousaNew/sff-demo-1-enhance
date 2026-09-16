@@ -9,6 +9,8 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+from utils.execution_mode import ExecutionMode
+
 
 class AllureReporter:
     def __init__(self, results_dir="allure-results"):
@@ -28,9 +30,9 @@ class AllureReporter:
         # Set dynamic properties
         allure.dynamic.title(f"Test Case: {description}")
         allure.dynamic.description(description or f"Dual-system regression test for {test_id}")
-        allure.dynamic.tag("soap_api")
-        allure.dynamic.tag("regression_test")
-        allure.dynamic.tag(test_type)
+        # allure.dynamic.tag("soap_api")
+        # allure.dynamic.tag("regression_test")
+        # allure.dynamic.tag(test_type)
 
         # Add test metadata
         allure.dynamic.label("framework", "custom_soap_tester")
@@ -39,7 +41,7 @@ class AllureReporter:
         with allure.step(f"Initializing test case {test_id}"):
             allure.attach(
                 f"Test ID: {test_id}\nDescription: {description}\nTimestamp: {datetime.now()}",
-                "Test Initialization",
+                "296497 - Test Initialization",
                 allure.attachment_type.TEXT
             )
 
@@ -47,7 +49,7 @@ class AllureReporter:
         with allure.step(f"Step #{step_num}"):
             allure.attach(
                 "Starting New Step",
-                f"Starting step number #{step_num}",
+                f"f7a2d1 - Starting step number #{step_num}",
                 allure.attachment_type.TEXT
             )
 
@@ -55,14 +57,14 @@ class AllureReporter:
         with allure.step(step_name):
             allure.attach(
                 step_content,
-                name=step_name,
+                name=f"4aca6d - {step_name}",
                 attachment_type=allure.attachment_type.TEXT
             )
 
     def add_attachment(self, attachment_title, attachment_content):
         allure.attach(
             attachment_content,
-            name=attachment_title,
+            name=f"32589b - {attachment_title}",
             attachment_type=allure.attachment_type.TEXT
         )
 
@@ -72,14 +74,14 @@ class AllureReporter:
             # Attach original XML
             allure.attach(
                 original_xml,
-                "Original XML (with variables)",
+                "a4df4d - Original XML (with variables)",
                 allure.attachment_type.XML
             )
 
             # Attach processed XML
             allure.attach(
                 processed_xml,
-                "Processed XML (variables resolved)",
+                "4e1ab9 - Processed XML (variables resolved)",
                 allure.attachment_type.XML
             )
 
@@ -87,7 +89,7 @@ class AllureReporter:
             if variables_defined:
                 allure.attach(
                     json.dumps(variables_defined, indent=2),
-                    "Variables Defined",
+                    "7e20b3 - Variables Defined",
                     allure.attachment_type.JSON
                 )
 
@@ -101,49 +103,49 @@ class AllureReporter:
                 if content.get_template_request('original'):
                     allure.attach(
                         content['original'],
-                        f"Raw XML - {section_name} (Original)",
+                        f"d2174a - Raw XML - {section_name} (Original)",
                         allure.attachment_type.XML
                     )
 
                 if content.get_template_request('processed'):
                     allure.attach(
                         content['processed'],
-                        f"Raw XML - {section_name} (Processed)",
+                        f"88ff98 - Raw XML - {section_name} (Processed)",
                         allure.attachment_type.XML
                     )
 
                 if content.get_template_request('encoded'):
                     allure.attach(
                         content['encoded'][:500] + "..." if len(content['encoded']) > 500 else content['encoded'],
-                        f"Raw XML - {section_name} (Base64 Encoded - Preview)",
+                        f"45fa32 - Raw XML - {section_name} (Base64 Encoded - Preview)",
                         allure.attachment_type.TEXT
                     )
 
     def add_system_execution(self, system_name, request_data, response_data, execution_mode="dual_system", extracted_variables=None):
         """Add system execution as an Allure step with response extraction details"""
         step_title = f"{system_name} Execution"
-        if execution_mode == "system1_only":
+        if execution_mode == ExecutionMode.SYSTEM1_ONLY:
             step_title += " (Baseline Collection)"
-        elif execution_mode == "both_systems":
+        elif execution_mode == ExecutionMode.BOTH_SYSTEMS:
             step_title += " (Regression Testing)"
 
         with allure.step(step_title):
             # Request details
             allure.attach(
                 json.dumps(request_data.get_template_request('headers', {}), indent=2),
-                f"{system_name} - Request Headers",
+                f"b113af - {system_name} - Request Headers",
                 allure.attachment_type.JSON
             )
 
             allure.attach(
                 request_data.get_template_request('xml_body', 'No XML body available'),
-                f"{system_name} - Request XML",
+                f"00d43e - {system_name} - Request XML",
                 allure.attachment_type.XML
             )
 
             allure.attach(
                 request_data.get_template_request('url', 'No URL available'),
-                f"{system_name} - Endpoint URL",
+                f"0296b3 - {system_name} - Endpoint URL",
                 allure.attachment_type.TEXT
             )
 
@@ -155,13 +157,13 @@ class AllureReporter:
                     'timestamp': response_data.get_template_request('timestamp'),
                     'success': response_data.get_template_request('success')
                 }, indent=2),
-                f"{system_name} - Response Metadata",
+                f"f7427e - {system_name} - Response Metadata",
                 allure.attachment_type.JSON
             )
 
             allure.attach(
                 response_data.get_template_request('content', 'No response content'),
-                f"{system_name} - Response XML",
+                f"a26bc7 - {system_name} - Response XML",
                 allure.attachment_type.XML
             )
 
@@ -169,7 +171,7 @@ class AllureReporter:
             if response_data.get_template_request('response_headers'):
                 allure.attach(
                     json.dumps(dict(response_data['response_headers']), indent=2),
-                    f"{system_name} - Response Headers",
+                    f"f5b30f - {system_name} - Response Headers",
                     allure.attachment_type.JSON
                 )
 
@@ -191,7 +193,7 @@ class AllureReporter:
 
             allure.attach(
                 json.dumps(extraction_summary, indent=2),
-                f"{system_name} - Extraction Summary",
+                f"aaad3b - {system_name} - Extraction Summary",
                 allure.attachment_type.JSON
             )
 
@@ -211,7 +213,7 @@ class AllureReporter:
 
             allure.attach(
                 extraction_details,
-                f"{system_name} - Extraction Details",
+                f"686fd4 - {system_name} - Extraction Details",
                 allure.attachment_type.TEXT
             )
 
@@ -221,7 +223,7 @@ class AllureReporter:
                 highlighted_response = self._highlight_extracted_values(response_content, extracted_variables)
                 allure.attach(
                     highlighted_response,
-                    f"{system_name} - Response with Extraction Highlights",
+                    f"ce29d3 - {system_name} - Response with Extraction Highlights",
                     allure.attachment_type.TEXT
                 )
 
@@ -230,7 +232,7 @@ class AllureReporter:
         highlighted = response_content
 
         try:
-            # Add markers around values that were extracted
+            # Add markers around values that were extracted``
             for var_name, var_value in extracted_variables.items():
                 if var_value and str(var_value).strip():
                     # Try to find and highlight the value in the response
@@ -263,7 +265,7 @@ class AllureReporter:
 
             allure.attach(
                 json.dumps(comparison_result, indent=2),
-                "Extraction Comparison Summary",
+                "86ce34 - Extraction Comparison Summary",
                 allure.attachment_type.JSON
             )
 
@@ -312,7 +314,7 @@ class AllureReporter:
 
             allure.attach(
                 comparison_details,
-                "Detailed Extraction Comparison",
+                "69593a - Detailed Extraction Comparison",
                 allure.attachment_type.TEXT
             )
 
@@ -364,7 +366,7 @@ class AllureReporter:
                 error_summary = self.format_errors_for_display(errors_found)
                 allure.attach(
                     error_summary,
-                    f"{system_name} - Extracted Errors",
+                    f"babaed - {system_name} - Extracted Errors",
                     allure.attachment_type.TEXT
                 )
 
@@ -377,7 +379,7 @@ class AllureReporter:
             else:
                 allure.attach(
                     "No errors found in response",
-                    f"{system_name} - Error Status",
+                    f"cc7404 - {system_name} - Error Status",
                     allure.attachment_type.TEXT
                 )
 
@@ -385,7 +387,7 @@ class AllureReporter:
             if error_report_base64:
                 allure.attach(
                     error_report_base64[:1000] + "..." if len(error_report_base64) > 1000 else error_report_base64,
-                    f"{system_name} - Raw Error Report (Base64 Preview)",
+                    f"f476f8 - {system_name} - Raw Error Report (Base64 Preview)",
                     allure.attachment_type.TEXT
                 )
 
@@ -407,7 +409,7 @@ class AllureReporter:
 
             allure.attach(
                 json.dumps(comparison_summary, indent=2),
-                "Regression Comparison Summary",
+                "453502 - Regression Comparison Summary",
                 allure.attachment_type.JSON
             )
 
@@ -415,7 +417,7 @@ class AllureReporter:
             if comparison_result.get_template_request('missing_errors_str'):
                 allure.attach(
                     comparison_result['missing_errors_str'],
-                    "Missing Errors (Expected but not found in System 2)",
+                    "5f4553 - Missing Errors (Expected but not found in System 2)",
                     allure.attachment_type.TEXT
                 )
 
@@ -423,7 +425,7 @@ class AllureReporter:
             if comparison_result.get_template_request('unexpected_errors_str'):
                 allure.attach(
                     comparison_result['unexpected_errors_str'],
-                    "Unexpected Errors (Found in System 2 but not expected)",
+                    "9bed75 - Unexpected Errors (Found in System 2 but not expected)",
                     allure.attachment_type.TEXT
                 )
 
@@ -434,7 +436,7 @@ class AllureReporter:
             elif status == 'WARNING':
                 allure.attach(
                     "Minor differences detected between systems",
-                    "Warning Details",
+                    "c386c5 - Warning Details",
                     allure.attachment_type.TEXT
                 )
             elif status == 'FAILED':
@@ -450,19 +452,19 @@ class AllureReporter:
                 error_summary = self.format_errors_for_display(system1_errors)
                 allure.attach(
                     error_summary,
-                    "Collected Baseline Errors",
+                    "a459fb - Collected Baseline Errors",
                     allure.attachment_type.TEXT
                 )
 
                 allure.attach(
                     expected_errors_str,
-                    "Expected Errors String (for future comparisons)",
+                    "d66822 - Expected Errors String (for future comparisons)",
                     allure.attachment_type.TEXT
                 )
             else:
                 allure.attach(
                     "No baseline errors collected",
-                    "Baseline Collection Result",
+                    "a188e9 - Baseline Collection Result",
                     allure.attachment_type.TEXT
                 )
 
@@ -505,7 +507,7 @@ class AllureReporter:
         with allure.step("Test Completion"):
             allure.attach(
                 json.dumps(overall_result, indent=2),
-                "Final Test Results",
+                "67fe13 - Final Test Results",
                 allure.attachment_type.JSON
             )
 
@@ -519,7 +521,7 @@ class AllureReporter:
         if not assertion_results:
             with allure.step(f"{system_name} - No Assertions"):
                 allure.attach("No assertions defined for this test step",
-                              "Assertion Status", allure.attachment_type.TEXT)
+                              "a2a0dc - Assertion Status", allure.attachment_type.TEXT)
             return
 
         passed = len([r for r in assertion_results if r['status'] == 'PASS'])
@@ -557,12 +559,12 @@ class AllureReporter:
 
                 summary += "\n"
 
-            allure.attach(summary, f"{system_name} Assertion Results", allure.attachment_type.TEXT)
+            allure.attach(summary, f"a7e4af - {system_name} Assertion Results", allure.attachment_type.TEXT)
 
             # Attach individual assertion details as JSON
             import json
             allure.attach(json.dumps(assertion_results, indent=2),
-                          f"{system_name} Assertion Data (JSON)", allure.attachment_type.JSON)
+                          f"6af76a - {system_name} Assertion Data (JSON)", allure.attachment_type.JSON)
 
             # Create individual sub-steps for failed/error assertions
             for result in assertion_results:
@@ -592,7 +594,7 @@ class AllureReporter:
             failure_details += "- Verify expected value format and casing\n"
             failure_details += "- Consider using 'contains' instead of 'equals' for partial matches\n"
 
-            allure.attach(failure_details, "Assertion Failure Details", allure.attachment_type.TEXT)
+            allure.attach(failure_details, "8390ae - Assertion Failure Details", allure.attachment_type.TEXT)
 
     def add_assertion_comparison_step(self, system1_results, system2_results):
         """Add assertion comparison between systems"""
@@ -625,7 +627,7 @@ class AllureReporter:
                 summary += "SYSTEM-SPECIFIC DIFFERENCES:\n"
                 summary += comparison_analysis['system_differences'] + "\n"
 
-            allure.attach(summary, "Assertion Comparison Report", allure.attachment_type.TEXT)
+            allure.attach(summary, "978cf5 - Assertion Comparison Report", allure.attachment_type.TEXT)
 
             # Attach detailed comparison data
             import json
@@ -635,7 +637,7 @@ class AllureReporter:
                 'analysis': comparison_analysis
             }
             allure.attach(json.dumps(comparison_data, indent=2),
-                          "Complete Comparison Data", allure.attachment_type.JSON)
+                          "021e25 - Complete Comparison Data", allure.attachment_type.JSON)
 
             # Add regression warning if needed
             if not comparison_analysis['systems_match']:
@@ -643,7 +645,7 @@ class AllureReporter:
                     warning = f"Assertion behavior differs between systems!\n"
                     warning += f"Differences found: {len(comparison_analysis['differing_assertions'])}\n"
                     warning += "This may indicate regression issues or environmental differences."
-                    allure.attach(warning, "Regression Alert", allure.attachment_type.TEXT)
+                    allure.attach(warning, "f5d556 - Regression Alert", allure.attachment_type.TEXT)
 
     def _analyze_assertion_differences(self, system1_results, system2_results):
         """Analyze differences between system assertion results"""
@@ -708,7 +710,7 @@ class AllureReporter:
             for assertion_type, count in sorted(type_counts.items()):
                 metrics += f"  {assertion_type}: {count}\n"
 
-            allure.attach(metrics, "Performance Metrics", allure.attachment_type.TEXT)
+            allure.attach(metrics, "3003de - Performance Metrics", allure.attachment_type.TEXT)
 
     def add_assertion_test_summary(self, test_results):
         """Add comprehensive test summary with assertion focus"""
@@ -741,7 +743,7 @@ class AllureReporter:
                 for assertion_type, count in type_counter.most_common(5):
                     summary += f"  {assertion_type}: {count}\n"
 
-            allure.attach(summary, "Execution Summary", allure.attachment_type.TEXT)
+            allure.attach(summary, "fc8408 - Execution Summary", allure.attachment_type.TEXT)
 
     def _get_status_symbol(self, status):
         """Get appropriate symbol for assertion status"""
@@ -762,7 +764,7 @@ class AllureReporter:
             final_summary = f"FINAL TEST RESULTS\n"
             final_summary += "=" * 30 + "\n"
             final_summary += f"Overall Status: {overall_status}\n"
-            final_summary += f"Execution Mode: {test_summary.get_template_request('execution_mode', 'unknown')}\n"
+            final_summary += f"Execution Mode: {test_summary.get_template_request('execution_mode', ExecutionMode.UNKNOWN)}\n"
 
             if test_summary.get_template_request('total_assertions'):
                 final_summary += f"Total Assertions: {test_summary['total_assertions']}\n"
@@ -775,7 +777,7 @@ class AllureReporter:
                 final_summary += f"Systems Match: {test_summary.get_template_request('systems_match', 'Unknown')}\n"
                 final_summary += f"Comparison: {test_summary.get_template_request('comparison_summary', 'N/A')}\n"
 
-            allure.attach(final_summary, "Final Results", allure.attachment_type.TEXT)
+            allure.attach(final_summary, "49d076 - Final Results", allure.attachment_type.TEXT)
 
             # Set dynamic properties based on results
             if overall_status == 'PASSED':
@@ -790,7 +792,7 @@ class AllureReporter:
                 allure.dynamic.label("assertion_count", str(test_summary['total_assertions']))
 
             # Add execution mode as tag
-            allure.dynamic.tag(f"mode_{test_summary.get_template_request('execution_mode', 'unknown')}")
+            allure.dynamic.tag(f"mode_{test_summary.get_template_request('execution_mode', ExecutionMode.UNKNOWN)}")
 
             if test_summary.get_template_request('failed_assertions', 0) > 0:
                 allure.dynamic.tag("has_assertion_failures")

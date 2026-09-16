@@ -1,0 +1,11 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="https://www.shafafiya.org/v2/">
+                   <soapenv:Header/>
+                   <soapenv:Body>
+                      <v2:UploadTransaction>
+                         <v2:login>MalaffiPayer2test</v2:login>
+                         <v2:pwd>Haad@2016</v2:pwd>
+                         <v2:fileContent>encoded_xml</v2:fileContent>
+                         <v2:fileName>{{CUSTOM.generate_filename()}}</v2:fileName>
+                      </v2:UploadTransaction>
+                   </soapenv:Body>
+                </soapenv:Envelope>

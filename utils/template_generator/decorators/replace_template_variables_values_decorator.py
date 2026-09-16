@@ -34,8 +34,8 @@ class ReplaceTemplateVariablesValuesDecorator(BaseDecorator):
                 return False
             find_element_by_identity(template, tag, values, functions)
         allure.attach(
-                ET.tostring(template).decode("utf-8"),
-                name="Replace variables values",
+                ET.tostring(template, encoding="unicode"),
+                name="7e890f - Replace variables values",
                 attachment_type=allure.attachment_type.XML)
         template, results, live_data = super().create_template(request_name=request_name, template=template, parent=parent, results=results, live_data=live_data, results_index=results_index, prerequisites=prerequisites, health_checker=health_checker)
         return template, results, live_data

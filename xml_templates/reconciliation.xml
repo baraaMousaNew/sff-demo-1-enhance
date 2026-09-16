@@ -1,0 +1,14 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="https://www.shafafiya.org/v2/">
+   <soap:Header/>
+   <soap:Body>
+      <v2:GetClaimCountReconciliation>
+         <!--Optional:-->
+         <v2:login>MalaffiProvidertest</v2:login>
+         <!--Optional:-->
+         <v2:pwd>Haad@2016</v2:pwd>
+         <v2:transactionName>Claim.Submission</v2:transactionName>
+         <!--Optional:-->
+         <v2:transactionDate>{{CUSTOM.get_current_date()}}</v2:transactionDate>
+      </v2:GetClaimCountReconciliation>
+   </soap:Body>
+</soap:Envelope>

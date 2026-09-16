@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+    <soap:Body>
+        <UploadTransactionResponse xmlns="https://www.shafafiya.org/v2/">
+            <UploadTransactionResult>-3</UploadTransactionResult>
+            <errorMessage>Required input parameter for the web service is empty, or null, or contains invalid value</errorMessage>
+        </UploadTransactionResponse>
+    </soap:Body>
+    </soap:Envelope>

@@ -9,13 +9,13 @@
 	</Header>
 	<Authorization>
 		<Type>Authorization</Type>
-		<ID>MF3505-{{VAR(prior_request_id).CUSTOM.generate_numbers_id()}}</ID>
+		<ID>{{VAR(facility_id).CUSTOM.get_random_facility_license()}}-{{VAR(prior_request_id).CUSTOM.generate_numbers_id()}}</ID>
 		<MemberID>{{VAR.member_id}}</MemberID>
 		<PayerID>T001_Malaffi</PayerID>
-		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+		<EmiratesIDNumber>{{VAR.emirates_id}}</EmiratesIDNumber>
         <DateOrdered>{{DATE(DD/MM/YYYY)}}</DateOrdered>
 		<Encounter>
-			<FacilityID>MF3505</FacilityID>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
 			<Type>3</Type>
 			<Start>{{DATE(DD/MM/YYYY)}} 16:43</Start>
             <End>{{DATE(DD/MM/YYYY)}} 23:43</End>
@@ -29,17 +29,17 @@
             </DxInfo>
 		</Diagnosis>
 		<Activity>
-			<ID>{{CUSTOM.generate_numbers_id()}}</ID>
+			<ID>{{VAR(activity_id).CUSTOM.generate_numbers_id()}}</ID>
 			<Start>{{DATE(DD/MM/YYYY)}} 16:43</Start>
 			<Type>3</Type>
-			<Code>44950</Code>
-			<Quantity>1</Quantity>
-			<Net>1500</Net>
-            <OrderingClinician>{{VAR(clinician_license).CUSTOM.get_random_clinician_license()}}</OrderingClinician>
+			<Code>{{VAR(activity_code).CUSTOM.get_random_cpt_code()}}</Code>
+			<Quantity>1.006</Quantity>
+			<Net>1500.002</Net>
+            <OrderingClinician>{{VAR(clinician_license).CUSTOM.get_clinician_license_starting_with(! pharma, ! pharma, ! pharma)}}</OrderingClinician>
             <Clinician>{{VAR.clinician_license}}</Clinician>
 			<Observation>
 				<Type>LOINC</Type>
-				<Code>10579-1</Code>
+				<Code>{{VAR(observation_code).CUSTOM.get_random_loinc()}}</Code>
 				<Value>8</Value>
 				<ValueType>Qn</ValueType>
 			</Observation>

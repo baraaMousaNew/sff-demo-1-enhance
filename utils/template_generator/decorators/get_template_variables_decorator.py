@@ -32,7 +32,7 @@ class GetVariablesDecorator(BaseDecorator):
         collect_vars(template, template.tag, results)
         allure.attach(
                         str(results),
-                        name="Get variables for request",
+                        name="c6dd61 - Get variables for request",
                         attachment_type=allure.attachment_type.TEXT)
         template, results, live_data = super().create_template(request_name=request_name,template=template, parent=parent, results=results, live_data=live_data, results_index=results_index, prerequisites=prerequisites, health_checker=health_checker)
         return template, results, live_data

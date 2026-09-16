@@ -12,7 +12,7 @@ class GetTemplateDecorator(BaseDecorator):
         root = tree.getroot()
         allure.attach(
                 ET.tostring(root).decode('utf-8'),
-                name="Get template",
+                name="b8ec2b - Get template",
                 attachment_type=allure.attachment_type.XML
                           )
         template, results, live_data = super().create_template(request_name=request_name,template=root, parent=parent, results=results, live_data=live_data, results_index=results_index, prerequisites=prerequisites, health_checker=health_checker)

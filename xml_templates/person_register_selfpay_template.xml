@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Person.Register>
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>HAAD</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+	<Person>
+		<UnifiedNumber>{{VAR(unified_number).CUSTOM.generate_person_data(emirates_unified_number)}}</UnifiedNumber>
+		<FirstName>{{CUSTOM.generate_person_data(first_name)}}</FirstName>
+		<FirstNameEn>{{CUSTOM.generate_person_data(first_name)}}</FirstNameEn>
+        <MiddleNameEn>{{CUSTOM.generate_person_data(first_name)}}</MiddleNameEn>
+        <LastNameEn>{{CUSTOM.generate_person_data(last_name)}}</LastNameEn>
+        <FirstNameAr>عربي اسم اول</FirstNameAr>
+        <MiddleNameAr>عربي اسم اوسط</MiddleNameAr>
+        <LastNameAr>عربي اسم اخير</LastNameAr>
+		<ContactNumber>{{CUSTOM.generate_person_data(phone)}}</ContactNumber>
+		<BirthDate>{{CUSTOM.generate_dob()}}</BirthDate>
+		<Gender>1</Gender>
+		<Nationality>Indian</Nationality>
+		<NationalityCode>100</NationalityCode>
+		<City>Abu Dhabi</City>
+		<CityCode>88</CityCode>
+		<CountryOfResidence>United Arab Emirates</CountryOfResidence>
+		<EmirateOfResidence>1</EmirateOfResidence>
+		<PassportNumber>{{CUSTOM.generate_person_data(passport)}}</PassportNumber>
+		<EmiratesIDNumber>{{VAR(emirates_id).CUSTOM.generate_person_data(emirates_id)}}</EmiratesIDNumber>
+        <SponsorNumber>{{CUSTOM.generate_random_number()}}</SponsorNumber>
+        <SponsorNameEn>{{CUSTOM.generate_person_data(first_name)}}</SponsorNameEn>
+        <SponsorNameAr>كفيل اسم عربي</SponsorNameAr>
+        <SpecialNationality>Indian</SpecialNationality>
+        <Privileges>None</Privileges>
+		<COCReferenceNumber>123456</COCReferenceNumber>
+        <BirthCertificateNumber>{{CUSTOM.generate_random_number()}}</BirthCertificateNumber>
+		<Member>
+			<ID>MF3505#{{VAR(patient_id).CUSTOM.generate_random_number(7)}}</ID>
+			<Relation>Principal</Relation>
+			<RelationTo>MF3505#{{VAR.patient_id}}</RelationTo>
+            <RelationToEmiratesIDNumber>{{VAR.emirates_id}}</RelationToEmiratesIDNumber>
+            <RelationToUnifiedNumber>{{VAR.unified_number}}</RelationToUnifiedNumber>
+		</Member>
+	</Person>
+</Person.Register>

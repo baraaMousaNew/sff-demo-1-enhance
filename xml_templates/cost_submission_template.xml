@@ -11,7 +11,7 @@
         <ID>{{VAR.claim_id}}</ID>
         <ProviderID>TF001_Malaffi</ProviderID>
         <Encounter>
-            <FacilityID>MF3505</FacilityID>
+            <FacilityID>{{VAR.facility_id}}</FacilityID>
             <ID>A37O24030002735</ID>
             <PatientID>1245</PatientID>
             <Type>3</Type>

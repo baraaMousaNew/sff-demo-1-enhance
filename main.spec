@@ -1,16 +1,35 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
+import customtkinter
 
+ctk_path = os.path.dirname(customtkinter.__file__)
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=[
+        (ctk_path, 'customtkinter'),
+        ('xml_templates', 'xml_templates'),
+        ('xsd', 'xsd'),
+        ('resources', 'resources'),
+    ],
+    hiddenimports=[
+        'customtkinter',
+        'darkdetect',
+        'PIL._tkinter_finder',
+        'pandas',
+        'numpy',
+        'openpyxl',
+        'xlrd',
+        'xmlschema',
+        'requests',
+        'jinja2',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['pytest', 'allure', 'allure_pytest'],
     noarchive=False,
     optimize=0,
 )
@@ -22,7 +41,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='main',
+    name='SFF-Demo',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

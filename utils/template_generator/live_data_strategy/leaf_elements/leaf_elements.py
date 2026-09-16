@@ -90,7 +90,7 @@ class LeafValueContext:
                     matched_value = None
                     for group in match.groups():
                         if group:
-                            matched_value = group.lower()
+                            matched_value = group if group.strip().lower() not in ('empty', 'valid', 'invalid') else group.strip().lower()
                     if matched_value == 'empty':
                         return ""
                     elif matched_value == 'valid':

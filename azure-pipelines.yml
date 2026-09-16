@@ -1,0 +1,90 @@
+trigger:
+  branches:
+    include:
+      - master
+      - main
+
+schedules:
+  - cron: '0 2 * * *'
+    displayName: Nightly run
+    branches:
+      include: [master]
+    always: true
+
+parameters:
+  - name: sheets
+    displayName: Sheet names (comma-separated)
+    type: string
+    default: Sheet1
+  - name: mode
+    displayName: Execution mode
+    type: string
+    default: system2_only
+    values: [system1_only, system2_only, both_systems, system1_both_envs]
+  - name: newEnv
+    displayName: New system environment
+    type: string
+    default: test
+    values: [test, dev, uat]
+  - name: parallel
+    displayName: Enable parallel execution
+    type: boolean
+    default: true
+
+pool:
+  vmImage: ubuntu-latest   # or 'windows-latest' if needed
+
+variables:
+  - group: soap-test-secrets   # Variable group in Azure Pipelines → Pipelines → Library
+  - name: PYTHON_VERSION
+    value: '3.11'
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: $(PYTHON_VERSION)
+    displayName: Set up Python $(PYTHON_VERSION)
+
+  - script: pip install -r requirements-ci.txt
+    displayName: Install dependencies
+
+  - script: rm -rf allure-results
+    displayName: Clear previous Allure results
+
+  - script: |
+      PARALLEL_FLAG=""
+      if [ "${{ parameters.parallel }}" = "True" ]; then
+        PARALLEL_FLAG="--parallel"
+      fi
+
+      python run_tests.py \
+        --excel "$(TEST_EXCEL_FILE)" \
+        --sheets "${{ parameters.sheets }}" \
+        --mode "${{ parameters.mode }}" \
+        --new-env "${{ parameters.newEnv }}" \
+        --assert-error-text \
+        $PARALLEL_FLAG
+    displayName: Run SOAP API tests
+    env:
+      SOAP_ENDPOINT_URL: $(SOAP_ENDPOINT_URL)
+      SOAP_ENDPOINT_URL_NEW: $(SOAP_ENDPOINT_URL_NEW)
+
+  - task: PublishPipelineArtifact@1
+    displayName: Upload Allure results
+    condition: always()
+    inputs:
+      targetPath: allure-results
+      artifact: allure-results
+
+  - script: |
+      npm install -g allure-commandline --save-dev
+      allure generate allure-results -o allure-report --clean
+    displayName: Generate Allure HTML report
+    condition: always()
+
+  - task: PublishPipelineArtifact@1
+    displayName: Upload Allure HTML report
+    condition: always()
+    inputs:
+      targetPath: allure-report
+      artifact: allure-report

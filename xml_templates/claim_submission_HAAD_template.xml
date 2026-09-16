@@ -25,7 +25,7 @@
         <VAT>1</VAT>
 		<!-- Encounter information -->
 		<Encounter>
-			<FacilityID>MF3505</FacilityID>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
 			<Type>3</Type>
 			<PatientID>1245</PatientID>
             <EligibilityIDPayer></EligibilityIDPayer>

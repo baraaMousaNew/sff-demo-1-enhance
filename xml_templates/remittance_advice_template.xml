@@ -15,22 +15,22 @@
     <PaymentReference>1111155555</PaymentReference>
 	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
     <Encounter>
-        <FacilityID>MF3505</FacilityID>
+        <FacilityID>{{VAR.facility_id}}</FacilityID>
     </Encounter>
     <Activity>
 	  <ID>{{VAR.activity_id}}</ID>
       <Start>{{CUSTOM.get_current_date_time()}}</Start>
       <Type>3</Type>
-      <Code>44950</Code>
-      <Quantity>1</Quantity>
-      <Net>0</Net>
-      <List>0</List>
-	  <OrderingClinician>GD6476</OrderingClinician>
-      <Clinician>GD6476</Clinician>
+      <Code>{{VAR.activity_code}}</Code>
+      <Quantity>1.006</Quantity>
+      <Net>1500.002</Net>
+      <List>1500.002</List>
+	  <OrderingClinician>{{VAR.clinician_license}}</OrderingClinician>
+      <Clinician>{{VAR.clinician_license}}</Clinician>
       <PriorAuthorizationID></PriorAuthorizationID>
-      <Gross>100</Gross>
+      <Gross>1500.002</Gross>
       <PatientShare>0</PatientShare>
-      <PaymentAmount>0</PaymentAmount>
+      <PaymentAmount>1500.002</PaymentAmount>
       <DenialCode></DenialCode>
     </Activity>
   </Claim>

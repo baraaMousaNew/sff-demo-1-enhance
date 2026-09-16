@@ -4,7 +4,7 @@ pip install --find-links ./packages -r requirements.txt --no-index
 # open report for others
 1. Save the report from GUI
 2. Navigate to the folder
-3. In cmd, type: python -m http.server 8000
+3. In cmd, type: python -m http.server 8000 or py -m http.server 8000
 4. Open the following in browser: http://localhost:8000
 
 # how do I know here a python library is installed? .venv or outside

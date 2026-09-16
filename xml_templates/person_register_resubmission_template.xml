@@ -9,11 +9,15 @@
 	</Header>
 	<Person>
 		<UnifiedNumber>{{VAR.unified_number}}</UnifiedNumber>
-		<FirstName>{{CUSTOM.generate_person_data(first_name)}}</FirstName>
-		<FirstNameEn>{{CUSTOM.generate_person_data(first_name)}}</FirstNameEn>
-        <MiddleNameEn></MiddleNameEn>
-		<ContactNumber>{{CUSTOM.generate_person_data(phone)}}</ContactNumber>
-		<BirthDate>{{CUSTOM.generate_dob()}}</BirthDate>
+		<FirstName>{{VAR.first_name}}</FirstName>
+		<FirstNameEn>{{VAR.first_name_en}}</FirstNameEn>
+        <MiddleNameEn>{{VAR.middle_name_en}}</MiddleNameEn>
+        <LastNameEn>{{VAR.last_name_en}}</LastNameEn>
+        <FirstNameAr>عربي اسم اول</FirstNameAr>
+        <MiddleNameAr>عربي اسم اوسط</MiddleNameAr>
+        <LastNameAr>عربي اسم اخير</LastNameAr>
+		<ContactNumber>{{VAR.contact_number}}</ContactNumber>
+		<BirthDate>{{VAR.date_of_birth}}</BirthDate>
 		<Gender>1</Gender>
 		<Nationality>Indian</Nationality>
 		<NationalityCode>100</NationalityCode>
@@ -21,29 +25,35 @@
 		<CityCode>88</CityCode>
 		<CountryOfResidence>United Arab Emirates</CountryOfResidence>
 		<EmirateOfResidence>1</EmirateOfResidence>
-		<PassportNumber>{{CUSTOM.generate_person_data(passport)}}</PassportNumber>
-		<EmiratesIDNumber>000-0000-0000000-0</EmiratesIDNumber>
+		<PassportNumber>{{VAR.passport}}</PassportNumber>
+		<EmiratesIDNumber>{{VAR.emirates_id}}</EmiratesIDNumber>
+        <SponsorNumber>{{VAR.sponsor_number}}</SponsorNumber>
+        <SponsorNameEn>{{VAR.sponsor_name_en}}</SponsorNameEn>
+        <SponsorNameAr>كفيل اسم عربي</SponsorNameAr>
+        <SpecialNationality>Indian</SpecialNationality>
+        <Privileges>None</Privileges>
 		<COCReferenceNumber>123456</COCReferenceNumber>
+        <BirthCertificateNumber>{{VAR.birth_cert_number}}</BirthCertificateNumber>
 		<Member>
 			<ID>{{VAR.member_id}}</ID>
 			<Relation>Principal</Relation>
 			<RelationTo>{{VAR.member_id}}</RelationTo>
-            <RelationToEmiratesIDNumber>000-0000-0000000-0</RelationToEmiratesIDNumber>
+            <RelationToEmiratesIDNumber>{{VAR.emirates_id}}</RelationToEmiratesIDNumber>
             <RelationToUnifiedNumber>{{VAR.unified_number}}</RelationToUnifiedNumber>
 			<Contract>
 				<PayerID>T001_Malaffi</PayerID>
                 <TPAID>T002_Malaffi</TPAID>
 				<PackageName>Malaffi-1234</PackageName>
 				<StartDate>{{VAR.contract_start_date}}</StartDate>
-				<RenewalDate>{{VAR.contract_renew_date}}</RenewalDate>
-				<ExpiryDate>{{VAR.contract_expiry_date}}</ExpiryDate>
+				<RenewalDate>{{VAR.contract_renewal_date}}</RenewalDate>
+				<ExpiryDate>{{VAR.contract_end_date}}</ExpiryDate>
 				<GrossPremium>951</GrossPremium>
 				<PolicyHolder>4</PolicyHolder>
 				<CompanyID>XYZ Insurance</CompanyID>
 				<CollectedPremium>0</CollectedPremium>
 				<VAT>0</VAT>
 				<VATPercent>5</VATPercent>
-				<Status>New</Status>
+				<Status>Corrected Date</Status>
 			</Contract>
 		</Member>
 	</Person>

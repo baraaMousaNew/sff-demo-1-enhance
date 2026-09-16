@@ -12,7 +12,7 @@ from typing import List, Dict, Tuple, Optional
 
 class ErrorValidator:
     def __init__(self):
-        self.validation_columns = ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Error Text']
+        self.validation_columns = ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
 
     def extract_and_validate_errors(self, response_content: str, expected_errors_str: str, test_id: str) -> Dict:
         """
@@ -98,6 +98,7 @@ class ErrorValidator:
             # Try as direct CSV
             csv_content = decoded_bytes.decode('utf-8')
             return self.parse_csv_content(csv_content)
+            # raise Exception("Incorrect format of error report; it should always be zipped file")
 
     def parse_zip_content(self, zip_bytes: bytes) -> List[Dict]:
         """Parse ZIP file containing CSV error report"""

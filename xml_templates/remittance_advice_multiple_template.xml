@@ -4,7 +4,7 @@
     <SenderID>T001_Malaffi</SenderID>
     <ReceiverID>TF001_Malaffi</ReceiverID>
     <TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
-    <RecordCount>1</RecordCount>
+    <RecordCount>5</RecordCount>
     <DispositionFlag>PRODUCTION</DispositionFlag>
   </Header>
   <Claim>
@@ -15,24 +15,21 @@
     <PaymentReference>1111155555</PaymentReference>
 	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
     <Encounter>
-        <FacilityID>MF3505</FacilityID>
+        <FacilityID>{{VAR.facility_id}}</FacilityID>
     </Encounter>
     <Activity>
-	  <ID>{{VAR.activity_id}}</ID>
-      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
-      <Type>3</Type>
-      <Code>44950</Code>
-      <Quantity>1</Quantity>
-      <Net>0</Net>
-      <List>0</List>
-	  <OrderingClinician>GD6476</OrderingClinician>
-      <Clinician>GD6476</Clinician>
-      <PriorAuthorizationID></PriorAuthorizationID>
-      <Gross>100</Gross>
-      <PatientShare>0</PatientShare>
-      <PaymentAmount>0</PaymentAmount>
-      <DenialCode></DenialCode>
-    </Activity>
+          <ID>1</ID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <Type>5</Type>
+          <Code>QD4-C900-16948-01</Code>
+          <Quantity>1.0000</Quantity>
+          <Net>197590.00</Net>
+          <OrderingClinician>GD25888</OrderingClinician>
+          <Clinician>GD25888</Clinician>
+          <PriorAuthorizationID>MF3505-{{VAR.prior_request_id}}</PriorAuthorizationID>
+          <PaymentAmount>197590.00</PaymentAmount>
+          <DenialCode></DenialCode>
+        </Activity>
   </Claim>
   <Claim>
     <ID>{{VAR.claim_id_two}}</ID>
@@ -42,24 +39,21 @@
     <PaymentReference>1111155555</PaymentReference>
 	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
     <Encounter>
-        <FacilityID>MF3505</FacilityID>
+        <FacilityID>{{VAR.facility_id}}</FacilityID>
     </Encounter>
     <Activity>
-	  <ID>{{VAR.activity_id}}</ID>
-      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
-      <Type>3</Type>
-      <Code>44950</Code>
-      <Quantity>1</Quantity>
-      <Net>0</Net>
-      <List>0</List>
-	  <OrderingClinician>GD6476</OrderingClinician>
-      <Clinician>GD6476</Clinician>
-      <PriorAuthorizationID></PriorAuthorizationID>
-      <Gross>100</Gross>
-      <PatientShare>0</PatientShare>
-      <PaymentAmount>0</PaymentAmount>
-      <DenialCode></DenialCode>
-    </Activity>
+          <ID>1</ID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <Type>5</Type>
+          <Code>QD4-C900-16948-01</Code>
+          <Quantity>1.0000</Quantity>
+          <Net>197590.00</Net>
+          <OrderingClinician>GD25888</OrderingClinician>
+          <Clinician>GD25888</Clinician>
+          <PriorAuthorizationID>MF3505-{{VAR.prior_request_id}}</PriorAuthorizationID>
+          <PaymentAmount>197590.00</PaymentAmount>
+          <DenialCode></DenialCode>
+        </Activity>
   </Claim>
   <Claim>
     <ID>{{VAR.claim_id_three}}</ID>
@@ -69,24 +63,21 @@
     <PaymentReference>1111155555</PaymentReference>
 	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
     <Encounter>
-        <FacilityID>MF3505</FacilityID>
+        <FacilityID>{{VAR.facility_id}}</FacilityID>
     </Encounter>
     <Activity>
-	  <ID>{{VAR.activity_id}}</ID>
-      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
-      <Type>3</Type>
-      <Code>44950</Code>
-      <Quantity>1</Quantity>
-      <Net>0</Net>
-      <List>0</List>
-	  <OrderingClinician>GD6476</OrderingClinician>
-      <Clinician>GD6476</Clinician>
-      <PriorAuthorizationID></PriorAuthorizationID>
-      <Gross>100</Gross>
-      <PatientShare>0</PatientShare>
-      <PaymentAmount>0</PaymentAmount>
-      <DenialCode></DenialCode>
-    </Activity>
+          <ID>1</ID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <Type>5</Type>
+          <Code>QD4-C900-16948-01</Code>
+          <Quantity>1.0000</Quantity>
+          <Net>197590.00</Net>
+          <OrderingClinician>GD25888</OrderingClinician>
+          <Clinician>GD25888</Clinician>
+          <PriorAuthorizationID>MF3505-{{VAR.prior_request_id}}</PriorAuthorizationID>
+          <PaymentAmount>197590.00</PaymentAmount>
+          <DenialCode></DenialCode>
+        </Activity>
   </Claim>
   <Claim>
     <ID>{{VAR.claim_id_four}}</ID>
@@ -96,24 +87,21 @@
     <PaymentReference>1111155555</PaymentReference>
 	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
     <Encounter>
-        <FacilityID>MF3505</FacilityID>
+        <FacilityID>{{VAR.facility_id}}</FacilityID>
     </Encounter>
     <Activity>
-	  <ID>{{VAR.activity_id}}</ID>
-      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
-      <Type>3</Type>
-      <Code>44950</Code>
-      <Quantity>1</Quantity>
-      <Net>0</Net>
-      <List>0</List>
-	  <OrderingClinician>GD6476</OrderingClinician>
-      <Clinician>GD6476</Clinician>
-      <PriorAuthorizationID></PriorAuthorizationID>
-      <Gross>100</Gross>
-      <PatientShare>0</PatientShare>
-      <PaymentAmount>0</PaymentAmount>
-      <DenialCode></DenialCode>
-    </Activity>
+          <ID>1</ID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <Type>5</Type>
+          <Code>QD4-C900-16948-01</Code>
+          <Quantity>1.0000</Quantity>
+          <Net>197590.00</Net>
+          <OrderingClinician>GD25888</OrderingClinician>
+          <Clinician>GD25888</Clinician>
+          <PriorAuthorizationID>MF3505-{{VAR.prior_request_id}}</PriorAuthorizationID>
+          <PaymentAmount>197590.00</PaymentAmount>
+          <DenialCode></DenialCode>
+        </Activity>
   </Claim>
   <Claim>
     <ID>{{VAR.claim_id_five}}</ID>
@@ -123,23 +111,20 @@
     <PaymentReference>1111155555</PaymentReference>
 	<DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
     <Encounter>
-        <FacilityID>MF3505</FacilityID>
+        <FacilityID>{{VAR.facility_id}}</FacilityID>
     </Encounter>
     <Activity>
-	  <ID>{{VAR.activity_id}}</ID>
-      <Start>{{DATE(DD/MM/YYYY)}} 13:00</Start>
-      <Type>3</Type>
-      <Code>44950</Code>
-      <Quantity>1</Quantity>
-      <Net>0</Net>
-      <List>0</List>
-	  <OrderingClinician>GD6476</OrderingClinician>
-      <Clinician>GD6476</Clinician>
-      <PriorAuthorizationID></PriorAuthorizationID>
-      <Gross>100</Gross>
-      <PatientShare>0</PatientShare>
-      <PaymentAmount>0</PaymentAmount>
-      <DenialCode></DenialCode>
-    </Activity>
+          <ID>1</ID>
+          <Start>{{CUSTOM.sub_days_to_current_date(60)}} 15:40</Start>
+          <Type>5</Type>
+          <Code>QD4-C900-16948-01</Code>
+          <Quantity>1.0000</Quantity>
+          <Net>197590.00</Net>
+          <OrderingClinician>GD25888</OrderingClinician>
+          <Clinician>GD25888</Clinician>
+          <PriorAuthorizationID>MF3505-{{VAR.prior_request_id}}</PriorAuthorizationID>
+          <PaymentAmount>197590.00</PaymentAmount>
+          <DenialCode></DenialCode>
+        </Activity>
   </Claim>
 </Remittance.Advice>

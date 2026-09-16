@@ -16,7 +16,7 @@
 		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
         <DateOrdered>{{DATE(DD/MM/YYYY)}}</DateOrdered>
 		<Encounter>
-			<FacilityID>MF3505</FacilityID>
+			<FacilityID>{{VAR.facility_id}}</FacilityID>
 			<Type>3</Type>
 			<Start>{{DATE(DD/MM/YYYY)}} 16:43</Start>
             <End>{{DATE(DD/MM/YYYY)}} 23:43</End>

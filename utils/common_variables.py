@@ -10,7 +10,13 @@ tc_precondition = 'Precondition'
 tc_object = 'Object'
 tc_element = 'Element'
 tc_error_text = 'Error Text'
-
+tc_scenario_type = 'Scenario Type'
+tc_dependency = 'Dependency'
+tc_dependency_variables = 'Dependency Variables'
+tc_skip_env1 = 'Skip Env 1'
+tc_occurrences = 'Occurrences'
+tc_field_value = 'Field Value'
+tc_additional_reference = 'Additional Reference'
 
 ## xml tags
 old_system_tag = '{https://www.shafafiya.org/v2/}'

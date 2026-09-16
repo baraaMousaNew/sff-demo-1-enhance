@@ -1,0 +1,15 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="https://www.shafafiya.org/v2/">
+   <soap:Header/>
+   <soap:Body>
+      <v2:GetPersonInsuranceHistory>
+         <!--Optional:-->
+         <v2:login>MalaffiPayerTest</v2:login>
+         <!--Optional:-->
+         <v2:pwd>Haad@2016</v2:pwd>
+         <!--Optional:-->
+         <v2:EmiratesID>111-1111-1111111-1</v2:EmiratesID>
+         <!--Optional:-->
+         <v2:UnifiedID></v2:UnifiedID>
+      </v2:GetPersonInsuranceHistory>
+   </soap:Body>
+</soap:Envelope>

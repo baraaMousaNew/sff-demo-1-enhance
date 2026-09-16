@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Remittance.Advice xmlns:tns="http://www.haad.ae/DataDictionary/CommonTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/PayForQuality.xsd">
+  <Header>
+    <SenderID>T001_Malaffi</SenderID>
+    <ReceiverID>TF001_Malaffi</ReceiverID>
+    <TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+    <RecordCount>1</RecordCount>
+    <DispositionFlag>PRODUCTION</DispositionFlag>
+  </Header>
+  <Claim>
+    <ID>PayForQuality-{{CUSTOM.get_current_year()}}-{{CUSTOM.generate_random_digit_string(7)}}</ID>
+    <IDPayer>{{VAR(id_payer).CUSTOM.generate_numbers_id(T001_Malaffi)}}</IDPayer>
+    <ProviderID>MF3505</ProviderID>
+    <DenialCode></DenialCode>
+    <PaymentReference>1111155555</PaymentReference>
+    <DateSettlement>{{CUSTOM.add_minutes_to_current_date_time(2)}}</DateSettlement>
+    <Encounter>
+      <FacilityID>{{VAR.facility_id}}</FacilityID>
+    </Encounter>
+    <Activity>
+      <ID>{{VAR(activity_id).CUSTOM.generate_numbers_id()}}</ID>
+      <Start>{{CUSTOM.get_current_date_time()}}</Start>
+      <Type>8</Type>
+      <Code>P4Q</Code>
+      <Quantity>1</Quantity>
+      <Net>10000</Net>
+      <List>10000</List>
+      <OrderingClinician>GD6476</OrderingClinician>
+      <Clinician>GD6476</Clinician>
+      <PriorAuthorizationID></PriorAuthorizationID>
+      <Gross>10000</Gross>
+      <PatientShare>0</PatientShare>
+      <PaymentAmount>10000</PaymentAmount>
+      <DenialCode></DenialCode>
+    </Activity>
+    <!-- SumActNet>10000</SumActNet>
+    <SumPayAmt>10000</SumPayAmt -->
+  </Claim>
+</Remittance.Advice>
