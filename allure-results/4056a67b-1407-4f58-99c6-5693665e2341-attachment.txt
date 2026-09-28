@@ -1,0 +1,6 @@
+Worker gw4: Executing test TC_5
+DEBUG: Parsing CSV content (first 200 chars): Transaction,Type,RuleID,Object Name,HAAD Field,Field Value,Additional Reference,Error Text
+Internal Error, cannot parse the transaction file,,,,,,
+
+DEBUG: CSV columns found: ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
+DEBUG: CSV rows count: 1

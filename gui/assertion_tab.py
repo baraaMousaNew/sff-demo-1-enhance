@@ -24,7 +24,7 @@ from utils.azure_reporting import (
     AVAILABLE_REPORT_TAGS, SYSTEM1_AVAILABLE_REPORT_TAGS,
     TARGET_TAGS, SYSTEM1_TARGET_TAGS,
     test_ado_connection, get_pbi_details, check_existing_bug, add_failure_comment,
-    scan_all_results, scan_all_assertion_results, find_ready_for_qa_bug, update_bug_for_qa_result,
+    scan_all_results, scan_all_assertion_results, update_bug_for_qa_result,
     get_all_ready_for_qa_bugs, get_all_closed_bugs, match_bug_to_test_case,
 )
 from utils.csv_custom_report import generate_custom_combined_report, get_available_rules_summary_columns
@@ -170,6 +170,17 @@ class AssertionTab:
         self.execution_sequence = tk.StringVar(value="full_scenario")
         ctk.CTkRadioButton(seq_col, text="Single API", variable=self.execution_sequence, value="single_api", font=FONTS["main"]).pack(anchor="w", padx=10, pady=2)
         ctk.CTkRadioButton(seq_col, text="Full Scenario", variable=self.execution_sequence, value="full_scenario", font=FONTS["main"]).pack(anchor="w", padx=10, pady=2)
+        delay_row = ctk.CTkFrame(seq_col, fg_color="transparent")
+        delay_row.pack(anchor="w", padx=10, pady=(4, 2))
+        self.step_delay_label = ctk.CTkLabel(delay_row, text="Delay between steps:", font=FONTS["main"])
+        self.step_delay_label.pack(side="left")
+        self.step_delay_var = tk.StringVar(value="0")
+        self.step_delay_entry = ctk.CTkEntry(delay_row, textvariable=self.step_delay_var, width=50, font=FONTS["main"])
+        self.step_delay_entry.pack(side="left", padx=5)
+        self.step_delay_unit_label = ctk.CTkLabel(delay_row, text="sec", font=FONTS["main"])
+        self.step_delay_unit_label.pack(side="left")
+        self.execution_sequence.trace_add("write", self.on_execution_sequence_change)
+        self.on_execution_sequence_change()
 
         # Col 2: Mode
         mode_col = ctk.CTkFrame(config_frame, fg_color="transparent")
@@ -1631,6 +1642,14 @@ class AssertionTab:
             self.current_sheet = selected
             self.status_var.set(f"Sheet '{selected}' selected. Click Load to preview.")
 
+    def on_execution_sequence_change(self, *args):
+        # Step delay only applies between transactions of a Full Scenario chain
+        enabled = self.execution_sequence.get() == "full_scenario"
+        self.step_delay_entry.configure(state="normal" if enabled else "disabled")
+        text_color = ("gray10", "gray90") if enabled else ("gray60", "gray45")
+        self.step_delay_label.configure(text_color=text_color)
+        self.step_delay_unit_label.configure(text_color=text_color)
+
     def on_execution_mode_change(self):
         """Enable/disable 2.0 Target Environment options based on execution mode"""
         if self.execution_mode.get() == ExecutionMode.BOTH_SYSTEMS:  # System 2.0 selected
@@ -1902,6 +1921,13 @@ class AssertionTab:
             os.environ[EnvVar.EXCEL_FILE_TEST_SHEETS] = sheets_to_test
             os.environ[EnvVar.SOAP_EXECUTION_MODE] = self.execution_mode.get()
             os.environ[EnvVar.SOAP_EXECUTION_SEQUENCE] = self.execution_sequence.get()
+            step_delay = 0.0
+            if self.execution_sequence.get() == "full_scenario":
+                try:
+                    step_delay = max(0.0, float(self.step_delay_var.get() or "0"))
+                except ValueError:
+                    step_delay = 0.0
+            os.environ[EnvVar.SOAP_STEP_DELAY] = str(step_delay)
             os.environ[EnvVar.TARGET_ENVIRONMENT] = "pte"
             os.environ[EnvVar.NEW_TARGET_ENVIRONMENT] = self.new_target_env.get()
 
@@ -2064,8 +2090,8 @@ class AssertionTab:
 
         all_criteria_names = [
             f'{s1_name} Failure',
+            'Failed - No Failure Tag',
             'No Failure',
-            'Group By Criteria',
             'Default Statistics',
             'Transactions Default Statistics',
         ]
@@ -2142,7 +2168,7 @@ class AssertionTab:
             sheet_conf['criteria'] = current
 
         for name, var in self.criteria_vars.items():
-            if name in ('No Failure', 'Default Statistics'):
+            if name in ('Failed - No Failure Tag', 'Default Statistics'):
                 sep = ctk.CTkLabel(criteria_scroll_frame, text="─" * 30, text_color="gray", font=("Arial", 9))
                 sep.pack(anchor="w", padx=10)
             cb = ctk.CTkCheckBox(criteria_scroll_frame, text=name, variable=var,

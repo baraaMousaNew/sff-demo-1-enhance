@@ -1,0 +1,36 @@
+<Remittance.Advice xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/CommonTypes/RemittanceAdvice.xsd">
+  <Header>
+    <SenderID>T001_Malaffi</SenderID>
+    <ReceiverID>TF001_Malaffi</ReceiverID>
+    <TransactionDate>23/09/2026 01:00</TransactionDate>
+    <RecordCount>1</RecordCount>
+    <DispositionFlag>PRODUCTION</DispositionFlag>
+  </Header>
+  <Claim>
+    <ID>5845061081</ID>
+    <IDPayer>T001_Malaffi-8119592004</IDPayer>
+	<ProviderID>TF001_Malaffi</ProviderID>
+    <DenialCode />
+    <PaymentReference>1111155555</PaymentReference>
+	<DateSettlement>23/09/2026 12:33</DateSettlement>
+    <Encounter>
+        <FacilityID>MF3505</FacilityID>
+    </Encounter>
+    <Activity>
+	  <ID>9874950030</ID>
+      <Start>23/09/2026 12:31</Start>
+      <Type>3</Type>
+      <Code>44950</Code>
+      <Quantity>1</Quantity>
+      <Net>0</Net>
+      <List>0</List>
+	  <OrderingClinician>GD6476</OrderingClinician>
+      <Clinician>GD6476</Clinician>
+      <PriorAuthorizationID />
+      <Gross>100</Gross>
+      <PatientShare>0</PatientShare>
+      <PaymentAmount>0</PaymentAmount>
+      <DenialCode />
+    </Activity>
+  </Claim>
+</Remittance.Advice>

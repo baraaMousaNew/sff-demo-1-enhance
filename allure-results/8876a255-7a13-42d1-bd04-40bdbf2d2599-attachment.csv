@@ -1,0 +1,2 @@
+Row#,RuleID,Type,All Matched,Error Text,Object,Element,Field Value,Additional Reference
+0,,ERROR,True,(actual: Schema Validation error:Expected element 'Header' instead of 'Claim' here in element Claim.Submission) (not checked),(actual: Claim.Submission) (not checked),(actual: Claim) (not checked),(actual: ) (not checked),(actual: ) (not checked)

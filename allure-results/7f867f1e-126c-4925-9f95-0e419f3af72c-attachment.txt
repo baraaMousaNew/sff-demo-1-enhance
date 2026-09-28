@@ -1,0 +1,46 @@
+Error file doesn't contain the rule id
+
+Expected error: 
+
+Error file: [
+  {
+    "Transaction": "Remittance.Advice",
+    "Type": "ERROR",
+    "RuleID": "30",
+    "Object Name": "Header",
+    "HAAD Field": "DispositionFlag",
+    "Field Value": "PRODUCTION",
+    "Additional Reference": "",
+    "Error Text": "Disposition Flag may have values 'PTE_SUBMIT', 'PTE_VALIDATE_ONLY', 'PTE_RESPONSE', 'PTE_SHADOW_NOT_FOR_PAYMENT_SUBMIT', 'PTE_SHADOW_NOT_FOR_PAYMENT_VALIDATE_ONLY', 'SHADOW_NOT_FOR_PAYMENT_SUBMIT' or 'SHADOW_NOT_FOR_PAYMENT_VALIDATE_ONLY' only. Your value is PRODUCTION."
+  },
+  {
+    "Transaction": "Remittance.Advice",
+    "Type": "ERROR",
+    "RuleID": "133",
+    "Object Name": "Claim",
+    "HAAD Field": "ID",
+    "Field Value": "XXXXXXXX1111",
+    "Additional Reference": "",
+    "Error Text": "Remittance advice cannot be matched with claim using Claim ID 'XXXXXXXX1111',Claim ProviderID 'TF001_Malaffi'.Reason: Sum of all activities in remittance advice has Net = 0, but submitted claim doesnot match this value. Net amounts must be equal."
+  },
+  {
+    "Transaction": "Remittance.Advice",
+    "Type": "ERROR",
+    "RuleID": "111",
+    "Object Name": "Claim",
+    "HAAD Field": "ID",
+    "Field Value": "XXXXXXXX1111",
+    "Additional Reference": "",
+    "Error Text": "Remittance advice cannot be matched with claim using Claim ID 'XXXXXXXX1111' and Sender ID TF001_Malaffi.Reason: Combination of Claim.ID, Claim.ProviderID, Activity.ID, Activity.Start, Activity.Type, Activity.Code, Activity.OrderingClinician, Activity.Clinician, Activity.Net and Activity.Quantity is not present in any Claim.Submission with Sender as TF001_Malaffi"
+  },
+  {
+    "Transaction": "Remittance.Advice",
+    "Type": "ERROR",
+    "RuleID": "117",
+    "Object Name": "Claim",
+    "HAAD Field": "ID",
+    "Field Value": "XXXXXXXX1111",
+    "Additional Reference": "",
+    "Error Text": "Remittance advice cannot be matched with claim using Claim ID 'XXXXXXXX1111', ProviderID 'TF001_Malaffi'. Reason: submitted Claim ID and ProviderID must be unique."
+  }
+]

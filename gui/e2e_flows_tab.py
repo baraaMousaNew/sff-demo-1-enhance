@@ -512,44 +512,6 @@ class E2EFlowsTab:
 
         self.mapping_outer.pack(fill="x", pady=(0, 8))
 
-    def make_processor(self) -> VariableProcessor:
-        """Create a fresh VariableProcessor for a single test case execution."""
-        return VariableProcessor()
-
-    def get_effective_payload(self, row: dict, processor: VariableProcessor) -> str:
-        """
-        Build the final XML payload for a single step row using the shared processor.
-
-        Processing order:
-          1. Nested XML (if column configured and cell has value):
-             - Run through processor so {{...}} placeholders are resolved.
-             - Base64-encode the result.
-             - Substitute {{nested_xml}} inside the main XML string.
-          2. Main XML:
-             - Run through processor (resolves built-in functions, custom functions,
-               {{VAR.*}}, {{EXTRACT.*}} populated by earlier steps, etc.).
-
-        The processor is shared across all steps of the same test case, so
-        {{EXTRACT.*}} values from step N are available in step N+1.
-        """
-        main_col   = self.main_xml_col_var.get().strip()
-        nested_col = self.nested_xml_col_var.get().strip()
-
-        main_xml = str(row.get(main_col, "") or "").strip()
-
-        if nested_col and nested_col != "(none)":
-            nested_xml = str(row.get(nested_col, "") or "").strip()
-            if nested_xml:
-                processed_nested = processor.process_variables(nested_xml, excel_row_data=row)
-                if NESTED_XML_ZIP_PLACEHOLDER in main_xml:
-                    encoded = _b64_zip_encode(processed_nested)
-                    main_xml = main_xml.replace(NESTED_XML_ZIP_PLACEHOLDER, encoded)
-                else:
-                    encoded = _b64_encode(processed_nested)
-                    main_xml = main_xml.replace(NESTED_XML_PLACEHOLDER, encoded)
-
-        return processor.process_variables(main_xml, excel_row_data=row)
-
     def extract_from_response(self, response_content: str, row: dict, processor: VariableProcessor) -> dict:
         """
         If the step row has extraction rules, parse the response and store the

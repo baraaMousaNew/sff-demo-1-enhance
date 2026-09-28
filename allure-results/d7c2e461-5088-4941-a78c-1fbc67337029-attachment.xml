@@ -1,0 +1,59 @@
+<Person.Register>
+	<Header>
+		<SenderID>T001_Malaffi</SenderID>
+		<ReceiverID>HAAD</ReceiverID>
+		<TransactionDate>23/09/2026 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+	<Person>
+		<UnifiedNumber>964324202365</UnifiedNumber>
+		<FirstName>Liam</FirstName>
+		<FirstNameEn>Ava</FirstNameEn>
+        <MiddleNameEn>Emma</MiddleNameEn>
+        <LastNameEn>Brown</LastNameEn>
+        <FirstNameAr>عربي اسم اول</FirstNameAr>
+        <MiddleNameAr>عربي اسم اوسط</MiddleNameAr>
+        <LastNameAr>عربي اسم اخير</LastNameAr>
+		<ContactNumber>+971-51-9006536</ContactNumber>
+		<BirthDate>18/01/1936</BirthDate>
+		<Gender>1</Gender>
+		<Nationality>Indian</Nationality>
+		<NationalityCode>100</NationalityCode>
+		<City>Abu Dhabi</City>
+		<CityCode>88</CityCode>
+		<CountryOfResidence>United Arab Emirates</CountryOfResidence>
+		<EmirateOfResidence>1</EmirateOfResidence>
+		<PassportNumber>JLIDWRPV</PassportNumber>
+		<EmiratesIDNumber>784-1977-4679854-1</EmiratesIDNumber>
+        <SponsorNumber>59588</SponsorNumber>
+        <SponsorNameEn>Emma</SponsorNameEn>
+        <SponsorNameAr>كفيل اسم عربي</SponsorNameAr>
+        <SpecialNationality>Indian</SpecialNationality>
+        <Privileges>None</Privileges>
+		<COCReferenceNumber>123456</COCReferenceNumber>
+        <BirthCertificateNumber>30553</BirthCertificateNumber>
+		<Member>
+			<ID>939815356</ID>
+			<Relation>Principal</Relation>
+			<RelationTo>939815356</RelationTo>
+            <RelationToEmiratesIDNumber>784-1977-4679854-1</RelationToEmiratesIDNumber>
+            <RelationToUnifiedNumber>964324202365</RelationToUnifiedNumber>
+			<Contract>
+				<PayerID>T001_Malaffi</PayerID>
+                <TPAID>T002_Malaffi</TPAID>
+				<PackageName>Malaffi-1234</PackageName>
+				<StartDate>20/02/2027</StartDate>
+				<RenewalDate>20/02/2027</RenewalDate>
+				<ExpiryDate>08/09/2027</ExpiryDate>
+				<GrossPremium>951</GrossPremium>
+				<PolicyHolder>4</PolicyHolder>
+				<CompanyID>XYZ Insurance</CompanyID>
+				<CollectedPremium>0</CollectedPremium>
+				<VAT>0</VAT>
+				<VATPercent>5</VATPercent>
+				<Status>Corrected Date</Status>
+			</Contract>
+		</Member>
+	</Person>
+</Person.Register>

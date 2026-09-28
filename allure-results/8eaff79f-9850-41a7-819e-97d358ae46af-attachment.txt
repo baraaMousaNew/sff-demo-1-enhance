@@ -1,0 +1,18 @@
+Error file contains the rule id
+
+Expected error: ''
+
+Matched error: 'Schema Validation error:Expected element 'BirthDate' instead of 'Gender' here in element Person'
+
+Error file: [
+  {
+    "Transaction": "Person.Register",
+    "Type": "ERROR",
+    "RuleID": "",
+    "Object Name": "Person",
+    "HAAD Field": "Gender",
+    "Field Value": "",
+    "Additional Reference": "",
+    "Error Text": "Schema Validation error:Expected element 'BirthDate' instead of 'Gender' here in element Person"
+  }
+]

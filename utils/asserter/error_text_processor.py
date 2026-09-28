@@ -1,4 +1,4 @@
-from utils.template_generator.common_variables import variable_pattern, ordered_variable_pattern, template_path_variable
+from utils.template_generator.common_variables import variable_pattern, ordered_variable_pattern
 import xml.etree.ElementTree as ET
 import re
 from utils.variable_processor import VariableProcessor

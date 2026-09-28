@@ -37,6 +37,8 @@ class LiveParentElement(AbstractLiveDataStrategy):
         while counter > 1:
             minor_template, results, live_data = GetRequestTemplate().get_template_request(request_name=request_name, variables=variables, health_checker=None)
             element, is_found = self._get_element_by_identity(minor_template, tag_path, has_xmlns=has_xmlns)
+            # ## in case of duplicating element, I want to duplicate with same values - cancelled
+            # element, is_found = self._get_element_by_identity(template, tag_path, has_xmlns=has_xmlns)
             if is_found:
                 template, is_added = self._add_element_to_template(template, element, tag_path, has_xmlns=has_xmlns)
             allure.attach(

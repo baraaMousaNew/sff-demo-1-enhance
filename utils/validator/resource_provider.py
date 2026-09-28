@@ -114,11 +114,6 @@ class ResourceProvider:
             "SELECT 1 FROM HIB_MDM.InsurancePayers WHERE Classification = 'TPA' AND AuthNumber = ?",
             [license_id])
 
-    def is_haad_broker(self, license_id: str) -> bool:
-        return self._exists("haad_broker",
-            "SELECT 1 FROM HIB_MDM.InsurancePayers WHERE Classification = 'Broker' AND AuthNumber = ?",
-            [license_id])
-
     # ── 2. Live registry lookups ───────────────────────────────────────────────
 
     def is_active_provider(self, license_id: str) -> bool:

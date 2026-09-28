@@ -20,6 +20,7 @@ from utils.template_generator.extract_data_strategy.extract_data_context import 
 from utils.request_mapper.request_mapper_context import do_assertion_requests
 from utils import dependency_tracker
 from utils.request_sender.system_enums import Systems
+from utils.request_sender.send_request_context import reset_step_delay
 from utils.env_vars import EnvVar
 from utils.execution_mode import ExecutionMode
 
@@ -29,7 +30,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 from utils.excel_handler import ExcelHandler
 from utils.api_client import APIClient
 from utils.variable_processor import VariableProcessor
-from utils.assertion_validator import AssertionValidator
 from utils.allure_reporter import AllureReporter
 
 
@@ -38,7 +38,6 @@ class AssertionTestExecutor:
         self.excel_handler = ExcelHandler()
         self.api_client = APIClient()
         self.variable_processor = VariableProcessor()
-        self.assertion_validator = AssertionValidator()
         self.allure_reporter = AllureReporter()
 
     def load_test_cases_from_excel(self, excel_file_path, sheets_to_test):
@@ -169,6 +168,7 @@ def test_soap(soap_test_case):
     )
     execution_mode = os.environ.get(EnvVar.SOAP_EXECUTION_MODE)
 
+    reset_step_delay()
     try:
         if execution_mode == ExecutionMode.SYSTEM1_ONLY:
             response, template = _execute_system1_baseline(test_case)

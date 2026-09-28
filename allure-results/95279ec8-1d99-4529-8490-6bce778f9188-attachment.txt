@@ -1,0 +1,9 @@
+Worker gw8: Executing test TC_9
+Current time: 2026-09-23
+Current time: 2026-09-23
+Current time: 2026-09-23
+DEBUG: Parsing CSV content (first 200 chars): Transaction,Type,RuleID,Object Name,HAAD Field,Field Value,Additional Reference,Error Text
+"Person.Register","ERROR","","Person","Gender","","","Schema Validation error:Expected element 'BirthDate' i
+DEBUG: CSV columns found: ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
+DEBUG: CSV rows count: 1
+Worker gw8: Completed test TC_9 - PASSED

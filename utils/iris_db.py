@@ -190,36 +190,6 @@ class IrisDBClient:
             result.setdefault(schema, []).append(table)
         return result
 
-    def fetch_one(self, sql, params=None):
-        """
-        Execute a SELECT query and return only the first row as a dict,
-        or None if no rows are returned.
-
-        Args:
-            sql (str):     SQL query string.
-            params (list): Optional list of positional parameters.
-
-        Returns:
-            dict | None
-        """
-        self._require_connection()
-        cursor = None
-        try:
-            cursor = self.connection.cursor()
-            if params:
-                cursor.execute(sql, params)
-            else:
-                cursor.execute(sql)
-            columns = [desc[0] for desc in cursor.description]
-            row = cursor.fetchone()
-            return dict(zip(columns, row)) if row else None
-        except Exception as e:
-            print(f"[IrisDB] fetch_one failed: {e}")
-            raise
-        finally:
-            if cursor:
-                cursor.close()
-
     # ─────────────────────────────────────────────────────────────────────────
     # Context Manager Support  (use with `with IrisDBClient(...) as client:`)
     # ─────────────────────────────────────────────────────────────────────────

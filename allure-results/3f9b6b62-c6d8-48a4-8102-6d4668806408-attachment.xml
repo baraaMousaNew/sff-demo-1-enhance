@@ -1,0 +1,9 @@
+<Prior.Request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.haad.ae/DataDictionary/CommonTypes/PriorRequest.xsd">
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>T001_Malaffi</ReceiverID>
+		<TransactionDate>23/09/2026 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+	</Prior.Request>

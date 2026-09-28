@@ -8,7 +8,23 @@ import json
 import base64
 import requests
 import os
+import re
 from pathlib import Path
+
+
+# ADO tags are ';'-separated and may not contain newlines/control chars or
+# commas (TF401266), and are capped at 400 characters.
+_ADO_TAG_MAX_LEN = 400
+
+
+def sanitize_ado_tag(tag):
+    """Normalise a tag so ADO accepts it, e.g. a multi-line Excel cell
+    'Element - Code<newline>Type' becomes 'Element - Code / Type'."""
+    lines = [ln.strip() for ln in str(tag).splitlines() if ln.strip()]
+    cleaned = " / ".join(lines)
+    cleaned = re.sub(r"[;,\x00-\x1f\x7f]", " ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned[:_ADO_TAG_MAX_LEN].rstrip()
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -645,6 +661,7 @@ def create_ado_bug(url, project, pat, pbi_id, failure):
     # Combine tags and eliminate duplicates
     combined_tags = []
     for tag in all_tags + custom_tags:
+        tag = sanitize_ado_tag(tag) if tag else tag
         if tag and tag not in combined_tags:
             combined_tags.append(tag)
             
@@ -793,7 +810,7 @@ def check_existing_bug(url, project, pat, failure, target_tags=None, fp_criteria
     ]
 
     for tag in tags_to_check:
-        tag_escaped = tag.replace("'", "''")
+        tag_escaped = sanitize_ado_tag(tag).replace("'", "''")
         conditions.append(f"[System.Tags] CONTAINS '{tag_escaped}'")
 
     if fp_criteria.get("error_text"):
@@ -1324,7 +1341,7 @@ def find_ready_for_qa_bug(url, project, pat, test_case, match_fields=None):
 
     for field_key, tag_value in tag_field_map.items():
         if field_key in match_fields and tag_value:
-            tag_escaped = tag_value.replace("'", "''")
+            tag_escaped = sanitize_ado_tag(tag_value).replace("'", "''")
             conditions.append(f"[System.Tags] CONTAINS '{tag_escaped}'")
 
     if "bug_title" in match_fields:
@@ -1666,7 +1683,7 @@ def match_bug_to_test_case(bug, test_cases, match_fields=None):
         for field_key, tc_tag in tag_field_map.items():
             if field_key not in match_fields:
                 continue
-            if not tc_tag or tc_tag.lower() not in bug_tags:
+            if not tc_tag or sanitize_ado_tag(tc_tag).lower() not in bug_tags:
                 matched = False
                 break
 

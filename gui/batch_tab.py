@@ -9,7 +9,7 @@ from utils.azure_reporting import (
     AVAILABLE_REPORT_TAGS, SYSTEM1_AVAILABLE_REPORT_TAGS,
     TARGET_TAGS, SYSTEM1_TARGET_TAGS,
     test_ado_connection, get_pbi_details, check_existing_bug,
-    scan_all_results, scan_all_batch_results, find_ready_for_qa_bug, update_bug_for_qa_result,
+    scan_all_results, scan_all_batch_results, update_bug_for_qa_result,
     get_all_ready_for_qa_bugs, get_all_closed_bugs, match_bug_to_test_case,
     add_failure_comment,
 )
@@ -184,6 +184,17 @@ class BatchTab:
         self.execution_sequence = tk.StringVar(value="full_scenario")
         ctk.CTkRadioButton(col1, text="Single API", variable=self.execution_sequence, value="single_api", font=FONTS["main"]).pack(anchor="w", padx=10, pady=2)
         ctk.CTkRadioButton(col1, text="Full Scenario", variable=self.execution_sequence, value="full_scenario", font=FONTS["main"]).pack(anchor="w", padx=10, pady=2)
+        delay_row = ctk.CTkFrame(col1, fg_color="transparent")
+        delay_row.pack(anchor="w", padx=10, pady=(4, 2))
+        self.step_delay_label = ctk.CTkLabel(delay_row, text="Delay between steps:", font=FONTS["main"])
+        self.step_delay_label.pack(side="left")
+        self.step_delay_var = tk.StringVar(value="0")
+        self.step_delay_entry = ctk.CTkEntry(delay_row, textvariable=self.step_delay_var, width=50, font=FONTS["main"])
+        self.step_delay_entry.pack(side="left", padx=5)
+        self.step_delay_unit_label = ctk.CTkLabel(delay_row, text="sec", font=FONTS["main"])
+        self.step_delay_unit_label.pack(side="left")
+        self.execution_sequence.trace_add("write", self.on_execution_sequence_change)
+        self.on_execution_sequence_change()
 
         # Config Column 2
         col2 = ctk.CTkFrame(config_grid)
@@ -506,8 +517,6 @@ class BatchTab:
         priority_var = tk.StringVar(value="2")
         severity_var = tk.StringVar(value="3 - Medium")
         assignee_var = tk.StringVar()
-
-        projects_list = []
 
         step1_frame = ctk.CTkFrame(dialog)
         step1_frame.pack(fill="x", padx=20, pady=5)
@@ -1197,7 +1206,7 @@ class BatchTab:
                         anchor="w", font=FONTS["small"], text_color="gray", wraplength=270)
                     err_lbl.pack(fill="x")
 
-                def _on_click(ev=None, f=failure, r=row, il=i_local):
+                def _on_click(ev=None, f=failure, r=row):
                     if active_row[0] and active_row[0] is not r:
                         prev = active_row[0]
                         try:
@@ -2283,9 +2292,9 @@ class BatchTab:
              'System Comparison Failure',
              'System Comparison Error Text Failure',
              'System Row Comparison Failure',
+             'Failed - No Failure Tag',
              'No Failure',
              'Broken',
-             'Group By Criteria',
              'Default Statistics',
              'Transactions Default Statistics',
         ]
@@ -2398,7 +2407,7 @@ class BatchTab:
             self._criteria_checkboxes[name] = cb
 
             # Visual separators before grouped sections
-            if name in ('No Failure', 'Default Statistics'):
+            if name in ('Failed - No Failure Tag', 'Default Statistics'):
                 sep = ctk.CTkLabel(criteria_scroll_frame, text="─" * 30, text_color="gray", font=("Arial", 9))
                 sep.pack(anchor="w", padx=10)
 
@@ -3052,6 +3061,13 @@ class BatchTab:
             os.environ[EnvVar.EXCEL_FILE_TEST_SHEETS] = sheets_to_test
             os.environ[EnvVar.SOAP_EXECUTION_MODE] = self.execution_mode.get()
             os.environ[EnvVar.SOAP_EXECUTION_SEQUENCE] = self.execution_sequence.get()
+            step_delay = 0.0
+            if self.execution_sequence.get() == "full_scenario":
+                try:
+                    step_delay = max(0.0, float(self.step_delay_var.get() or "0"))
+                except ValueError:
+                    step_delay = 0.0
+            os.environ[EnvVar.SOAP_STEP_DELAY] = str(step_delay)
             os.environ[EnvVar.SOAP_GENERATE_RULES_SUMMARY] = "false"
             os.environ[EnvVar.SOAP_GENERATE_LEGACY_RULES_SUMMARY] = "false"
             os.environ[EnvVar.SOAP_GENERATE_SYSTEM_RULES_SUMMARY] = "false"
@@ -3577,6 +3593,14 @@ class BatchTab:
 
 
 
+
+    def on_execution_sequence_change(self, *args):
+        # Step delay only applies between transactions of a Full Scenario chain
+        enabled = self.execution_sequence.get() == "full_scenario"
+        self.step_delay_entry.configure(state="normal" if enabled else "disabled")
+        text_color = ("gray10", "gray90") if enabled else ("gray60", "gray45")
+        self.step_delay_label.configure(text_color=text_color)
+        self.step_delay_unit_label.configure(text_color=text_color)
 
     def on_mode_change(self, *args):
         mode = self.execution_mode.get()

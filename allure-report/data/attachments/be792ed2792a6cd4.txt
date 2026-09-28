@@ -1,3 +1,0 @@
-Test ID: TC_CSub_9_1
-Description: Rule-9 | Element:RecordCount | Object:Header -> Missing PayerID
-Timestamp: 2026-01-05 16:41:37.177191

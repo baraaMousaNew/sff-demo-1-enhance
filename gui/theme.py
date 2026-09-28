@@ -28,16 +28,6 @@ FONTS = {
     "small": ("Roboto Medium", 12)
 }
 
-def setup_theme():
-    """
-    Deprecated: Use setup_app_config() before root creation and apply_styles() after.
-    Kept for backward compatibility if needed, but will cause the ghost window issue if called before root.
-    """
-    setup_app_config()
-    # If we call apply_styles here without a root, it creates a ghost window.
-    # So we simply return the colors. The user must call apply_styles explicitly if they want ttk styling.
-    return COLORS
-
 def setup_app_config():
     """
     Configures CTk appearance settings. call this BEFORE creating the root window.

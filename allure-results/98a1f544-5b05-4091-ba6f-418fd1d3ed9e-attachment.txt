@@ -1,0 +1,6 @@
+Worker gw7: Executing test TC_8
+DEBUG: Parsing CSV content (first 200 chars): Transaction,Type,RuleID,Object Name,HAAD Field,Field Value,Additional Reference,Error Text
+"Claim.Submission","ERROR","","Claim.Submission","Claim","","","Schema Validation error:Expected element 'He
+DEBUG: CSV columns found: ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
+DEBUG: CSV rows count: 1
+Worker gw7: Completed test TC_8 - PASSED

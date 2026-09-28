@@ -3,7 +3,6 @@ Custom Functions for SOAP API Testing
 Add your own functions here for specific business logic
 """
 import base64
-import gzip
 import io
 import random
 import os
@@ -15,7 +14,6 @@ from io import BytesIO
 import pandas as pd
 import threading
 import xml.etree.ElementTree as ET
-from functools import lru_cache
 from utils.env_vars import EnvVar
 
 

@@ -17,7 +17,3 @@ tc_skip_env1 = 'Skip Env 1'
 tc_occurrences = 'Occurrences'
 tc_field_value = 'Field Value'
 tc_additional_reference = 'Additional Reference'
-
-## xml tags
-old_system_tag = '{https://www.shafafiya.org/v2/}'
-new_system_tag = '{https://www.shafafiya.org/v2/}'

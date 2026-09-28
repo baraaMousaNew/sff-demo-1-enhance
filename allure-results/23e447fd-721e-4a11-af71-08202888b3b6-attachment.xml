@@ -1,0 +1,11 @@
+<ns0:Envelope xmlns:ns0="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://www.shafafiya.org/v2/">
+                   <ns0:Header />
+                   <ns0:Body>
+                      <ns1:UploadTransaction>
+                         <ns1:login>MalaffiPayertest</ns1:login>
+                         <ns1:pwd>Haad@2016</ns1:pwd>
+                         <ns1:fileContent>encoded_xml</ns1:fileContent>
+                         <ns1:fileName>test_file_MYeXjk__20260923_123116.xml</ns1:fileName>
+                      </ns1:UploadTransaction>
+                   </ns0:Body>
+                </ns0:Envelope>

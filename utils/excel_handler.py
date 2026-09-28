@@ -10,7 +10,6 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 
-import utils.common_variables
 from utils import common_variables
 from utils.common_variables import tc_precondition
 
@@ -143,36 +142,5 @@ class ExcelHandler:
 
         except Exception as e:
             raise Exception(f"Failed to load Excel file: {str(e)}")
-
-    def load_excel_original_format(self, file_path, sheet_name=None):
-        try:
-            if sheet_name:
-                df = pd.read_excel(file_path, sheet_name=sheet_name)
-            else:
-                df = pd.read_excel(file_path)
-            # Convert NaN to empty strings
-            df = df.fillna('')
-            return df
-
-        except Exception as e:
-            raise Exception(f"Failed to load Excel file: {str(e)}")
-
-    def save_results(self, file_path, results_data):
-        """
-        Save test results to Excel file
-
-        Args:
-            file_path (str): Path to save results
-            results_data (list): List of result dictionaries
-        """
-        try:
-            df = pd.DataFrame(results_data)
-            df.to_excel(file_path, index=False)
-
-        except Exception as e:
-            raise Exception(f"Failed to save results: {str(e)}")
-
-
-
 
 

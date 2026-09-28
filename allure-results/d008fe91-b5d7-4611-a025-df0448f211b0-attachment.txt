@@ -1,0 +1,18 @@
+Error file contains the rule id
+
+Expected error: ''
+
+Matched error: 'Schema Validation error:Expected element 'Authorization' before the end of the content in element Prior.Request'
+
+Error file: [
+  {
+    "Transaction": "Prior.Request",
+    "Type": "ERROR",
+    "RuleID": "",
+    "Object Name": "",
+    "HAAD Field": "Prior.Request",
+    "Field Value": "",
+    "Additional Reference": "",
+    "Error Text": "Schema Validation error:Expected element 'Authorization' before the end of the content in element Prior.Request"
+  }
+]

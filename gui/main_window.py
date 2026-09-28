@@ -9,7 +9,6 @@ from .assertion_tab import AssertionTab
 from .encoder_tab import EncoderTab
 from .help_tab import HelpTab
 from .database_tab import DatabaseTab
-from .request_generator_tab import RequestGeneratorTab
 from .e2e_flows_tab import E2EFlowsTab
 from .validator_tab import ValidatorTab
 
@@ -45,7 +44,6 @@ class MainWindow:
         self.tabview.add("Assertion Testing")
         self.tabview.add("XML Encoder")
         self.tabview.add("Database")
-        self.tabview.add("Request Generator")
         self.tabview.add("E2E Flows")
         self.tabview.add("XML Validator")
         self.tabview.add("Help & Documentation")
@@ -57,7 +55,6 @@ class MainWindow:
         self.assertion_tab = AssertionTab(self.tabview.tab("Assertion Testing"))
         self.encoder_tab = EncoderTab(self.tabview.tab("XML Encoder"))
         self.database_tab = DatabaseTab(self.tabview.tab("Database"))
-        self.request_generator_tab = RequestGeneratorTab(self.tabview.tab("Request Generator"))
         self.e2e_flows_tab = E2EFlowsTab(self.tabview.tab("E2E Flows"))
         self.validator_tab = ValidatorTab(self.tabview.tab("XML Validator"))
         self.help_tab = HelpTab(self.tabview.tab("Help & Documentation"))

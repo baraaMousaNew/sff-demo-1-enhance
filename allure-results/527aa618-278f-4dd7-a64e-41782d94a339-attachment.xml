@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"/><soap:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><UploadTransactionResponse xmlns="https://www.shafafiya.org/v2/">
+  <UploadTransactionResult>-2</UploadTransactionResult>
+  <errorMessage>Schema validation failed for the submitted XML file.Download Schema Validation Error Report</errorMessage>
+  <errorReport>UEsDBBQAAAAIAOhjN13RIwFkrgAAAAQBAAAUABwARXJyb3JzUmVwb3J0X05FVy5jc3ZVVAkAA1SOs2pUjrNqdXgLAAEEixMAAASJEwAAbU5BCsIwELwL/cPSSy7BB3grtqIXhVi8b5sRI0la0hTq700qeFEYdped2Z1pA/uJ+2gGL9vXCKlmi1MtL90TfaQzO8hjVdV0MLBarpVubGfISmuT79iSwh0BvodsQhgCtVhisSn3lo3bXufOmWlKylKWjVIXlXrCH3ZdfdiEa/+A4+xmNGcnQv6+a5YxZYMmWDj4SOII1giCjJ9iGmm4k1h/CXqkYGn/1f64Fps3UEsBAh4DFAAAAAgA6GM3XdEjAWSuAAAABAEAABQAGAAAAAAAAQAAAPSBAAAAAEVycm9yc1JlcG9ydF9ORVcuY3N2VVQFAANUjrNqdXgLAAEEixMAAASJEwAAUEsFBgAAAAABAAEAWgAAAPwAAAAAAA==</errorReport>
+</UploadTransactionResponse></soap:Body></soapenv:Envelope>

@@ -1,0 +1,16 @@
+Error file doesn't contain the rule id
+
+Expected error: 
+
+Error file: [
+  {
+    "Transaction": "Rule 126 failed",
+    "Type": "Invalid Transaction file",
+    "RuleID": "",
+    "Object Name": "",
+    "HAAD Field": "",
+    "Field Value": "",
+    "Additional Reference": "",
+    "Error Text": ""
+  }
+]

@@ -39,6 +39,8 @@ def parse_args():
     parser.add_argument("--sequence", default="full_scenario",
                         choices=["single_api", "full_scenario"],
                         help="Execution sequence (default: full_scenario)")
+    parser.add_argument("--step-delay", type=float, default=0.0,
+                        help="Seconds to wait between transactions within a full scenario (default: 0)")
     parser.add_argument("--env", default="pte",
                         choices=["pte", "production"],
                         help="Legacy system target environment (default: pte)")
@@ -83,6 +85,7 @@ def set_env(args):
     os.environ[EnvVar.EXCEL_FILE_TEST_SHEETS] = args.sheets
     os.environ[EnvVar.SOAP_EXECUTION_MODE] = args.mode
     os.environ[EnvVar.SOAP_EXECUTION_SEQUENCE] = args.sequence
+    os.environ[EnvVar.SOAP_STEP_DELAY] = str(max(0.0, args.step_delay))
     os.environ[EnvVar.TARGET_ENVIRONMENT] = args.env
     os.environ[EnvVar.NEW_TARGET_ENVIRONMENT] = args.new_env
     os.environ[EnvVar.ASSERT_ERROR_TEXT] = "true" if args.assert_error_text else "false"

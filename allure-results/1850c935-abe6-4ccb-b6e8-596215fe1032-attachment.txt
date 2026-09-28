@@ -1,0 +1,6 @@
+Worker gw10: Executing test TC_11
+Current time: 2026-09-23 12:31:16
+DEBUG: Parsing CSV content (first 200 chars): Transaction,Type,RuleID,Object Name,HAAD Field,Field Value,Additional Reference,Error Text
+"Remittance.Advice","ERROR","30","Header","DispositionFlag","PRODUCTION","","Disposition Flag may have value
+DEBUG: CSV columns found: ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
+DEBUG: CSV rows count: 4

@@ -1,0 +1,6 @@
+Worker gw5: Executing test TC_6
+DEBUG: Parsing CSV content (first 200 chars): Transaction,Type,RuleID,Object Name,HAAD Field,Field Value,Additional Reference,Error Text
+Rule 126 failed,Invalid Transaction file,,,,,,
+
+DEBUG: CSV columns found: ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
+DEBUG: CSV rows count: 1

@@ -37,10 +37,12 @@ class ReplaceLiveValueDecorator(BaseDecorator):
             live_data_dict.update(parent_elements)
             live_data_dict.update(leaf_elements)
             final_data_dict = live_data_dict.copy()
+            # the results list is copied to new one so variables generated do the template next don't affect later requests in the chain
+            variable_copy = results.copy()
             for key, value in live_data_dict.items():
                 template, is_done = LiveDataContext().get_data_context(key).get_full_element(request_name=request_name,
                                                                                     template=template, tag=key,
-                                                                                    value=value, variables=results)
+                                                                                    value=value, variables=variable_copy)
                 if is_done:
                     final_data_dict.pop(key)
             final_live_data = ';'.join(f"{key}={value}" for key, value in final_data_dict.items())

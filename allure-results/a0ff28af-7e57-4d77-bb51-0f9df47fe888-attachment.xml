@@ -1,0 +1,75 @@
+<Claim.Submission xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.haad.ae/DataDictionary/CommonTypes/ClaimSubmission.xsd">
+
+	
+	<Header>
+		<SenderID>TF001_Malaffi</SenderID>
+		<ReceiverID>T001_Malaffi</ReceiverID>
+		<TransactionDate>23/09/2026 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+
+	
+	<Claim>
+		
+		<ID>4704151217</ID>
+        <IDPayer />
+		<MemberID>4086832370</MemberID>
+		<PayerID>T001_Malaffi</PayerID>
+		<ProviderID>TF001_Malaffi</ProviderID>
+		<EmiratesIDNumber>111-1111-1111111-1</EmiratesIDNumber>
+		<Gross>0</Gross>
+		<PatientShare>0</PatientShare>
+		<Net>0</Net>
+        <VAT>1</VAT>
+		
+		<Encounter>
+			<FacilityID>MF3505</FacilityID>
+			<Type>3</Type>
+			<PatientID>1245</PatientID>
+            <EligibilityIDPayer />
+			<Start>23/09/2026 12:00</Start>
+			<End>23/09/2026 15:00</End>
+			<StartType>1</StartType>
+			<EndType>1</EndType>
+            <TransferSource />
+            <TransferDestination />
+		</Encounter>
+
+		
+		<Diagnosis>
+			<Type>Principal</Type>
+			<Code>A00.0</Code>
+			<DxInfo>
+				<Type>POA</Type>
+				<Code>Y</Code>
+			</DxInfo>
+		</Diagnosis>
+
+		
+		<Activity>
+			<ID>5003224429</ID>
+			<Start>23/09/2026 13:00</Start>
+			<Type>3</Type>
+			<Code>44950</Code>
+			<Quantity>1</Quantity>
+			<Net>0</Net>
+			<OrderingClinician>GD6476</OrderingClinician>
+			<Clinician>GD6476</Clinician>
+            <PriorAuthorizationID />
+            <VAT>10</VAT>
+            <VATPercent>1</VATPercent>
+            <DateOrdered>23/09/2026 12:00</DateOrdered>
+			
+			<Observation>
+				<Type>LOINC</Type>
+				<Code>10579-1</Code>
+				<Value>8</Value>
+				<ValueType>Qn</ValueType>
+			</Observation>
+		</Activity>
+        <Contract>
+            <PackageName>Malaffi-1234</PackageName>
+        </Contract>
+	</Claim>
+</Claim.Submission>

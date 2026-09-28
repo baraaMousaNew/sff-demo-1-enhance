@@ -1,5 +1,4 @@
 import re
-from dis import pretty_flags
 from enum import Enum
 from xml.etree.ElementTree import tostring, Element, fromstring
 

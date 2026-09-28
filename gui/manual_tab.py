@@ -711,60 +711,6 @@ class ManualTab:
         self.response_text.delete("1.0", "end")
         self.status_var.set("Ready")
 
-    def show_processed_xml_window(self, original_xml, processed_xml):
-        window = ctk.CTkToplevel(self.frame)
-        window.title("Variable Processing Results")
-        window.geometry("1200x700")
-
-        left_frame = ctk.CTkFrame(window)
-        left_frame.pack(side="left", fill="both", expand=True, padx=(10, 5), pady=10)
-
-        right_frame = ctk.CTkFrame(window)
-        right_frame.pack(side="right", fill="both", expand=True, padx=(5, 10), pady=10)
-
-        ctk.CTkLabel(left_frame, text="Original XML (with variables):", anchor="w").pack(anchor="w", padx=10, pady=5)
-        original_text = ctk.CTkTextbox(left_frame)
-        original_text.pack(fill="both", expand=True, padx=10, pady=(0, 10))
-        original_text.insert("1.0", original_xml)
-        original_text.configure(state='disabled')
-
-        ctk.CTkLabel(right_frame, text="Processed XML (variables replaced):", anchor="w").pack(anchor="w", padx=10, pady=5)
-        processed_text = ctk.CTkTextbox(right_frame)
-        processed_text.pack(fill="both", expand=True, padx=10, pady=(0, 10))
-        processed_text.insert("1.0", processed_xml)
-        processed_text.configure(state='disabled')
-
-        button_frame = ctk.CTkFrame(window, fg_color="transparent")
-        button_frame.pack(fill="x", padx=10, pady=(0, 10))
-
-        def copy_processed():
-            window.clipboard_clear()
-            window.clipboard_append(processed_xml)
-            messagebox.showinfo("Copied", "Processed XML copied to clipboard")
-
-        def use_processed():
-            self.xml_body.delete("1.0", "end")
-            self.xml_body.insert("1.0", processed_xml)
-            window.destroy()
-            messagebox.showinfo("Updated", "XML body updated with processed version")
-
-        def process_again():
-            try:
-                self.variable_processor.set_batch_context()
-                self.variable_processor.set_test_context(1)
-                new_processed = self.variable_processor.process_variables(original_xml)
-                processed_text.configure(state='normal')
-                processed_text.delete("1.0", "end")
-                processed_text.insert("1.0", new_processed)
-                processed_text.configure(state='disabled')
-            except Exception as e:
-                messagebox.showerror("Error", f"Failed to reprocess: {str(e)}")
-
-        ctk.CTkButton(button_frame, text="Copy Processed", command=copy_processed).pack(side="left", padx=(0, 5))
-        ctk.CTkButton(button_frame, text="Use Processed", command=use_processed, fg_color="green", hover_color="#006400").pack(side="left", padx=(0, 5))
-        ctk.CTkButton(button_frame, text="Process Again", command=process_again, fg_color="orange", hover_color="#b87400").pack(side="left", padx=(0, 5))
-        ctk.CTkButton(button_frame, text="Close", command=window.destroy, fg_color="gray", hover_color="#404040").pack(side="right")
-
     def format_xml(self):
         xml_content = self.xml_body.get("1.0", "end").strip()
         if xml_content:

@@ -1,0 +1,18 @@
+Error file contains the rule id
+
+Expected error: ''
+
+Matched error: 'Schema Validation error:Expected element 'Header' instead of 'Claim' here in element Claim.Submission'
+
+Error file: [
+  {
+    "Transaction": "Claim.Submission",
+    "Type": "ERROR",
+    "RuleID": "",
+    "Object Name": "Claim.Submission",
+    "HAAD Field": "Claim",
+    "Field Value": "",
+    "Additional Reference": "",
+    "Error Text": "Schema Validation error:Expected element 'Header' instead of 'Claim' here in element Claim.Submission"
+  }
+]

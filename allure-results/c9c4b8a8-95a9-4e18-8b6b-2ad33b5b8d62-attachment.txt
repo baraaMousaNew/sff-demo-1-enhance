@@ -1,0 +1,16 @@
+Error file doesn't contain the rule id
+
+Expected error: 
+
+Error file: [
+  {
+    "Transaction": "Internal Error",
+    "Type": " cannot parse the transaction file",
+    "RuleID": "",
+    "Object Name": "",
+    "HAAD Field": "",
+    "Field Value": "",
+    "Additional Reference": "",
+    "Error Text": ""
+  }
+]

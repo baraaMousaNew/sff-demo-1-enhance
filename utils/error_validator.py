@@ -8,49 +8,11 @@ import pandas as pd
 import base64
 import io
 import re
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Optional
 
 class ErrorValidator:
     def __init__(self):
         self.validation_columns = ['Transaction', 'Type', 'RuleID', 'Object Name', 'HAAD Field', 'Field Value', 'Additional Reference', 'Error Text']
-
-    def extract_and_validate_errors(self, response_content: str, expected_errors_str: str, test_id: str) -> Dict:
-        """
-        Main validation function - extracts errorReport and validates against expected errors
-
-        Args:
-            response_content (str): SOAP response content
-            expected_errors_str (str): Expected errors string from Excel
-            test_id (str): Test identifier
-
-        Returns:
-            Dict: Validation results
-        """
-        try:
-            # Step 1: Extract errorReport from response
-            error_report_base64 = self.extract_error_report(response_content)
-
-            if not error_report_base64:
-                # No error report in response
-                if not expected_errors_str.strip():
-                    return self.create_validation_result('PASS', 'No errors expected and none found', [], [], [], [])
-                else:
-                    expected_errors = self.parse_expected_errors(expected_errors_str)
-                    return self.create_validation_result('FAIL', 'Expected errors but no errorReport found', expected_errors, [], expected_errors, [])
-
-            # Step 2: Decode and parse error report
-            found_errors = self.decode_and_parse_error_report(error_report_base64)
-
-            # Step 3: Parse expected errors
-            expected_errors = self.parse_expected_errors(expected_errors_str) if expected_errors_str.strip() else []
-
-            # Step 4: Validate
-            validation_result = self.validate_errors(expected_errors, found_errors, test_id)
-
-            return validation_result
-
-        except Exception as e:
-            return self.create_validation_result('ERROR', f'Validation failed: {str(e)}', [], [], [], [])
 
     def extract_error_report(self, soap_response: str) -> Optional[str]:
         """Extract Base64 errorReport content from SOAP response"""
@@ -348,37 +310,3 @@ class ErrorValidator:
             'unexpected_errors': unexpected,
             'matched_errors': matched
         }
-
-    def format_validation_summary(self, validation_result: Dict) -> str:
-        """Create a human-readable validation summary"""
-        try:
-            status = validation_result['validation_status']
-            message = validation_result['validation_message']
-            expected_count = validation_result['expected_errors_count']
-            found_count = validation_result['found_errors_count']
-            matched_count = validation_result['matched_errors_count']
-            missing_count = validation_result['missing_errors_count']
-            unexpected_count = validation_result['unexpected_errors_count']
-
-            summary = f"Status: {status}\n"
-            summary += f"Message: {message}\n\n"
-            summary += f"Expected Errors: {expected_count}\n"
-            summary += f"Found Errors: {found_count}\n"
-            summary += f"Matched Errors: {matched_count}\n"
-            summary += f"Missing Errors: {missing_count}\n"
-            summary += f"Unexpected Errors: {unexpected_count}\n"
-
-            if missing_count > 0:
-                summary += f"\nMissing Errors:\n"
-                for i, error in enumerate(validation_result['missing_errors'], 1):
-                    summary += f"  {i}. {error.get_template_request('Transaction', '')}, {error.get_template_request('Type', '')}, {error.get_template_request('RuleID', '')}, {error.get_template_request('Object Name', '')}, {error.get_template_request('HAAD Field', '')}\n"
-
-            if unexpected_count > 0:
-                summary += f"\nUnexpected Errors:\n"
-                for i, error in enumerate(validation_result['unexpected_errors'], 1):
-                    summary += f"  {i}. {error.get_template_request('Transaction', '')}, {error.get_template_request('Type', '')}, {error.get_template_request('RuleID', '')}, {error.get_template_request('Object Name', '')}, {error.get_template_request('HAAD Field', '')}\n"
-
-            return summary
-
-        except Exception as e:
-            return f"Error formatting validation summary: {str(e)}"

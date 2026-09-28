@@ -185,6 +185,15 @@ def generate_all_cases_flat(allure_results_dir):
         is_dual_row_failure            = 'dual system row failure' in tags_lower
         is_dual_mismatch_failure       = 'dual system mismatch failure' in tags_lower
 
+        is_failed_no_failure_tag = status == 'failed' and not (
+            is_s1_trigger_failure or is_s2_trigger_failure
+            or is_s1_error_text_failure or is_s2_error_text_failure
+            or is_s1_object_element_failure or is_s2_object_element_failure
+            or is_s1_field_additional_failure or is_s2_field_additional_failure
+            or is_dual_system_failure or is_dual_error_text_failure
+            or is_dual_row_failure or is_dual_mismatch_failure
+        )
+
         def find_attachments_recursive(steps, target_name_part):
             found = []
             for step in steps:
@@ -319,6 +328,7 @@ def generate_all_cases_flat(allure_results_dir):
             'is_dual_error_text_failure': is_dual_error_text_failure,
             'is_dual_row_failure': is_dual_row_failure,
             'is_dual_mismatch_failure': is_dual_mismatch_failure,
+            'is_failed_no_failure_tag': is_failed_no_failure_tag,
         })
 
     return pd.DataFrame(results) if results else pd.DataFrame()
@@ -326,14 +336,37 @@ def generate_all_cases_flat(allure_results_dir):
 def generate_default_statistics(allure_results_dir):
     """
     Generates a DataFrame with one row per Rule ID containing:
-    Rule ID, Total Cases, Pass Cases, Fail Cases on Old System,
-    Fail Cases on New System, Completion %
+    Rule ID, Total Cases, Pass Cases, <failure column(s)>, Completion %
 
-    Failure attribution:
-    - Old System: system 1 failure OR system 1 error text failure (excluding dual)
-    - New System: system 2 failure OR system 2 error text failure
+    Single-system runs (System 1 Only / System 2 Only) produce a single
+    'Fail Cases on <system name>' column, since there is no second system
+    to compare against and every failed case belongs to the one system
+    under test. Dual-system runs (Both Systems / System 1 Both Envs)
+    produce one failure column per system:
+    - First system: system 1 failure OR system 1 error text failure (excluding dual)
+    - Second system: system 2 failure OR system 2 error text failure
                   OR dual system failure OR dual system error text failure
     """
+    execution_mode = os.environ.get(EnvVar.SOAP_EXECUTION_MODE, ExecutionMode.UNKNOWN)
+    single_system_mode = execution_mode in (ExecutionMode.SYSTEM1_ONLY, ExecutionMode.SYSTEM2_ONLY)
+
+    s1_name = "System 1"
+    s2_name = "System 2"
+    if execution_mode == ExecutionMode.BOTH_SYSTEMS:
+        s1_name = "Legacy System"
+        s2_name = "System 2.0"
+    elif execution_mode == ExecutionMode.SYSTEM1_BOTH_ENVS:
+        s1_name = "Legacy System (Prod)"
+        s2_name = "Legacy System (PTE)"
+    elif execution_mode == ExecutionMode.SYSTEM1_ONLY:
+        s1_name = "Legacy System"
+    elif execution_mode == ExecutionMode.SYSTEM2_ONLY:
+        s1_name = "System 2.0"
+
+    fail_col = f'Fail Cases on {s1_name}'
+    fail_old_col = f'Fail Cases on {s1_name}'
+    fail_new_col = f'Fail Cases on {s2_name}'
+
     results = []
     for file in Path(allure_results_dir).glob('*-result.json'):
         with open(file, 'r', encoding='utf-8') as f:
@@ -362,11 +395,14 @@ def generate_default_statistics(allure_results_dir):
             'is_s2_failure': is_s2_failure,
         })
 
+    columns = (
+        ['Rule ID', 'Total Cases', 'Pass Cases', fail_col, 'Completion %']
+        if single_system_mode else
+        ['Rule ID', 'Total Cases', 'Pass Cases', fail_old_col, fail_new_col, 'Completion %']
+    )
+
     if not results:
-        return pd.DataFrame(columns=[
-            'Rule ID', 'Total Cases', 'Pass Cases',
-            'Fail Cases on Old System', 'Fail Cases on New System', 'Completion %'
-        ])
+        return pd.DataFrame(columns=columns)
 
     df = pd.DataFrame(results)
     grouped = df.groupby('Rule ID')
@@ -376,37 +412,66 @@ def generate_default_statistics(allure_results_dir):
         total   = len(group)
         passed  = len(group[group['status'] == 'passed'])
         failed  = group[group['status'] == 'failed']
-
-        fail_old = len(failed[failed['is_s1_failure']])
-        fail_new = len(failed[failed['is_s2_failure']])
         completion = round((passed / total) * 100, 2) if total > 0 else 0.0
 
-        rows.append({
-            'Rule ID': rule_id,
-            'Total Cases': total,
-            'Pass Cases': passed,
-            'Fail Cases on Old System': fail_old,
-            'Fail Cases on New System': fail_new,
-            'Completion %': completion
-        })
+        if single_system_mode:
+            # A single system is under test, so every failed case is a failure on it.
+            rows.append({
+                'Rule ID': rule_id,
+                'Total Cases': total,
+                'Pass Cases': passed,
+                fail_col: len(failed),
+                'Completion %': completion
+            })
+        else:
+            fail_old = len(failed[failed['is_s1_failure']])
+            fail_new = len(failed[failed['is_s2_failure']])
+            rows.append({
+                'Rule ID': rule_id,
+                'Total Cases': total,
+                'Pass Cases': passed,
+                fail_old_col: fail_old,
+                fail_new_col: fail_new,
+                'Completion %': completion
+            })
 
-    return pd.DataFrame(rows, columns=[
-        'Rule ID', 'Total Cases', 'Pass Cases',
-        'Fail Cases on Old System', 'Fail Cases on New System', 'Completion %'
-    ])
+    return pd.DataFrame(rows, columns=columns)
 
 
 def generate_transactions_default_statistics(allure_results_dir):
     """
     Generates a DataFrame with one row per Transaction Type containing:
-    Transaction Type, Total Cases, Pass Cases, Fail Cases on Old System,
-    Fail Cases on New System, Completion %
+    Transaction Type, Total Cases, Pass Cases, <failure column(s)>, Completion %
 
-    Failure attribution mirrors generate_default_statistics:
-    - Old System: system 1 failure OR system 1 error text failure (excluding dual)
-    - New System: system 2 failure OR system 2 error text failure
+    Single-system runs (System 1 Only / System 2 Only) produce a single
+    'Fail Cases on <system name>' column, since there is no second system
+    to compare against. Dual-system runs (Both Systems / System 1 Both
+    Envs) produce one failure column per system, mirroring
+    generate_default_statistics:
+    - First system: system 1 failure OR system 1 error text failure (excluding dual)
+    - Second system: system 2 failure OR system 2 error text failure
                   OR dual system failure OR dual system error text failure
     """
+    execution_mode = os.environ.get(EnvVar.SOAP_EXECUTION_MODE, ExecutionMode.UNKNOWN)
+    single_system_mode = execution_mode in (ExecutionMode.SYSTEM1_ONLY, ExecutionMode.SYSTEM2_ONLY)
+
+    s1_name = "System 1"
+    s2_name = "System 2"
+    if execution_mode == ExecutionMode.BOTH_SYSTEMS:
+        s1_name = "Legacy System"
+        s2_name = "System 2.0"
+    elif execution_mode == ExecutionMode.SYSTEM1_BOTH_ENVS:
+        s1_name = "Legacy System (Prod)"
+        s2_name = "Legacy System (PTE)"
+    elif execution_mode == ExecutionMode.SYSTEM1_ONLY:
+        s1_name = "Legacy System"
+    elif execution_mode == ExecutionMode.SYSTEM2_ONLY:
+        s1_name = "System 2.0"
+
+    fail_col = f'Fail Cases on {s1_name}'
+    fail_old_col = f'Fail Cases on {s1_name}'
+    fail_new_col = f'Fail Cases on {s2_name}'
+
     results = []
     for file in Path(allure_results_dir).glob('*-result.json'):
         with open(file, 'r', encoding='utf-8') as f:
@@ -436,11 +501,14 @@ def generate_transactions_default_statistics(allure_results_dir):
             'is_s2_failure': is_s2_failure,
         })
 
+    columns = (
+        ['Transaction Type', 'Total Cases', 'Pass Cases', fail_col, 'Completion %']
+        if single_system_mode else
+        ['Transaction Type', 'Total Cases', 'Pass Cases', fail_old_col, fail_new_col, 'Completion %']
+    )
+
     if not results:
-        return pd.DataFrame(columns=[
-            'Transaction Type', 'Total Cases', 'Pass Cases',
-            'Fail Cases on Old System', 'Fail Cases on New System', 'Completion %'
-        ])
+        return pd.DataFrame(columns=columns)
 
     df = pd.DataFrame(results)
     grouped = df.groupby('Transaction Type')
@@ -450,24 +518,29 @@ def generate_transactions_default_statistics(allure_results_dir):
         total   = len(group)
         passed  = len(group[group['status'] == 'passed'])
         failed  = group[group['status'] == 'failed']
-
-        fail_old = len(failed[failed['is_s1_failure']])
-        fail_new = len(failed[failed['is_s2_failure']])
         completion = round((passed / total) * 100, 2) if total > 0 else 0.0
 
-        rows.append({
-            'Transaction Type': txn_type,
-            'Total Cases': total,
-            'Pass Cases': passed,
-            'Fail Cases on Old System': fail_old,
-            'Fail Cases on New System': fail_new,
-            'Completion %': completion
-        })
+        if single_system_mode:
+            rows.append({
+                'Transaction Type': txn_type,
+                'Total Cases': total,
+                'Pass Cases': passed,
+                fail_col: len(failed),
+                'Completion %': completion
+            })
+        else:
+            fail_old = len(failed[failed['is_s1_failure']])
+            fail_new = len(failed[failed['is_s2_failure']])
+            rows.append({
+                'Transaction Type': txn_type,
+                'Total Cases': total,
+                'Pass Cases': passed,
+                fail_old_col: fail_old,
+                fail_new_col: fail_new,
+                'Completion %': completion
+            })
 
-    return pd.DataFrame(rows, columns=[
-        'Transaction Type', 'Total Cases', 'Pass Cases',
-        'Fail Cases on Old System', 'Fail Cases on New System', 'Completion %'
-    ])
+    return pd.DataFrame(rows, columns=columns)
 
 
 def generate_custom_combined_report(allure_results_dir, output_excel, sheets_config, assert_error_text_enabled=False, assert_field_additional_enabled=False):
@@ -498,12 +571,7 @@ def generate_custom_combined_report(allure_results_dir, output_excel, sheets_con
                 # ── Default Statistics: special exclusive criteria ──────────────
                 if 'Default Statistics' in criteria:
                     stats_df = generate_default_statistics(allure_results_dir)
-                    if not stats_df.empty:
-                        stats_df.to_excel(writer, sheet_name=sheet_name, index=False)
-                    else:
-                        pd.DataFrame(columns=['Rule ID', 'Total Cases', 'Pass Cases', 'Fail Cases on Old System', 'Fail Cases on New System', 'Completion %']).to_excel(
-                            writer, sheet_name=sheet_name, index=False
-                        )
+                    stats_df.to_excel(writer, sheet_name=sheet_name, index=False)
                     try:
                         workbook = writer.book
                         if sheet_name in workbook.sheetnames:
@@ -516,12 +584,7 @@ def generate_custom_combined_report(allure_results_dir, output_excel, sheets_con
                 # ── Transactions Default Statistics ────────────────────────────
                 if 'Transactions Default Statistics' in criteria:
                     stats_df = generate_transactions_default_statistics(allure_results_dir)
-                    if not stats_df.empty:
-                        stats_df.to_excel(writer, sheet_name=sheet_name, index=False)
-                    else:
-                        pd.DataFrame(columns=['Transaction Type', 'Total Cases', 'Pass Cases', 'Fail Cases on Old System', 'Fail Cases on New System', 'Completion %']).to_excel(
-                            writer, sheet_name=sheet_name, index=False
-                        )
+                    stats_df.to_excel(writer, sheet_name=sheet_name, index=False)
                     try:
                         workbook = writer.book
                         if sheet_name in workbook.sheetnames:
@@ -582,6 +645,8 @@ def generate_custom_combined_report(allure_results_dir, output_excel, sheets_con
                         criteria_mask |= source_df['is_dual_row_failure']
                     if 'System Mismatch Failure' in old_criteria:
                         criteria_mask |= source_df['is_dual_mismatch_failure']
+                    if 'Failed - No Failure Tag' in old_criteria:
+                        criteria_mask |= source_df['is_failed_no_failure_tag']
 
                     failure_mask = criteria_mask & (source_df['status'] == 'failed')
                     pass_mask = (source_df['status'] == 'passed') if apply_no_failure else pd.Series([False] * len(source_df), dtype=bool)
@@ -729,6 +794,15 @@ def generate_rules_summary(allure_results_dir):
         is_dual_row_failure          = 'dual system row failure' in tags_lower
         is_dual_mismatch_failure     = 'dual system mismatch failure' in tags_lower
 
+        is_failed_no_failure_tag = status == 'failed' and not (
+            is_s1_trigger_failure or is_s2_trigger_failure
+            or is_s1_error_text_failure or is_s2_error_text_failure
+            or is_s1_object_element_failure or is_s2_object_element_failure
+            or is_s1_field_additional_failure or is_s2_field_additional_failure
+            or is_dual_system_failure or is_dual_error_text_failure
+            or is_dual_row_failure or is_dual_mismatch_failure
+        )
+
         # --- Attachment Extraction Logic ---
         
         def find_attachments_recursive(steps, target_name_part):
@@ -802,7 +876,6 @@ def generate_rules_summary(allure_results_dir):
         decoded_s2_error_report = _decode_error_report_from_response(response_s2_content)
 
         single_rs_response = response_s2_content if execution_mode == ExecutionMode.SYSTEM2_ONLY else response_s1_content
-        single_rs_decoded = decoded_s2_error_report if execution_mode == ExecutionMode.SYSTEM2_ONLY else decoded_s1_error_report
 
         # Row comparison diff - e8f3d2
         row_diff_sources = find_attachments_recursive(data.get('steps', []), 'e8f3d2')
@@ -882,6 +955,7 @@ def generate_rules_summary(allure_results_dir):
             'is_dual_error_text_failure': is_dual_error_text_failure,
             'is_dual_row_failure': is_dual_row_failure,
             'is_dual_mismatch_failure': is_dual_mismatch_failure,
+            'is_failed_no_failure_tag': is_failed_no_failure_tag,
             's1_diffs': s1_diffs,
             's2_diffs': s2_diffs,
             'generic_diffs': generic_diffs,
@@ -910,6 +984,7 @@ def generate_rules_summary(allure_results_dir):
         'is_s1_trigger_failure', 'is_s2_trigger_failure',
         'is_dual_system_failure', 'is_dual_error_text_failure',
         'is_dual_row_failure', 'is_dual_mismatch_failure',
+        'is_failed_no_failure_tag',
     ]
 
     if df.empty:
@@ -992,6 +1067,7 @@ def generate_rules_summary(allure_results_dir):
             row['is_dual_error_text_failure'] = False
             row['is_dual_row_failure'] = False
             row['is_dual_mismatch_failure'] = False
+            row['is_failed_no_failure_tag'] = False
 
             rows.append(row)
         else:
@@ -1031,6 +1107,7 @@ def generate_rules_summary(allure_results_dir):
                 row['is_dual_error_text_failure'] = case['is_dual_error_text_failure']
                 row['is_dual_row_failure'] = case['is_dual_row_failure']
                 row['is_dual_mismatch_failure'] = case['is_dual_mismatch_failure']
+                row['is_failed_no_failure_tag'] = case['is_failed_no_failure_tag']
 
                 # Combine diffs for this case
                 s1_t = "\n----------------------------------------\n".join(case['s1_diffs'])

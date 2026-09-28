@@ -1,10 +1,8 @@
 from utils.asserter.text_similarity import get_strings_difference
-from _pytest.hookspec import pytest_enter_pdb
 from utils.common_variables import tc_element
 from utils.common_variables import tc_object
 from utils.common_variables import tc_field_value
 from utils.common_variables import tc_additional_reference
-import utils.asserter.error_text_processor
 from utils.common_variables import tc_error_text
 from utils.asserter.error_text_processor import ErrorTextProcessor
 from utils.asserter.response_codes import warning_only
@@ -21,9 +19,7 @@ import pytest
 
 from utils.asserter.schema_rules_validator import SchemaRulesValidator, render_grid_csv
 from utils.asserter.report_row_type import ReportRowType
-from utils.asserter.text_similarity import calculate_similarity
 from utils.env_vars import EnvVar
-from utils.assertion_validator import AssertionValidator
 from utils.common_variables import tc_rule_id
 from utils.common_variables import tc_occurrences
 from utils.common_variables import tc_objective

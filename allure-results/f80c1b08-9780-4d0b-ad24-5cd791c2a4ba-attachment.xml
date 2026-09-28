@@ -1,0 +1,11 @@
+<ns0:Envelope xmlns:ns0="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://www.shafafiya.org/v2/">
+                   <ns0:Header />
+                   <ns0:Body>
+                      <ns1:UploadTransaction>
+                         <ns1:login>MalaffiPayertest</ns1:login>
+                         <ns1:pwd>Haad@2016</ns1:pwd>
+                         <ns1:fileContent>PFJlbWl0dGFuY2UuQWR2aWNlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTpub05hbWVzcGFjZVNjaGVtYUxvY2F0aW9uPSJodHRwOi8vd3d3LmhhYWQuYWUvRGF0YURpY3Rpb25hcnkvQ29tbW9uVHlwZXMvUmVtaXR0YW5jZUFkdmljZS54c2QiPgogIDxIZWFkZXI+CiAgICA8U2VuZGVySUQ+VDAwMV9NYWxhZmZpPC9TZW5kZXJJRD4KICAgIDxSZWNlaXZlcklEPlRGMDAxX01hbGFmZmk8L1JlY2VpdmVySUQ+CiAgICA8VHJhbnNhY3Rpb25EYXRlPjIzLzA5LzIwMjYgMDE6MDA8L1RyYW5zYWN0aW9uRGF0ZT4KICAgIDxSZWNvcmRDb3VudD4xPC9SZWNvcmRDb3VudD4KICAgIDxEaXNwb3NpdGlvbkZsYWc+UFJPRFVDVElPTjwvRGlzcG9zaXRpb25GbGFnPgogIDwvSGVhZGVyPgogIDxDbGFpbT4KICAgIDxJRD5YWFhYWFhYWDExMTE8L0lEPgogICAgPElEUGF5ZXI+VDAwMV9NYWxhZmZpLTEzNjU4NjM1Mzg8L0lEUGF5ZXI+Cgk8UHJvdmlkZXJJRD5URjAwMV9NYWxhZmZpPC9Qcm92aWRlcklEPgogICAgPERlbmlhbENvZGUgLz4KICAgIDxQYXltZW50UmVmZXJlbmNlPjExMTExNTU1NTU8L1BheW1lbnRSZWZlcmVuY2U+Cgk8RGF0ZVNldHRsZW1lbnQ+MjMvMDkvMjAyNiAxMjozMzwvRGF0ZVNldHRsZW1lbnQ+CiAgICA8RW5jb3VudGVyPgogICAgICAgIDxGYWNpbGl0eUlEPk1GMzUwNTwvRmFjaWxpdHlJRD4KICAgIDwvRW5jb3VudGVyPgogICAgPEFjdGl2aXR5PgoJICA8SUQ+MTQyNTI3MjMwODwvSUQ+CiAgICAgIDxTdGFydD4yMy8wOS8yMDI2IDEyOjMxPC9TdGFydD4KICAgICAgPFR5cGU+MzwvVHlwZT4KICAgICAgPENvZGU+NDQ5NTA8L0NvZGU+CiAgICAgIDxRdWFudGl0eT4xPC9RdWFudGl0eT4KICAgICAgPE5ldD4wPC9OZXQ+CiAgICAgIDxMaXN0PjA8L0xpc3Q+CgkgIDxPcmRlcmluZ0NsaW5pY2lhbj5HRDY0NzY8L09yZGVyaW5nQ2xpbmljaWFuPgogICAgICA8Q2xpbmljaWFuPkdENjQ3NjwvQ2xpbmljaWFuPgogICAgICA8UHJpb3JBdXRob3JpemF0aW9uSUQgLz4KICAgICAgPEdyb3NzPjEwMDwvR3Jvc3M+CiAgICAgIDxQYXRpZW50U2hhcmU+MDwvUGF0aWVudFNoYXJlPgogICAgICA8UGF5bWVudEFtb3VudD4wPC9QYXltZW50QW1vdW50PgogICAgICA8RGVuaWFsQ29kZSAvPgogICAgPC9BY3Rpdml0eT4KICA8L0NsYWltPgo8L1JlbWl0dGFuY2UuQWR2aWNlPg==</ns1:fileContent>
+                         <ns1:fileName>test_file_Up2Kbe__20260923_123116.xml</ns1:fileName>
+                      </ns1:UploadTransaction>
+                   </ns0:Body>
+                </ns0:Envelope>

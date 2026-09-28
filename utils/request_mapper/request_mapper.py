@@ -62,7 +62,6 @@ class AbstractRequestMapper(ABC):
         self.second_person_register_template = None
         self.prior_request_template = None
         self.prior_authorization_template = None
-        self.prior_authorization_resubmission_template = None
         self.claim_submission_template = None
         self.claim_submission_resubmission_template = None
         self.claim_checker_template = None

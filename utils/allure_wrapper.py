@@ -15,6 +15,7 @@ from utils.common_variables import tc_id, tc_description, tc_name, tc_request_na
     tc_objective, tc_precondition, tc_error_text, tc_object, tc_element, tc_skip_env1
 from utils.request_mapper.request_mapper_context import do_requests
 from utils.request_sender.system_enums import Systems
+from utils.request_sender.send_request_context import reset_step_delay
 from utils.excel_handler import ExcelHandler
 from utils.api_client import APIClient
 from utils.variable_processor import VariableProcessor
@@ -131,6 +132,7 @@ def test_soap(soap_test_case):
         allure.dynamic.suite("Regression Tests")
         allure.dynamic.sub_suite("Dual System Verification")
 
+    reset_step_delay()
     try:
         if execution_mode == ExecutionMode.SYSTEM1_ONLY:
             _execute_system1_baseline(test_case)

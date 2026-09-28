@@ -1,0 +1,36 @@
+Error file doesn't contain the rule id
+
+Expected error: 
+
+Error file: [
+  {
+    "Transaction": "Claim.Submission",
+    "Type": "WARNING",
+    "RuleID": "289",
+    "Object Name": "Activity",
+    "HAAD Field": "DateOrdered",
+    "Field Value": "1505741411",
+    "Additional Reference": "",
+    "Error Text": "Claim submission for Claim ID '1505741411' and Sender ID 'TF001_Malaffi' the combination of Activity.DateOrdered, Activity.OrderingClinician must be present in at least one activity with Activtiy.Code=Consultation in the same or a previusly submitted Claim with the same Claim.MemberID."
+  },
+  {
+    "Transaction": "Claim.Submission",
+    "Type": "ERROR",
+    "RuleID": "30",
+    "Object Name": "Header",
+    "HAAD Field": "DispositionFlag",
+    "Field Value": "PRODUCTION",
+    "Additional Reference": "",
+    "Error Text": "Disposition Flag may have values 'PTE_SUBMIT', 'PTE_VALIDATE_ONLY', 'PTE_RESPONSE', 'PTE_SHADOW_NOT_FOR_PAYMENT_SUBMIT', 'PTE_SHADOW_NOT_FOR_PAYMENT_VALIDATE_ONLY', 'SHADOW_NOT_FOR_PAYMENT_SUBMIT' or 'SHADOW_NOT_FOR_PAYMENT_VALIDATE_ONLY' only. Your value is PRODUCTION."
+  },
+  {
+    "Transaction": "Claim.Submission",
+    "Type": "ERROR",
+    "RuleID": "9",
+    "Object Name": "Header",
+    "HAAD Field": "RecordCount",
+    "Field Value": "2",
+    "Additional Reference": "",
+    "Error Text": "Number of found records in the e-claim file is 1. Record count in the header is 2. The numbers must be equal."
+  }
+]

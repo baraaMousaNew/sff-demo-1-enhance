@@ -1,0 +1,2 @@
+URL: https://shafafiyapte.doh.gov.ae/v3/webservices.asmx
+Action: https://www.shafafiya.org/v2/UploadTransaction

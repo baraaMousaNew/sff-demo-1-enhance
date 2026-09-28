@@ -1,0 +1,59 @@
+<Person.Register>
+	<Header>
+		<SenderID>T001_Malaffi</SenderID>
+		<ReceiverID>HAAD</ReceiverID>
+		<TransactionDate>{{DATE(DD/MM/YYYY)}} 01:00</TransactionDate>
+		<RecordCount>1</RecordCount>
+		<DispositionFlag>PRODUCTION</DispositionFlag>
+	</Header>
+	<Person>
+		<UnifiedNumber>{{VAR(unified_number).CUSTOM.generate_person_data(emirates_unified_number)}}</UnifiedNumber>
+		<FirstName>{{VAR(first_name).CUSTOM.generate_person_data(first_name)}}</FirstName>
+		<FirstNameEn>{{VAR(first_name_en).CUSTOM.generate_person_data(first_name)}}</FirstNameEn>
+        <MiddleNameEn>{{VAR(middle_name_en).CUSTOM.generate_person_data(first_name)}}</MiddleNameEn>
+        <LastNameEn>{{VAR(last_name_en).CUSTOM.generate_person_data(last_name)}}</LastNameEn>
+        <FirstNameAr>&#1593;&#1585;&#1576;&#1610; &#1575;&#1587;&#1605; &#1575;&#1608;&#1604;</FirstNameAr>
+        <MiddleNameAr>&#1593;&#1585;&#1576;&#1610; &#1575;&#1587;&#1605; &#1575;&#1608;&#1587;&#1591;</MiddleNameAr>
+        <LastNameAr>&#1593;&#1585;&#1576;&#1610; &#1575;&#1587;&#1605; &#1575;&#1582;&#1610;&#1585;</LastNameAr>
+		<ContactNumber>{{VAR(contact_number).CUSTOM.generate_person_data(phone)}}</ContactNumber>
+		<BirthDate>{{VAR(date_of_birth).CUSTOM.generate_dob()}}</BirthDate>
+		<Gender>1</Gender>
+		<Nationality>Indian</Nationality>
+		<NationalityCode>100</NationalityCode>
+		<City>Abu Dhabi</City>
+		<CityCode>88</CityCode>
+		<CountryOfResidence>United Arab Emirates</CountryOfResidence>
+		<EmirateOfResidence>1</EmirateOfResidence>
+		<PassportNumber>{{VAR(passport).CUSTOM.generate_person_data(passport)}}</PassportNumber>
+		<EmiratesIDNumber>{{VAR(emirates_id).CUSTOM.generate_person_data(emirates_id)}}</EmiratesIDNumber>
+        <SponsorNumber>{{VAR(sponsor_number).CUSTOM.generate_random_number()}}</SponsorNumber>
+        <SponsorNameEn>{{VAR(sponsor_name_en).CUSTOM.generate_person_data(first_name)}}</SponsorNameEn>
+        <SponsorNameAr>&#1603;&#1601;&#1610;&#1604; &#1575;&#1587;&#1605; &#1593;&#1585;&#1576;&#1610;</SponsorNameAr>
+        <SpecialNationality>Indian</SpecialNationality>
+        <Privileges>None</Privileges>
+		<COCReferenceNumber>123456</COCReferenceNumber>
+        <BirthCertificateNumber>{{VAR(birth_cert_number).CUSTOM.generate_random_number()}}</BirthCertificateNumber>
+		<Member>
+			<ID>{{VAR(member_id).CUSTOM.generate_person_data(member_id)}}</ID>
+			<Relation>Principal</Relation>
+			<RelationTo>{{VAR.member_id}}</RelationTo>
+            <RelationToEmiratesIDNumber>{{VAR.emirates_id}}</RelationToEmiratesIDNumber>
+            <RelationToUnifiedNumber>{{VAR.unified_number}}</RelationToUnifiedNumber>
+			<Contract>
+				<PayerID>T001_Malaffi</PayerID>
+                <TPAID>T002_Malaffi</TPAID>
+				<PackageName>Malaffi-1234</PackageName>
+				<StartDate>{{VAR(contract_start_date).CUSTOM.add_days_to_current_date(150)}}</StartDate>
+				<RenewalDate>{{VAR(contract_renewal_date).CUSTOM.add_days_to_current_date(150)}}</RenewalDate>
+				<ExpiryDate>{{VAR(contract_end_date).CUSTOM.add_days_to_current_date(350)}}</ExpiryDate>
+				<GrossPremium>951</GrossPremium>
+				<PolicyHolder>4</PolicyHolder>
+				<CompanyID>XYZ Insurance</CompanyID>
+				<CollectedPremium>0</CollectedPremium>
+				<VAT>0</VAT>
+				<VATPercent>5</VATPercent>
+				<Status>Corrected Date</Status>
+			</Contract>
+		</Member>
+	</Person>
+</Person.Register>

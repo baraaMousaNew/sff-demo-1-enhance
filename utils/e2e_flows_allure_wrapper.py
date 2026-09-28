@@ -22,7 +22,7 @@ Environment variables read at runtime:
                             e.g.  claim_id=//ClaimID;status=Status
                             (leave empty or omit to disable)
     E2E_TRANSACTION_COL     Column that holds the transaction name used to resolve
-                            the SOAPAction header (same lookup as Request Generator)
+                            the SOAPAction header
     E2E_ASSERT_COL          Column that holds assertion rules for the step response,
                             e.g.  Status==Active;ErrorCode==0;//ClaimID==12345
                             Format: selector==expected_value separated by semicolons.
